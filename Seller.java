@@ -741,7 +741,7 @@ public class Seller extends User{
                     int sendNum = Integer.parseInt(parse[4]);
                     String sendAns = parse[5];
                     String sendStores = parse[6];
-                    return new Seller(sendName, sendEmail, sendPass, true, sendNum, sendAns, sendStores);
+                    return new Seller(sendName, sendEmail, sendPass, false, sendNum, sendAns, sendStores);
                 }
                 line = bfr.readLine();
             }

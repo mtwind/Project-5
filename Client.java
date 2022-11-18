@@ -21,6 +21,13 @@ public class Client
             Driver.checkIfFilesExist();
             logIn(s, writer, reader);
 
+            if (reader.readLine().equals("customer"))
+            {
+                customerMenu(s, writer, reader);
+            } else {
+                sellerMenu(s, writer, reader);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -250,6 +257,254 @@ public class Client
         }
     }
 
+    public static void customerMenu(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        String menuOptions = "Customer Menu\n1. View the marketplace\n2. View cart\n3. View Purchase History\n" +
+                "4. View Dashboard\n5. Export Purchase History to a file\n6. Delete Account\n7. Quit";
+        int menuChoice = -1;
+        boolean inLoop = true;
+        while (inLoop)
+        {
+            // loop assures the user selects a number 1-7
+            menuChoice = checkChoice(1, 7, menuOptions, s);
+
+            writer.write(String.valueOf(menuChoice));
+            writer.println();
+            writer.flush();
+
+            switch (menuChoice)
+            {
+                case 1:
+                    viewMarket(s, writer, reader);
+                    break;
+                case 2:
+                    viewCart(s, writer, reader);
+                    break;
+                case 3:
+                    String line = reader.readLine();
+                    while (!line.equals("history printed"))
+                    {
+                        System.out.println(line);
+                        line = reader.readLine();
+                    }
+                    break;
+                case 4:
+                    viewCostumerDash(s, writer, reader);
+                    break;
+                case 5:
+                    System.out.println("Exporting complete.");
+                    break;
+                case 6:
+                    System.out.println("Account deleted");
+                    inLoop = false;
+                    break;
+                case 7:
+                    System.out.println("Goodbye");
+                    inLoop = false;
+                    break;
+            }
+        }
+    }
+
+    public static void viewMarket(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        if (reader.readLine().equals("no products")) {
+            System.out.println("There are no products in the marketplace.");
+        } else {
+            String sortList = "Sort the list:\n1. By Price\n2. By Quantity\n3. No Sort";
+            int sortChoice = checkChoice(1, 3, sortList, s); // check choice is a method that handles all errors
+
+            writer.write(String.valueOf(sortChoice));
+            writer.println();
+            writer.flush();
+
+            // this writes out all the products to the user
+            String productInfo = reader.readLine();
+            while (!productInfo.equals("no more products"))
+            {
+                System.out.println(productInfo);
+                productInfo = reader.readLine();
+            }
+
+            // begin part where user preforms a search
+            String search;
+            while (true)
+            {
+                System.out.println("Search for a product: enter 'quit' to exit the search");
+                search = s.nextLine();
+                writer.write(search);
+                writer.println();
+                writer.flush();
+
+                if (reader.readLine().equals("quit"))
+                {
+                    break;
+                }
+
+                if (reader.readLine().equals("no results found"))
+                {
+                    System.out.println("There were no results aligning with you search");
+
+                } else {
+                    while (true)
+                    {
+                        String productResults = reader.readLine();
+                        int howManyResults = -1;
+                        while (!productResults.equals("no more products"))
+                        {
+                            howManyResults++;
+                            System.out.println(productResults);
+                            productResults = reader.readLine();
+                        }
+                        String selectAProduct = "Select a product from the list above, enter 0 to exit: ";
+                        int selectedProduct = checkChoice(0, howManyResults, selectAProduct, s);
+                        writer.write(String.valueOf(selectedProduct));
+                        writer.println();
+                        writer.flush();
+
+                        String focusOrQuit = reader.readLine();
+                        if (focusOrQuit.equals("no product selected"))
+                        {
+                            break;
+                        } else {
+                            System.out.println(focusOrQuit);
+                            String addToCartSting = "Add to cart? 1 = yes, 2 = no";
+                            int addToCartChoice = checkChoice(1, 2, addToCartSting, s);
+
+                            writer.write(String.valueOf(addToCartChoice));
+                            writer.println();
+                            writer.flush();
+                        }
+                    }
+                } // end else statement for the search having at least one result
+            } // end loop for searching
+        } // end else statement for when the marketplace has at least one product
+    } // end viewMarket
+
+    public static void viewCart(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        if(reader.readLine().equals("empty cart"))
+        {
+            System.out.println("No items in cart");
+        } else {
+            System.out.println("Shopping cart:");
+
+            String cartResult = reader.readLine();
+            while (!cartResult.equals("no more items in cart"))
+            {
+                System.out.println(cartResult);
+                cartResult = reader.readLine();
+            }
+
+            String cartOptions = "Shopping cart options: enter 0 to quit.\n" +
+                    "1. Purchase your cart\n2. Remove an item from your cart\n3. Clear your cart";
+            int cartChoice = checkChoice(0,3, cartOptions, s);
+            writer.write(String.valueOf(cartChoice));
+            writer.println();
+            writer.flush();
 
 
+            String choiceResult = reader.readLine();
+            if (choiceResult.equals("break"))
+            {
+
+            } else if (choiceResult.equals("purchased"))
+            {
+                System.out.println("Items purchased!");
+            } else if (choiceResult.equals("cart cleared")) {
+                System.out.println("Your cart has been emptied.");
+            } else {
+                while (true)
+                {
+                    System.out.println("Enter the name of the item you wish to remove: ");
+                    String removedItem = s.nextLine();
+                    writer.write(removedItem);
+                    writer.println();
+                    writer.flush();
+
+                    String removeItemResult = reader.readLine();
+
+
+                    if (removeItemResult.equals("item not found in cart"))
+                    {
+                        String itemNotFoundOptions = "Item not found in cart.\n1. Try again\n2. Quit";
+                        int itemNotFoundChoice = checkChoice(1,2, itemNotFoundOptions, s);
+
+
+                        writer.write(String.valueOf(itemNotFoundChoice));
+                        writer.println();
+                        writer.flush();
+
+
+                        String itemNotFoundChoiceResult = reader.readLine();
+
+                        if (itemNotFoundChoiceResult.equals("break"))
+                        {
+                            break;
+                        }
+
+                    } else {
+                        System.out.println("Item removed.");
+                        break;
+                    }
+                }
+
+            }
+        } // end else statement that runs for a cart with products inside
+
+    }
+
+    public static void viewCostumerDash(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        String chooseSort = "How do you want to the stores to be sorted?\n1. By Most Popular\n2. By Your Favorite";
+        int sortChoice = checkChoice(1, 2, chooseSort, s);
+        writer.write(String.valueOf(sortChoice));
+        writer.println();
+        writer.flush();
+
+        String customerDash = reader.readLine();
+        if (customerDash.equals("no stores"))
+        {
+            System.out.println("There are no stores in the market");
+        } else {
+            while (!customerDash.equals("all stores printed"))
+            {
+                System.out.println(customerDash);
+                customerDash = reader.readLine();
+            }
+        }
+    }
+
+
+
+    public static void sellerMenu(Scanner s, PrintWriter writer, BufferedReader reader)
+    {
+        System.out.println("seller");
+    }
+
+
+
+    public static int checkChoice (int low, int high, String choices, Scanner s)
+    {
+        int input = -1;
+        while (true)
+        {
+            System.out.println(choices);
+            try {
+                input = s.nextInt();
+                String waste = s.nextLine();
+                if (input >= low && input <= high)
+                {
+                    return input;
+                } else {
+                    System.out.printf("Invalid input, enter a number %d-%d\n", low, high);
+                }
+
+            } catch (InputMismatchException e)
+            {
+                String waste = s.nextLine();
+                System.out.printf("Invalid input, enter a number %d-%d\n", low, high);
+            }
+        }
+    }
 }

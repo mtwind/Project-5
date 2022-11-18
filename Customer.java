@@ -283,27 +283,36 @@ public class Customer extends User {
         }
     }
 
-    public void printPurchaseHistory() { // print the user's product purchase history
-        if (purchaseHistory.size() == 0) {
-            System.out.println("You have not purchased anything!");
+
+
+
+    public String printPurchaseHistoryString() { // print the user's product purchase history
+        String history = "";
+        if (purchaseHistory.size() == 0)
+        {
+            return "You have not purchased anything!";
         }
         String[] split;
-        for (int i = 0; i < purchaseHistory.size(); i++) {
+        for (int i = 0; i < purchaseHistory.size(); i++)
+        {
             split = purchaseHistory.get(i).split("-");
-            if (i == purchaseHistory.size() - 1) {
-                System.out.println("------------------------------------");
-                System.out.println("Product: " + (i + 1));
-                System.out.println("Name: " + split[1]);
-                System.out.println("Store: " + split[0]);
-                System.out.println("------------------------------------");
+            if (i == purchaseHistory.size() - 1)
+            {
+                history += "\n------------------------------------";
+                history += "\nProduct: " + (i + 1);
+                history += "\nName: " + split[1];
+                history += "\nStore: " + split[0];
+                history += "\n------------------------------------";
             } else {
-                System.out.println("------------------------------------");
-                System.out.println("Product: " + (i + 1));
-                System.out.println("Name: " + split[1]);
-                System.out.println("Store: " + split[0]);
+                history += "\n------------------------------------";
+                history += "\nProduct: " + (i + 1);
+                history += "\nName: " + split[1];
+                history += "\nStore: " + split[0];
             }
 
         }
+        System.out.println(history);
+        return history;
     }
 
     public void exportPurchaseHistory() {
