@@ -288,7 +288,7 @@ public class Driver {
                     user.editStore(s);
                     break;
                 case 4:
-                    viewSellerDash(s, stores);
+                    //viewSellerDash(s, stores);
                     break;
                 case 5:
                     user.exportStoreProducts(s);
@@ -310,64 +310,6 @@ public class Driver {
         System.out.println("Logging out...");
     }
 
-
-
-
-    public static void viewSellerDash(Scanner s, ArrayList<Store> stores) {
-        if (stores == null || stores.size() == 0) {
-            System.out.println("You have no stores or sales!");
-        } else {
-            System.out.println("Sort the list:\n1. By Revenue\n2. By Number of Products\n0. No Sort");
-            int z;
-            do {
-                try {
-                    z = Integer.parseInt(s.nextLine());
-                    if (z < 0 || z > 2) {
-                        System.out.println("Please enter valid input");
-                        continue;
-                    }
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("Please enter a number.");
-                }
-            } while (true);
-            switch (z) {
-                case 0:
-                    break;
-                case 1:
-                    stores = sortBySales(stores);
-                    break;
-                case 2:
-                    stores = sortByNumProducts(stores);
-                    break;
-            }
-            for (int i = 0; i < stores.size(); i++) {
-                System.out.println("---------------------------");
-                System.out.println("Store: " + stores.get(i).getName());
-
-                System.out.printf("Revenue: $%.2f\n", stores.get(i).getSales());
-                if (stores.get(i).getProducts() != null && stores.get(i).getProducts().size() > 0) {
-                    System.out.println("Products: ");
-                    for (int j = 0; j < stores.get(i).getProducts().size(); j++) {
-                        System.out.println(stores.get(i).getProducts().get(j).getName() + ". Number Sold: " +
-                                stores.get(i).getProducts().get(j).getAmountSold());
-                    }
-                } else {
-                    System.out.println("There are no products in this store!");
-                }
-                if (stores.get(i).getCustomers() != null && stores.get(i).getCustomers().size() != 0) {
-                    System.out.println("Customers: ");
-                    for (int j = 0; j < stores.get(i).getCustomers().size(); j++) {
-                        System.out.println(stores.get(i).getCustomers().get(j).getName() + ". Number Bought: "
-                                + stores.get(i).getCustomerSales().get(j));
-                    }
-                } else {
-                    System.out.println("There are no customers in this store!");
-                }
-                System.out.println("---------------------------");
-            }
-        }
-    }
 
     public static ArrayList<Product> sortByQuantity(ArrayList<Product> products) {
         for (int i = 0; i < products.size(); i++) {

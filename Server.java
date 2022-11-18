@@ -25,7 +25,7 @@ public class Server
             {
                 customerMenu(writer, reader, user);
             } else {
-                sellerMenu(writer, reader, user);
+                sellerMenu(writer, reader, (Seller) user);
             }
 
         } catch (Exception e) {
@@ -553,7 +553,8 @@ public class Server
     }
 
     // allows customers to view sale stores, either by total sales or sales to that individual
-    public static void viewCostumerDash(Customer customer, ArrayList<Store> stores, PrintWriter writer, BufferedReader reader) throws IOException
+    public static void viewCostumerDash(Customer customer, ArrayList<Store> stores, PrintWriter writer,
+                                        BufferedReader reader) throws IOException
     {
         int sortChoice = Integer.valueOf(reader.readLine());
 
@@ -602,12 +603,491 @@ public class Server
         }
     }
 
-    public static void sellerMenu(PrintWriter writer, BufferedReader reader, User user)
+    public static void sellerMenu(PrintWriter writer, BufferedReader reader, Seller seller) throws  IOException
     {
         writer.write("seller");
         writer.println();
         writer.flush();
+
+        int choice = 0;
+        ArrayList<Store> stores = seller.getStores();
+
+        if (stores == null || stores.size() == 0)
+        {
+            writer.write("no stores");
+            writer.println();
+            writer.flush();
+        } else {
+            writer.write("Stores:");
+            writer.println();
+            writer.flush();
+            for (int i = 0; i < stores.size(); i++)
+            {
+                writer.write((i + 1) + ": " + stores.get(i).getName());
+                writer.println();
+                writer.flush();
+
+            }
+        }
+
+        writer.write("------------------");
+        writer.println();
+        writer.flush();
+
+        int sellerMenuChoice = -1;
+
+        do {
+            sellerMenuChoice = Integer.valueOf(reader.readLine());
+
+            String name;
+            ArrayList<Store> temp;
+            boolean validName = false, broken = false;
+
+            switch (sellerMenuChoice) {
+                // adding a store
+                case 1:
+                    String newStoreName;
+
+                    do {
+                        newStoreName = reader.readLine();
+
+                        BufferedReader bfr = new BufferedReader(new FileReader("stores.txt"));
+                        String line = bfr.readLine();
+                        String[] splitted;
+                        while (line != null) {
+                            splitted = line.split(",");
+                            if (splitted[0].equals(newStoreName)) {
+                                writer.write("name taken");
+                                writer.println();
+                                writer.flush();
+                                broken = true;
+                                break;
+                            }
+                            line = bfr.readLine();
+                        }
+                        if (!broken) {
+                            validName = true;
+                        } else
+                            broken = false;
+
+                    } while (!validName);
+
+                    temp = seller.getStores();
+                    temp.add(new Store(seller.getEmail(), newStoreName, new ArrayList<Product>()));
+                    seller.setStores(temp);
+                    writer.write("store added");
+                    writer.println();
+                    writer.flush();
+                    seller.editUserFile();
+                    break;
+
+                // remove a store
+                case 2:
+                    if (stores != null && stores.size() > 0)
+                    {
+                        writer.write("stores found");
+                        writer.println();
+                        writer.flush();
+
+                        do {
+                            temp = seller.getStores();
+
+                            String removedStoreName = reader.readLine();
+
+                            if (removedStoreName.equals("quit")) {
+                                break;
+                            }
+
+                            boolean removed = false;
+                            for (int i = 0; i < temp.size(); i++) {
+                                if (stores.get(i).getName().equals(removedStoreName)) {
+                                    temp.remove(i);
+                                    removed = true;
+                                    break;
+                                }
+                            }
+
+                            if (removed) {
+
+                                writer.write("store removed");
+                                writer.println();
+                                writer.flush();
+
+                                seller.setStores(temp);
+                                seller.editUserFile();
+                                seller.removeStoreFromFile(removedStoreName);
+
+                                ArrayList<String> fileLines = new ArrayList<>();
+                                BufferedReader bfr = new BufferedReader(new FileReader("products.txt"));
+                                String[] split;
+                                String line = bfr.readLine();
+                                while (line != null) {
+                                    split = line.split(",");
+                                    if (split[1].equals(removedStoreName)) {
+                                        line = bfr.readLine();
+                                        continue;
+                                    } else {
+                                        fileLines.add(line);
+                                    }
+                                    line = bfr.readLine();
+                                }
+
+                                PrintWriter pw = new PrintWriter(new FileOutputStream("products.txt", false));
+                                for (int i = 0; i < fileLines.size(); i++) {
+                                    pw.println(fileLines.get(i));
+                                }
+                                pw.flush();
+                                pw.close();
+                                break;
+
+
+                            } else {
+                                writer.write("store not found");
+                                writer.println();
+                                writer.flush();
+                            }
+                        } while (true);
+
+                    } else {
+                        writer.write("no stores");
+                        writer.println();
+                        writer.flush();
+                        break;
+                    }
+                    break;
+
+                // edit a store
+                case 3:
+
+                    // view dashboard
+                case 4:
+                    viewSellerDash(seller, stores, writer, reader);
+                    break;
+
+                // Export store's products to a file
+                case 5:
+                    exportStoreProducts(seller, writer, reader);
+                    break;
+
+                // Import products from stores to a file
+                case 6:
+                    importStoreProducts(seller, writer, reader);
+                    break;
+
+                // View products in carts
+                case 7:
+                    viewCustomerCarts(seller, writer, reader);
+                    break;
+
+                // delete an account
+                case 8:
+                    writer.write("Account Deleted");
+                    writer.println();
+                    writer.flush();
+                    seller.deleteAccount();
+                    sellerMenuChoice = 9;
+                    break;
+
+                // exit
+                case 9:
+                    break;
+            }
+        } while (sellerMenuChoice != 9);
+
     }
 
+    public static void viewSellerDash(Seller user, ArrayList<Store> stores, PrintWriter writer, BufferedReader reader)
+            throws IOException
+    {
+        if (stores == null || stores.size() == 0) {
+            writer.write("no stores");
+            writer.println();
+            writer.flush();
+        } else {
+            writer.write("stores");
+            writer.println();
+            writer.flush();
+
+            int dashChoice = Integer.parseInt(reader.readLine());
+
+            switch (dashChoice)
+            {
+                case 1:
+                    stores = Driver.sortBySales(stores);
+                    break;
+                case 2:
+                    stores = Driver.sortByNumProducts(stores);
+                case 3:
+                    break;
+            }
+
+            writer.write("---------------------------");
+            writer.println();
+            writer.flush();
+
+            for (int i = 0; i < stores.size(); i++)
+            {
+
+
+                writer.write("Store: " + stores.get(i).getName());
+                writer.println();
+                writer.flush();
+
+                String revenue = String.format("Revenue: $%.2f", stores.get(i).getSales());
+                writer.write(revenue);
+                writer.println();
+                writer.flush();
+
+                if (stores.get(i).getProducts() != null && stores.get(i).getProducts().size() > 0)
+                {
+                    writer.write("Products: ");
+                    writer.println();
+                    writer.flush();
+                    for (int j = 0; j < stores.get(i).getProducts().size(); j++)
+                    {
+                        String numSold = "- " + stores.get(i).getProducts().get(j).getName() + ". Number Sold: " +
+                                stores.get(i).getProducts().get(j).getAmountSold();
+                        writer.write(numSold);
+                        writer.println();
+                        writer.flush();
+                    }
+                } else {
+                    writer.write("This store has no products");
+                    writer.println();
+                    writer.flush();
+                }
+
+                if (stores.get(i).getCustomers() != null && stores.get(i).getCustomers().size() != 0)
+                {
+                    writer.write("Customers: ");
+                    writer.println();
+                    writer.flush();
+                    for (int j = 0; j < stores.get(i).getCustomers().size(); j++)
+                    {
+                        String numBoughtByCustomer = "- " + stores.get(i).getCustomers().get(j).getName() + ". Products sold to: "
+                                + stores.get(i).getCustomerSales().get(j);
+                        writer.write(numBoughtByCustomer);
+                        writer.println();
+                        writer.flush();
+                    }
+                } else {
+                    writer.write("This store has no Customers");
+                    writer.println();
+                    writer.flush();
+                }
+
+                writer.write("---------------------------");
+                writer.println();
+                writer.flush();
+            } // end for loop for printing stores
+
+            writer.write("all done");
+            writer.println();
+            writer.flush();
+        }
+    }
+
+    public static void exportStoreProducts(Seller seller, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        Store store = null;
+        if (seller.getStores().size() == 0) {
+            writer.write("no stores");
+            writer.println();
+            writer.flush();
+        } else {
+            writer.write("stores found");
+            writer.println();
+            writer.flush();
+            for (int i = 0; i < seller.getStores().size(); i++)
+            { // print all store names
+                String storeNames = "Store " + (i + 1) + ": " + seller.getStores().get(i).getName();
+                writer.write(storeNames);
+                writer.println();
+                writer.flush();
+            }
+
+            writer.write("all stores printed");
+            writer.println();
+            writer.flush();
+
+            String exportedStore = reader.readLine();
+
+            for (int i = 0; i < seller.getStores().size(); i++) {
+                if (exportedStore.equals(seller.getStores().get(i).getName())) {
+                    store = seller.getStores().get(i);
+                    break;
+                }
+            }
+            if (store == null) {
+                writer.write("store not found");
+                writer.println();
+                writer.flush();
+            } else {
+                try {
+                    writer.write("Exporting products from " + store.getName() + "...");
+                    writer.println();
+                    writer.flush();
+                    PrintWriter pw = new PrintWriter(new FileOutputStream("exported" + store.getName() +
+                            "Products.csv"));
+                    for (int i = 0; i < store.getProducts().size(); i++) {
+                        String priceFormatted = String.format("%.2f", store.getProducts().get(i).getPrice());
+                        pw.println(store.getProducts().get(i).getName() + "," + store.getProducts().get(i).getStore() +
+                                "," + store.getProducts().get(i).getProductDescription() + "," +
+                                store.getProducts().get(i).getQuantity() + "," + priceFormatted
+                                + "," + store.getProducts().get(i).getAmountSold());
+                    }
+                    pw.flush();
+                    pw.close();
+                    writer.write("Products exported successfully!");
+                    writer.println();
+                    writer.flush();
+                } catch (FileNotFoundException e) {
+                    System.out.println("Error exporting store's products!");
+                }
+            }
+        }
+    }
+
+    public static void importStoreProducts(Seller seller, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        Store store = null;
+        if (seller.getStores().size() == 0)
+        {
+            writer.write("no stores");
+            writer.println();
+            writer.flush();
+        } else {
+            writer.write("stores found");
+            writer.println();
+            writer.flush();
+
+            String fileName = reader.readLine();
+            File f = new File(fileName);
+            if (!f.exists())
+            {
+                writer.write("file not found");
+                writer.println();
+                writer.flush();
+            } else {
+                writer.write("File found");
+                writer.println();
+                writer.flush();
+
+                ArrayList<String> productImportFileLines = seller.readCSVProductFile(fileName);
+                ArrayList<String> productFileLines = seller.readProductFile();
+                if (productImportFileLines.size() == 0)
+                {
+                    writer.write("The file has no products to import");
+                    writer.println();
+                    writer.flush();
+                } else {
+                    for (int i = 0; i < productImportFileLines.size(); i++)
+                    {
+                        boolean alreadyExists = false; // true if the product already exists in the user's store
+                        String[] importLineData = productImportFileLines.get(i).split(",");
+                        for (int j = 0; j < productFileLines.size(); j++) {
+                            String[] productLineData = productFileLines.get(j).split(",");
+                            if (importLineData[0].equals(productLineData[0]) &&
+                                    importLineData[1].equals(productLineData[1])) {
+                                writer.write("Product already exists");
+                                writer.println();
+                                writer.flush();
+                                alreadyExists = true; // product exists in user's store already so set true
+                                break;
+                            }
+                        }
+                        if (!alreadyExists) { // creates new product and updates the store file accordingly
+                            try {
+                                Product p = new Product(importLineData[0], importLineData[1], importLineData[2],
+                                        Integer.parseInt(importLineData[3]), Double.parseDouble(importLineData[4]));
+                                for (int x = 0; x < seller.getStores().size(); x++) {
+                                    if (seller.getStores().get(x).getName().equals(p.getStore())) {
+                                        seller.getStores().get(x).getProducts().add(p);
+                                        seller.getStores().get(x).editStoreFile();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                writer.write("Error parsing products, make sure that the file is correctly formatted.");
+                                writer.println();
+                                writer.flush();
+
+                            }
+                        }
+                    }
+                    writer.write("Import finished");
+                    writer.println();
+                    writer.flush();
+                }
+            }
+        }
+
+    }
+
+    public static void viewCustomerCarts(Seller seller, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        Customer c;
+        ArrayList<Product> carts;
+        int totalInCarts = 0;
+
+        BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
+        String line = bfr.readLine();
+        String[] parse;
+        while (line != null) {
+            parse = line.split(",");
+            if (!parse[0].equals("customer"))
+            {
+                line = bfr.readLine();
+                continue;
+            } else {
+                c = Customer.parseCustomer(parse[1]);
+                carts = c.getShoppingCart();
+                if (carts == null || carts.size() == 0) {
+                    line = bfr.readLine();
+                    continue;
+                } else {
+                    for (int i = 0; i < seller.getStores().size(); i ++)
+                    {
+                        for (int j = 0; j < carts.size(); j++)
+                        {
+                            if (carts.get(j).getStore().equals(seller.getStores().get(i).getName()))
+                            {
+                                totalInCarts++;
+                                writer.write("-------------------------------------------------------------");
+                                writer.println();
+                                writer.flush();
+
+                                String customerInfo = String.format("Customer: %s,   Store: %s,   Product: %s   ",
+                                        c.getEmail(), seller.getStores().get(i).getName(), carts.get(j).getName());
+                                writer.write(customerInfo);
+                                writer.println();
+                                writer.flush();
+
+
+                                String productInfo = String.format("Product Quantity: %d,   Product Price: $%.2f,   " +
+                                                "Product Description: %s,   Amount Sold: %d",
+                                        carts.get(j).getQuantity(), carts.get(j).getPrice(),
+                                        carts.get(j).getProductDescription(), carts.get(j).getAmountSold());
+                                writer.write(productInfo);
+                                writer.println();
+                                writer.flush();
+
+                            }
+                        }
+                    }
+                    writer.write("-------------------------------------------------------------");
+                    writer.println();
+                    writer.flush();
+                }
+            }
+            line = bfr.readLine();
+        }
+        writer.write("Total number of products in carts: " + totalInCarts);
+        writer.println();
+        writer.flush();
+
+        writer.write("all done");
+        writer.println();
+        writer.flush();
+    }
 
 }

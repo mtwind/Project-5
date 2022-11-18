@@ -222,7 +222,7 @@ public class Client
                         }
                     }
                 } else {
-                    System.out.println("Success!");
+                    System.out.println("Login successful.");
                     break;
                 }
 
@@ -448,7 +448,6 @@ public class Client
                         break;
                     }
                 }
-
             }
         } // end else statement that runs for a cart with products inside
 
@@ -477,9 +476,229 @@ public class Client
 
 
 
-    public static void sellerMenu(Scanner s, PrintWriter writer, BufferedReader reader)
+    public static void sellerMenu(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
     {
-        System.out.println("seller");
+        String storeNames = reader.readLine();
+
+        while (true)
+        {
+            if (storeNames.equals("------------------") || storeNames.equals("no stores"))
+            {
+                break;
+            }
+            System.out.println(storeNames);
+            storeNames = reader.readLine();
+        }
+        System.out.println(storeNames);
+
+        String options = "1. Add a store\n2. Remove a store\n3. Edit a store\n4. View Dashboard\n" +
+                "5. Export a store's products to a file\n6. Import products for stores from a file\n7. " +
+                "View products in" + " carts\n" + "8. Delete Account\n9. Exit";
+
+        int sellerMenuChoice = 0;
+
+        do {
+            sellerMenuChoice = checkChoice(1, 9, options, s);
+
+            writer.write(String.valueOf(sellerMenuChoice));
+            writer.println();
+            writer.flush();
+
+            switch (sellerMenuChoice) {
+                // adding a store
+                case 1:
+                    do {
+                        System.out.println("What is the name of the store?");
+                        String newStoreName = s.nextLine();
+                        writer.write(newStoreName);
+                        writer.println();
+                        writer.flush();
+
+                        if (reader.readLine().equals("name taken"))
+                        {
+                            System.out.println("This store name is already in use. Try again");
+
+                        } else {
+                            System.out.println("Store added: to add products, go to edit store.");
+                            break;
+                        }
+                    } while (true);
+
+                    break;
+
+                // remove a store
+                case 2:
+                    String storesAvailable = reader.readLine();
+                    if (storesAvailable.equals("no stores"))
+                    {
+                        System.out.println("You have no stores to remove.");
+                        break;
+                    }
+
+                    do {
+                        System.out.println("Enter the name of the store you want to remove: ");
+                        String removedStoreName = s.nextLine();
+                        writer.write(removedStoreName);
+                        writer.println();
+                        writer.flush();
+
+                        if (removedStoreName.equals("quit"))
+                        {
+                            break;
+                        }
+
+                        String removedResult = reader.readLine();
+                        if (removedResult.equals("store not found"))
+                        {
+                            System.out.println("The store you entered does not exist. Try again or enter 'quit' to exit");
+                        } else {
+                            break;
+                        }
+                    } while (true);
+                    break;
+
+                // edit a store (save for later)
+                case 3:
+
+                    // view dashboard
+                case 4:
+                    viewSellerDash(s, writer, reader);
+                    break;
+                // Export store's products to a file
+                case 5:
+                    exportStoreProducts(s, writer, reader);
+                    break;
+                // Import products from stores to a file
+                case 6:
+                    importStoreProducts(s, writer, reader);
+                    break;
+                // View products in carts
+                case 7:
+                    viewCustomerCarts(s, writer, reader);
+                    break;
+
+                // delete an account
+                case 8:
+                    System.out.println(reader.readLine());
+                    sellerMenuChoice = 9;
+                    break;
+
+                // exit
+                case 9:
+                    break;
+            }
+
+        } while (sellerMenuChoice != 9);
+        System.out.println("Logging out...");
+    }
+
+    public static void viewSellerDash(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        String availableStores = reader.readLine();
+        if (availableStores.equals("no stores"))
+        {
+            System.out.println("You have no stores or sales!");
+        } else {
+            String dashOptions = "Sort the list:\n1. By Revenue\n2. By Number of Products\n3. No Sort";
+            int dashChoice = checkChoice(1,3, dashOptions, s);
+            writer.write(String.valueOf(dashChoice));
+            writer.println();
+            writer.flush();
+
+            String line = reader.readLine();
+            while (!line.equals("all done"))
+            {
+                System.out.println(line);
+                line = reader.readLine();
+            }
+        }
+    }
+
+    public static void exportStoreProducts(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        String storesAvailable = reader.readLine();
+        if (storesAvailable.equals("no stores"))
+        {
+            System.out.println("You have no stores.");
+        } else {
+            String storeNames = reader.readLine();
+            while (!storeNames.equals("all stores printed"))
+            {
+                System.out.println(storeNames);
+                storeNames = reader.readLine();
+            }
+
+            System.out.println("Enter the name of the store whose products you want to export: ");
+            String storeChoice = s.nextLine();
+            writer.write(storeChoice);
+            writer.println();
+            writer.flush();
+
+            String storeChoiceResult = reader.readLine();
+            if (storeChoiceResult.equals("store not found"))
+            {
+                System.out.println("There are no stores with this name.");
+            } else {
+                String line;
+                while (true)
+                {
+                    line = reader.readLine();
+                    System.out.println(line);
+                    if (line.equals("Products exported successfully!"))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void importStoreProducts(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        String storesAvailable = reader.readLine();
+        if (storesAvailable.equals("no stores"))
+        {
+            System.out.println("You have no stores.");
+        } else {
+            System.out.println("Enter the file name from which you want to import products: ");
+            String fileName = s.nextLine();
+
+            writer.write(fileName);
+            writer.println();
+            writer.flush();
+
+            String fileExists = reader.readLine();
+            if (fileExists.equals("file not found"))
+            {
+                System.out.println("The file does not exist.");
+            } else {
+                String line = reader.readLine();
+                while (true)
+                {
+                    System.out.println(line);
+                    line = reader.readLine();
+                    if (line.equals("Import finished"))
+                    {
+                        System.out.println(line);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void viewCustomerCarts(Scanner s, PrintWriter writer, BufferedReader reader) throws IOException
+    {
+        String line = reader.readLine();
+        while (true)
+        {
+            System.out.println(line);
+            line = reader.readLine();
+            if (line.equals("all done"))
+            {
+                break;
+            }
+        }
     }
 
 
