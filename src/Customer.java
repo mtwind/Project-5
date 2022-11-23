@@ -382,6 +382,12 @@ public class Customer extends User {
         }
     }
 
+    /**
+     * This utility method takes an email string, looks through the users text file to find the
+     * corresponding Customer obj information and generates a new Customer object to return.
+     * @param em
+     * @return Customer object
+     */
     public static Customer parseCustomer(String em) {
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
