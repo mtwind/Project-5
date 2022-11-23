@@ -1,3 +1,5 @@
+package src;
+
 import java.util.*;
 import java.io.*;
 /**
@@ -358,6 +360,19 @@ public class User {
         } catch (Exception e) {
             System.out.println("Error reading file");
         }
+    }
+
+    public String toString() {
+        String userType, userString;
+        if(this.isCustomer) {
+            userType = "customer";
+        } else {
+            userType = "seller";
+        }
+
+        userString = userType + "," + this.email + "," + this.name + "," + this.password + "," +
+                this.securityQuestionNumber + "," + this.securityAnswer;
+        return userString;
     }
 
 }
