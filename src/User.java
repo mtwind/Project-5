@@ -360,4 +360,17 @@ public class User {
         }
     }
 
+    public String toString() {
+        String userType, userString;
+        if(this.isCustomer) {
+            userType = "customer";
+        } else {
+            userType = "seller";
+        }
+
+        userString = userType + "," + this.email + "," + this.name + "," + this.password + "," +
+                this.securityQuestionNumber + "," + this.securityAnswer;
+        return userString;
+    }
+
 }

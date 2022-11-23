@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 /**
  * A marketplace that allows for multiple users to connect, uses GUI, and is fully run on servers and sockets
@@ -27,6 +28,8 @@ public class MainInterface extends JComponent implements Runnable {
     JTextField createUsername;
     JTextField createEmail;
     JTextField createPassword;
+    JComboBox chooseSecurityQ;
+    JTextField createSecurityAnswer;
     JButton createNewSellerButton;
     JButton createNewCustomerButton;
     JButton back;
@@ -45,12 +48,6 @@ public class MainInterface extends JComponent implements Runnable {
     JTextField editEmailSeller;
     JButton confirmEditSeller;
     JButton backSeller;
-    JTextField editUsernameCustomer;
-    JTextField editPasswordCustomer;
-    JTextField editEmailCustomer;
-    JButton confirmEditCustomer;
-    JButton backCustomer;
-    MainInterface main;
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
@@ -70,9 +67,16 @@ public class MainInterface extends JComponent implements Runnable {
             }
             //new seller button sends to seller home page
             //NEEDS OTHER IMPLEMENTATION
+            // TODO: add error checking for pre-existing email
             if (e.getSource() == createNewSellerButton) {
                 seller.setVisible(true);
                 createAccount.setVisible(false);
+                try {
+                    Server.createSeller(createEmail.getText(), createUsername.getText(), createPassword.getText(),
+                            chooseSecurityQ.getSelectedIndex(), createSecurityAnswer.getText());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
             //login seller button sends to seller home page
             //TODO allow for change password
@@ -108,9 +112,16 @@ public class MainInterface extends JComponent implements Runnable {
             }
             //creating new customer button sends to marketplace
             //NEEDS OTHER IMPLEMENTATION
+            // TODO: add error checking for pre-existing email
             if (e.getSource() == createNewCustomerButton) {
                 customer.setVisible(true);
                 createAccount.setVisible(false);
+                try {
+                    Server.createCustomer(createEmail.getText(), createUsername.getText(), createPassword.getText(),
+                            chooseSecurityQ.getSelectedIndex(), createSecurityAnswer.getText());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
             //login customer button sends to marketplace
             //TODO allow for change password
@@ -160,9 +171,15 @@ public class MainInterface extends JComponent implements Runnable {
                 seller.setVisible(true);
                 editSeller.setVisible(false);
             }
-//            if (e.getSource() == ) {
-//
-//            }
+
+            // resets account creation text fields after an account is created
+            if (e.getSource() == logoutButtonCustomer || e.getSource() == logoutButtonSeller) {
+                createEmail.setText("Enter Email");
+                createUsername.setText("Enter Username");
+                createPassword.setText("Enter Password");
+                chooseSecurityQ.setSelectedIndex(0);
+                createSecurityAnswer.setText("Enter Answer");
+            }
 //            if (e.getSource() == ) {
 //
 //            }
@@ -305,27 +322,37 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelCreate.setLayout(null);
 
         createUsername = new JTextField("Enter Username");
-        createUsername.setBounds(400, 200, 200, 30);
+        createUsername.setBounds(400, 100, 200, 30);
         createUsername.addActionListener(actionListener);
         buttonPanelCreate.add(createUsername);
 
         createPassword = new JTextField("Enter Password");
-        createPassword.setBounds(400, 250, 200, 30);
+        createPassword.setBounds(400, 150, 200, 30);
         createPassword.addActionListener(actionListener);
         buttonPanelCreate.add(createPassword);
 
         createEmail = new JTextField("Enter Email");
-        createEmail.setBounds(400, 150, 200, 30);
+        createEmail.setBounds(400, 50, 200, 30);
         createEmail.addActionListener(actionListener);
         buttonPanelCreate.add(createEmail);
 
+        chooseSecurityQ = new JComboBox(User.questionList);
+        chooseSecurityQ.setBounds(360, 200, 275, 30);
+        chooseSecurityQ.addActionListener(actionListener);
+        buttonPanelCreate.add(chooseSecurityQ);
+
+        createSecurityAnswer = new JTextField("Enter Answer");
+        createSecurityAnswer.setBounds(400, 250, 200, 30);
+        createSecurityAnswer.addActionListener(actionListener);
+        buttonPanelCreate.add(createSecurityAnswer);
+
         createNewSellerButton = new JButton("Create Seller Account");
-        createNewSellerButton.setBounds(125,350,350, 60);
+        createNewSellerButton.setBounds(125,400,200, 60);
         createNewSellerButton.addActionListener(actionListener);
         buttonPanelCreate.add(createNewSellerButton);
 
         createNewCustomerButton = new JButton("Create Customer Account");
-        createNewCustomerButton.setBounds(525,350,350, 60);;
+        createNewCustomerButton.setBounds(525,400,350, 60);;
         createNewCustomerButton.addActionListener(actionListener);
         buttonPanelCreate.add(createNewCustomerButton);
 

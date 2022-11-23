@@ -67,7 +67,6 @@ public class Server
         {
             String email = reader.readLine();
 
-
             // if the user has an account, recreates their object from stored data
             if (User.userExists(email).equals("customer")) { //checks to see if the user exists
                 user = Customer.parseCustomer(email);
@@ -191,6 +190,29 @@ public class Server
         }
         return user;
     }
+    /*
+      createCustomer - static method accessed from MainInterface to generate new customer object and store it in
+      users.txt.
+     */
+    public static void createCustomer(String email, String username, String password, int securityNum,
+                                      String securityAnswer) throws IOException {
+        Customer newCustomer = new Customer(username, email, password, true, securityAnswer, securityNum);
+        String customerString = newCustomer.toString();
+        BufferedWriter bfr = new BufferedWriter(new FileWriter("src/users.txt"));
+        bfr.write(customerString);
+        bfr.newLine();
+        bfr.close();
+    }
+    public static void createSeller(String email, String username, String password, int securityNum,
+                                      String securityAnswer) throws IOException {
+        Seller newSeller = new Seller(username, email, password, false, securityAnswer, securityNum);
+        String sellerString = newSeller.toString();
+        BufferedWriter bfr = new BufferedWriter(new FileWriter("src/users.txt"));
+        bfr.write(sellerString);
+        bfr.newLine();
+        bfr.close();
+    }
+
 
     // customer menu and all the methods called in it starts here
     public static void customerMenu(PrintWriter writer, BufferedReader reader, User user) throws IOException
