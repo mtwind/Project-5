@@ -75,10 +75,30 @@ public class MainInterface extends JComponent implements Runnable {
                 createAccount.setVisible(false);
             }
             //login seller button sends to seller home page
-            //NEEDS OTHER IMPLEMENTATION
+            //TODO allow for change password
             if (e.getSource() == loginSellerButton) {
-                seller.setVisible(true);
-                login.setVisible(false);
+                String email = username.getText();
+                String type = User.userExists(email);
+                if (type.equals("seller")) {
+                    Seller user = Seller.parseSeller(email);
+                    String pass = password.getText();
+                    boolean verified = user.passwordCheck(pass);
+                    if (verified) {
+                        seller.setVisible(true);
+                        login.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } else if (type.equals("customer")) {
+                    JOptionPane.showMessageDialog(null,
+                            "this email is registered as a customer.", "error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "this email is not registered! create a new account.", "error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
             //logout button for seller frame sends to login screen
             //NEEDS OTHER IMPLEMENTATION
@@ -93,10 +113,30 @@ public class MainInterface extends JComponent implements Runnable {
                 createAccount.setVisible(false);
             }
             //login customer button sends to marketplace
-            //NEEDS OTHER IMPLEMENTATION
+            //TODO allow for change password
             if (e.getSource() == loginCustomerButton) {
-                customer.setVisible(true);
-                login.setVisible(false);
+                String email = username.getText();
+                String type = User.userExists(email);
+                if (type.equals("customer")) {
+                    Customer user = Customer.parseCustomer(email);
+                    String pass = password.getText();
+                    boolean verified = user.passwordCheck(pass);
+                    if (verified) {
+                        customer.setVisible(true);
+                        login.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } else if (type.equals("seller")) {
+                    JOptionPane.showMessageDialog(null,
+                            "this email is registered as a seller.", "error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "this email is not registered! create a new account.", "error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
             //logs customer out sends to login screen
             //NEEDS OTHER IMPLEMENTATION
