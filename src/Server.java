@@ -197,20 +197,15 @@ public class Server
     public static void createCustomer(String email, String username, String password, int securityNum,
                                       String securityAnswer) throws IOException {
         Customer newCustomer = new Customer(username, email, password, true, securityAnswer, securityNum);
-        String customerString = newCustomer.toString();
-        BufferedWriter bfr = new BufferedWriter(new FileWriter("src/users.txt"));
-        bfr.write(customerString);
-        bfr.newLine();
-        bfr.close();
     }
     public static void createSeller(String email, String username, String password, int securityNum,
                                       String securityAnswer) throws IOException {
         Seller newSeller = new Seller(username, email, password, false, securityAnswer, securityNum);
-        String sellerString = newSeller.toString();
-        BufferedWriter bfr = new BufferedWriter(new FileWriter("src/users.txt"));
-        bfr.write(sellerString);
-        bfr.newLine();
-        bfr.close();
+        //String sellerString = newSeller.toString();
+        //BufferedWriter bfr = new BufferedWriter(new FileWriter("users.txt", true));
+        //bfr.write(sellerString);
+        //bfr.newLine();
+        //bfr.close();
     }
 
 
