@@ -51,6 +51,7 @@ public class MainInterface extends JComponent implements Runnable {
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
+        User user;
         @Override
         //Programming different buttons in action listener using if statements
         public void actionPerformed(ActionEvent e) {
@@ -71,12 +72,8 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == createNewSellerButton) {
                 seller.setVisible(true);
                 createAccount.setVisible(false);
-                try {
-                    Server.createSeller(createEmail.getText(), createUsername.getText(), createPassword.getText(),
-                            chooseSecurityQ.getSelectedIndex(), createSecurityAnswer.getText());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                user = new Seller(createEmail.getText(), createUsername.getText(), createPassword.getText(),
+                        false, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
             }
             //login seller button sends to seller home page
             //TODO allow for change password
@@ -84,7 +81,7 @@ public class MainInterface extends JComponent implements Runnable {
                 String email = username.getText();
                 String type = User.userExists(email);
                 if (type.equals("seller")) {
-                    Seller user = Seller.parseSeller(email);
+                    user = Seller.parseSeller(email);
                     String pass = password.getText();
                     boolean verified = user.passwordCheck(pass);
                     if (verified) {
@@ -107,6 +104,7 @@ public class MainInterface extends JComponent implements Runnable {
             //logout button for seller frame sends to login screen
             //NEEDS OTHER IMPLEMENTATION
             if (e.getSource() == logoutButtonSeller) {
+                user = null;
                 login.setVisible(true);
                 seller.setVisible(false);
             }
@@ -116,12 +114,8 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == createNewCustomerButton) {
                 customer.setVisible(true);
                 createAccount.setVisible(false);
-                try {
-                    Server.createCustomer(createEmail.getText(), createUsername.getText(), createPassword.getText(),
-                            chooseSecurityQ.getSelectedIndex(), createSecurityAnswer.getText());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                    user = new Customer(createEmail.getText(), createUsername.getText(), createPassword.getText(),
+                            true, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
             }
             //login customer button sends to marketplace
             //TODO allow for change password
@@ -129,7 +123,7 @@ public class MainInterface extends JComponent implements Runnable {
                 String email = username.getText();
                 String type = User.userExists(email);
                 if (type.equals("customer")) {
-                    Customer user = Customer.parseCustomer(email);
+                    user = Customer.parseCustomer(email);
                     String pass = password.getText();
                     boolean verified = user.passwordCheck(pass);
                     if (verified) {
@@ -154,6 +148,7 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == logoutButtonCustomer) {
                 login.setVisible(true);
                 customer.setVisible(false);
+                user = null;
             }
             //takes customer to account screen
             if (e.getSource() == accountSeller) {
@@ -168,6 +163,9 @@ public class MainInterface extends JComponent implements Runnable {
             //takes user back to seller screen
             //NEEDS OTHER IMPLEMENTATION
             if (e.getSource() == confirmEditSeller) {
+                user.setPassword(editPasswordSeller.getText());
+                user.setEmail(editEmailSeller.getText());
+                user.editUserFile();
                 seller.setVisible(true);
                 editSeller.setVisible(false);
             }
