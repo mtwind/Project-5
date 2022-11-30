@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.net.Socket;
 
 /**
  * A marketplace that allows for multiple users to connect, uses GUI, and is fully run on servers and sockets
@@ -19,7 +20,7 @@ public class MainInterface extends JComponent implements Runnable {
     JFrame stores;
     JFrame editSeller;
     JFrame editCustomer;
-    JTextField username;
+    JTextField email;
     JTextField password;
     JButton createAccountButton;
     JButton loginCustomerButton;
@@ -48,13 +49,28 @@ public class MainInterface extends JComponent implements Runnable {
     JTextField editEmailSeller;
     JButton confirmEditSeller;
     JButton backSeller;
+    JButton backStore;
+    JTextField editUsernameCustomer;
+    JTextField editPasswordCustomer;
+    JTextField editEmailCustomer;
+    JButton confirmEditCustomer;
+    JButton logoutButtonStore;
+    JButton addProduct;
+    JComboBox productsDropdown;
+    JButton selectProductButton;
+    JButton deleteStore;
+    Socket socket;
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
         User user;
+
         @Override
         //Programming different buttons in action listener using if statements
         public void actionPerformed(ActionEvent e) {
+
+
+
             //create account button sends to create account page
             //NEEDS OTHER IMPLEMENTATION
             if (e.getSource() == createAccountButton) {
@@ -78,10 +94,10 @@ public class MainInterface extends JComponent implements Runnable {
             //login seller button sends to seller home page
             //TODO allow for change password
             if (e.getSource() == loginSellerButton) {
-                String email = username.getText();
-                String type = User.userExists(email);
+                String emailtxt = email.getText();
+                String type = User.userExists(emailtxt);
                 if (type.equals("seller")) {
-                    user = Seller.parseSeller(email);
+                    user = Seller.parseSeller(emailtxt);
                     String pass = password.getText();
                     boolean verified = user.passwordCheck(pass);
                     if (verified) {
@@ -114,16 +130,16 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == createNewCustomerButton) {
                 customer.setVisible(true);
                 createAccount.setVisible(false);
-                    user = new Customer(createEmail.getText(), createUsername.getText(), createPassword.getText(),
-                            true, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
+                user = new Customer(createEmail.getText(), createUsername.getText(), createPassword.getText(),
+                        true, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
             }
             //login customer button sends to marketplace
             //TODO allow for change password
             if (e.getSource() == loginCustomerButton) {
-                String email = username.getText();
-                String type = User.userExists(email);
+                String emailtxt = email.getText();
+                String type = User.userExists(emailtxt);
                 if (type.equals("customer")) {
-                    user = Customer.parseCustomer(email);
+                    user = Customer.parseCustomer(emailtxt);
                     String pass = password.getText();
                     boolean verified = user.passwordCheck(pass);
                     if (verified) {
@@ -178,21 +194,35 @@ public class MainInterface extends JComponent implements Runnable {
                 chooseSecurityQ.setSelectedIndex(0);
                 createSecurityAnswer.setText("Enter Answer");
             }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
+            //takes user back to customer screen and edits settings
+            //NEEDS OTHER IMPLEMENTATION
+            if (e.getSource() == confirmEditCustomer) {
+                customer.setVisible(true);
+                editCustomer.setVisible(false);
+            }
+            //takes user to stores screen and needs to change values of dropdowns in store settings
+            //NEEDS OTHER IMPLEMENTATION
+            if (e.getSource() == selectStoreButton) {
+                stores.setVisible(true);
+                seller.setVisible(false);
+            }
+            //deletes the store that's currently selected and takes back to seller homepage
+            //NEEDS OTHER IMPLEMENTATION
+            if (e.getSource() == deleteStore) {
+                seller.setVisible(true);
+                stores.setVisible(false);
+            }
+            //takes user back to seller homepage
+            if (e.getSource() == backStore) {
+                seller.setVisible(true);
+                stores.setVisible(false);
+            }
+            //takes user back to login screen
+            //NEEDS OTHER IMPLEMENTATION
+            if (e.getSource() == logoutButtonStore) {
+                login.setVisible(true);
+                stores.setVisible(false);
+            }
 
 
         }
@@ -204,6 +234,15 @@ public class MainInterface extends JComponent implements Runnable {
     }
 
     public void run() {
+
+        // creating socket
+        try {
+            socket = new Socket("localhost", 1);
+        } catch (IOException e) {
+//            throw new RuntimeException(e);
+        }
+
+
         // set up JFrames for all different frames
         login = new JFrame("Login");
         Container loginContent = login.getContentPane();
@@ -284,12 +323,12 @@ public class MainInterface extends JComponent implements Runnable {
 
         buttonPanelLogin.setLayout(null);
         loginCustomerButton = new JButton("Login Customer");
-        loginCustomerButton.setBounds(525,350,350, 60);
+        loginCustomerButton.setBounds(525, 350, 350, 60);
         loginCustomerButton.addActionListener(actionListener);
         buttonPanelLogin.add(loginCustomerButton);
 
         loginSellerButton = new JButton("Login Seller");
-        loginSellerButton.setBounds(125,350,350, 60);
+        loginSellerButton.setBounds(125, 350, 350, 60);
         loginSellerButton.addActionListener(actionListener);
         buttonPanelLogin.add(loginSellerButton);
 
@@ -303,10 +342,10 @@ public class MainInterface extends JComponent implements Runnable {
         exitButton.addActionListener(actionListener);
         buttonPanelLogin.add(exitButton);
 
-        username = new JTextField("Enter Username");
-        username.setBounds(400, 200, 200, 30);
-        username.addActionListener(actionListener);
-        buttonPanelLogin.add(username);
+        email = new JTextField("Enter Email");
+        email.setBounds(400, 200, 200, 30);
+        email.addActionListener(actionListener);
+        buttonPanelLogin.add(email);
 
         password = new JTextField("Enter Password");
         password.setBounds(400, 250, 200, 30);
@@ -314,12 +353,11 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelLogin.add(password);
 
 
-
         //Creating panel and buttons for creating account screen
         JPanel buttonPanelCreate = new JPanel();
         buttonPanelCreate.setLayout(null);
 
-        createUsername = new JTextField("Enter Username");
+        createUsername = new JTextField("Enter Name");
         createUsername.setBounds(400, 100, 200, 30);
         createUsername.addActionListener(actionListener);
         buttonPanelCreate.add(createUsername);
@@ -345,12 +383,13 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelCreate.add(createSecurityAnswer);
 
         createNewSellerButton = new JButton("Create Seller Account");
-        createNewSellerButton.setBounds(125,400,200, 60);
+        createNewSellerButton.setBounds(125, 400, 350, 60);
         createNewSellerButton.addActionListener(actionListener);
         buttonPanelCreate.add(createNewSellerButton);
 
         createNewCustomerButton = new JButton("Create Customer Account");
-        createNewCustomerButton.setBounds(525,400,350, 60);;
+        createNewCustomerButton.setBounds(525, 400, 350, 60);
+        ;
         createNewCustomerButton.addActionListener(actionListener);
         buttonPanelCreate.add(createNewCustomerButton);
 
@@ -417,11 +456,11 @@ public class MainInterface extends JComponent implements Runnable {
         exitButtonCustomer.addActionListener(actionListener);
         buttonPanelCustomer.add(exitButtonCustomer);
 
-        //Creating buttons and panels for edit account page
+        //Creating buttons and panels for edit Seller page
         JPanel buttonPanelEditSeller = new JPanel();
         buttonPanelEditSeller.setLayout(null);
 
-        editUsernameSeller = new JTextField("Enter Username");
+        editUsernameSeller = new JTextField("Enter Name");
         editUsernameSeller.setBounds(400, 200, 200, 30);
         editUsernameSeller.addActionListener(actionListener);
         buttonPanelEditSeller.add(editUsernameSeller);
@@ -446,13 +485,85 @@ public class MainInterface extends JComponent implements Runnable {
         backSeller.addActionListener(actionListener);
         buttonPanelEditSeller.add(backSeller);
 
+        //Creating buttons and panels for edit customer page
+        JPanel buttonPanelEditCustomer = new JPanel();
+        buttonPanelEditCustomer.setLayout(null);
+
+        editUsernameCustomer = new JTextField("Enter Name");
+        editUsernameCustomer.setBounds(400, 200, 200, 30);
+        editUsernameCustomer.addActionListener(actionListener);
+        buttonPanelEditCustomer.add(editUsernameCustomer);
+
+        editPasswordCustomer = new JTextField("Enter Password");
+        editPasswordCustomer.setBounds(400, 250, 200, 30);
+        editPasswordCustomer.addActionListener(actionListener);
+        buttonPanelEditCustomer.add(editPasswordCustomer);
+
+        editEmailCustomer = new JTextField("Enter Email");
+        editEmailCustomer.setBounds(400, 150, 200, 30);
+        editEmailCustomer.addActionListener(actionListener);
+        buttonPanelEditCustomer.add(editEmailCustomer);
+
+        confirmEditCustomer = new JButton("Edit Settings");
+        confirmEditCustomer.setBounds(400, 300, 200, 60);
+        confirmEditCustomer.addActionListener(actionListener);
+        buttonPanelEditCustomer.add(confirmEditCustomer);
+
+        backSeller = new JButton("Back");
+        backSeller.setBounds(50, 475, 350, 60);
+        backSeller.addActionListener(actionListener);
+        buttonPanelEditCustomer.add(backSeller);
+
+        //Creating buttons and panels for store page
+        JPanel buttonPanelStore = new JPanel();
+        buttonPanelStore.setLayout(null);
+
+        logoutButtonStore = new JButton("Logout");
+        logoutButtonStore.setBounds(50, 20, 150, 30);
+        logoutButtonStore.addActionListener(actionListener);
+        buttonPanelStore.add(logoutButtonStore);
+
+        addProduct = new JButton("Add Product");
+        addProduct.setBounds(800, 20, 150, 30);
+        addProduct.addActionListener(actionListener);
+        buttonPanelStore.add(addProduct);
+
+        productsDropdown = new JComboBox();
+        productsDropdown.setBounds(400, 250, 200, 30);
+        buttonPanelStore.add(productsDropdown);
+
+        selectProductButton = new JButton("Select Product");
+        selectProductButton.setBounds(400, 300, 200, 30);
+        selectProductButton.addActionListener(actionListener);
+        buttonPanelStore.add(selectProductButton);
+
+        backStore = new JButton("Back");
+        backStore.setBounds(50, 475, 350, 60);
+        backStore.addActionListener(actionListener);
+        buttonPanelStore.add(backStore);
+
+        deleteStore = new JButton("Remove This Store");
+        deleteStore.setBounds(600, 475, 350, 60);
+        deleteStore.addActionListener(actionListener);
+        buttonPanelStore.add(deleteStore);
+
+        //Creating buttons and panels for products page
+
+
+
+
+        //Creating buttons and panels for cart page (For this I don't know exactly what is needed i may need help)
+
+
+
+
         accountContentSeller.add(buttonPanelEditSeller);
         loginContent.add(buttonPanelLogin);
         createAccountContent.add(buttonPanelCreate);
         sellerContent.add(buttonPanelSeller);
         customerContent.add(buttonPanelCustomer);
+        storesContent.add(buttonPanelStore);
+        accountContentCustomer.add(buttonPanelEditCustomer);
     }
 
-
 }
-
