@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class Client
 {
-
     public static void main(String[] args)
     {
         Scanner s = new Scanner(System.in);
@@ -17,16 +16,8 @@ public class Client
             Socket socket = new Socket("localhost", 1);
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            SwingUtilities.invokeLater(new MainInterface());
 
-            Driver.checkIfFilesExist();
-            logIn(s, writer, reader);
-
-            if (reader.readLine().equals("customer"))
-            {
-                customerMenu(s, writer, reader);
-            } else {
-                sellerMenu(s, writer, reader);
-            }
 
         } catch (Exception e) {
             e.printStackTrace();

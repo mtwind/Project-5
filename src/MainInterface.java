@@ -1,8 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * A marketplace that allows for multiple users to connect, uses GUI, and is fully run on servers and sockets
@@ -60,6 +64,8 @@ public class MainInterface extends JComponent implements Runnable {
     JButton selectProductButton;
     JButton deleteStore;
     Socket socket;
+    BufferedReader reader;
+    PrintWriter writer;
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
@@ -68,8 +74,6 @@ public class MainInterface extends JComponent implements Runnable {
         @Override
         //Programming different buttons in action listener using if statements
         public void actionPerformed(ActionEvent e) {
-
-
 
             //create account button sends to create account page
             //NEEDS OTHER IMPLEMENTATION
@@ -84,6 +88,7 @@ public class MainInterface extends JComponent implements Runnable {
             }
             //new seller button sends to seller home page
             //NEEDS OTHER IMPLEMENTATION
+            //button 1
             // TODO: add error checking for pre-existing email
             if (e.getSource() == createNewSellerButton) {
                 seller.setVisible(true);
@@ -92,40 +97,58 @@ public class MainInterface extends JComponent implements Runnable {
                         false, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
             }
             //login seller button sends to seller home page
+            //button num: 2
             //TODO allow for change password
             if (e.getSource() == loginSellerButton) {
+                writer.write("2");
+                writer.println();
+                writer.flush();
                 String emailtxt = email.getText();
+                writer.write(emailtxt);
+                writer.println();
+                writer.flush();
                 String type = User.userExists(emailtxt);
-                if (type.equals("seller")) {
-                    user = Seller.parseSeller(emailtxt);
-                    String pass = password.getText();
-                    boolean verified = user.passwordCheck(pass);
-                    if (verified) {
-                        seller.setVisible(true);
-                        login.setVisible(false);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
+                writer.write(type);
+                writer.println();
+                writer.flush();
+                try {
+                    String result = reader.readLine();
+                    if (result.equals("t")) {
+                        writer.write(password.getText());
+                        writer.println();
+                        writer.flush();
+                        if (reader.readLine().equals("verified")) {
+                            seller.setVisible(true);
+                            login.setVisible(false);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else if (result.equals("customerLog")) {
+                        JOptionPane.showMessageDialog(null,
+                                "this email is registered as a customer.", "error", JOptionPane.ERROR_MESSAGE);
+                    } else if (result.equals("noLog")) {
+                        JOptionPane.showMessageDialog(null,
+                                "this email is not registered! create a new account.", "error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
-
-                } else if (type.equals("customer")) {
-                    JOptionPane.showMessageDialog(null,
-                            "this email is registered as a customer.", "error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null,
-                            "this email is not registered! create a new account.", "error",
-                            JOptionPane.ERROR_MESSAGE);
+                } catch (Exception h) {
+                    h.printStackTrace();
                 }
+
             }
             //logout button for seller frame sends to login screen
             //NEEDS OTHER IMPLEMENTATION
             if (e.getSource() == logoutButtonSeller) {
-                user = null;
-                login.setVisible(true);
-                seller.setVisible(false);
+                    user = null;
+                    login.setVisible(true);
+                    seller.setVisible(false);
+
+
             }
             //creating new customer button sends to marketplace
             //NEEDS OTHER IMPLEMENTATION
+            //button 3
             // TODO: add error checking for pre-existing email
             if (e.getSource() == createNewCustomerButton) {
                 customer.setVisible(true);
@@ -134,29 +157,43 @@ public class MainInterface extends JComponent implements Runnable {
                         true, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
             }
             //login customer button sends to marketplace
+            //button 4
             //TODO allow for change password
             if (e.getSource() == loginCustomerButton) {
+                writer.write("4");
+                writer.println();
+                writer.flush();
                 String emailtxt = email.getText();
+                writer.write(emailtxt);
+                writer.println();
+                writer.flush();
                 String type = User.userExists(emailtxt);
-                if (type.equals("customer")) {
-                    user = Customer.parseCustomer(emailtxt);
-                    String pass = password.getText();
-                    boolean verified = user.passwordCheck(pass);
-                    if (verified) {
-                        customer.setVisible(true);
-                        login.setVisible(false);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
+                writer.write(type);
+                writer.println();
+                writer.flush();
+                try {
+                    String result = reader.readLine();
+                    if (result.equals("t")) {
+                        writer.write(password.getText());
+                        writer.println();
+                        writer.flush();
+                        if (reader.readLine().equals("verified")) {
+                            seller.setVisible(true);
+                            login.setVisible(false);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else if (result.equals("sellerLog")) {
+                        JOptionPane.showMessageDialog(null,
+                                "this email is registered as a seller.", "error", JOptionPane.ERROR_MESSAGE);
+                    } else if (result.equals("noLog")) {
+                        JOptionPane.showMessageDialog(null,
+                                "this email is not registered! create a new account.", "error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
-
-                } else if (type.equals("seller")) {
-                    JOptionPane.showMessageDialog(null,
-                            "this email is registered as a seller.", "error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null,
-                            "this email is not registered! create a new account.", "error",
-                            JOptionPane.ERROR_MESSAGE);
+                } catch (Exception h) {
+                    h.printStackTrace();
                 }
             }
             //logs customer out sends to login screen
@@ -167,6 +204,7 @@ public class MainInterface extends JComponent implements Runnable {
                 user = null;
             }
             //takes customer to account screen
+
             if (e.getSource() == accountSeller) {
                 editSeller.setVisible(true);
                 seller.setVisible(false);
@@ -178,6 +216,7 @@ public class MainInterface extends JComponent implements Runnable {
             }
             //takes user back to seller screen
             //NEEDS OTHER IMPLEMENTATION
+            //button 5
             if (e.getSource() == confirmEditSeller) {
                 user.setPassword(editPasswordSeller.getText());
                 user.setEmail(editEmailSeller.getText());
@@ -196,12 +235,14 @@ public class MainInterface extends JComponent implements Runnable {
             }
             //takes user back to customer screen and edits settings
             //NEEDS OTHER IMPLEMENTATION
+            //button 6
             if (e.getSource() == confirmEditCustomer) {
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
             //takes user to stores screen and needs to change values of dropdowns in store settings
             //NEEDS OTHER IMPLEMENTATION
+
             if (e.getSource() == selectStoreButton) {
                 stores.setVisible(true);
                 seller.setVisible(false);
@@ -230,14 +271,18 @@ public class MainInterface extends JComponent implements Runnable {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new MainInterface());
+
+
     }
 
     public void run() {
 
+
         // creating socket
         try {
             socket = new Socket("localhost", 1);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
 //            throw new RuntimeException(e);
         }

@@ -17,11 +17,18 @@ public class Server
             server.setReuseAddress(true);
             // the next lines start and accept a socket from the client and create objects to read and write to
             // the client
+
             while (true) {
                 Socket client = server.accept();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                PrintWriter writer = new PrintWriter(client.getOutputStream());
                 ClientHandler clientSock = new ClientHandler(client);
                 new Thread(clientSock).start();
+
             }
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
