@@ -11,35 +11,17 @@ public class Server
 {
     public static void main(String[] args)
     {
-
         ServerSocket server = null;
         try {
             server = new ServerSocket(1);
             server.setReuseAddress(true);
             // the next lines start and accept a socket from the client and create objects to read and write to
             // the client
-
-
             while (true) {
                 Socket client = server.accept();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                PrintWriter writer = new PrintWriter(client.getOutputStream());
                 ClientHandler clientSock = new ClientHandler(client);
                 new Thread(clientSock).start();
-
-                //User user = logIn(writer, reader);
-
-                //if (user.isCustomer())
-                //{
-                    //customerMenu(writer, reader, user);
-                //} else {
-                    //sellerMenu(writer, reader, (Seller) user);
-                //}
-
             }
-
-
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -197,6 +179,7 @@ public class Server
     public static void createCustomer(String email, String username, String password, int securityNum,
                                       String securityAnswer) throws IOException {
         Customer newCustomer = new Customer(username, email, password, true, securityAnswer, securityNum);
+        //return newCustomer;
     }
     public static void createSeller(String email, String username, String password, int securityNum,
                                       String securityAnswer) throws IOException {
@@ -206,6 +189,7 @@ public class Server
         //bfr.write(sellerString);
         //bfr.newLine();
         //bfr.close();
+        //return newSeller;
     }
 
 

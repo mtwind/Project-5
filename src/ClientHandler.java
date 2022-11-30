@@ -11,6 +11,25 @@ public class ClientHandler implements Runnable {
     }
 
     public void run() {
-        SwingUtilities.invokeLater(new MainInterface());
+        try {
+            SwingUtilities.invokeLater(new MainInterface());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            int buttonChoice = 0;
+            boolean running = true;
+            while (running) {
+                //TODO: enter switch statement that takes input from client (based on button) and processes information
+                switch(buttonChoice) {
+                    default:
+                        running = false;
+                        break;
+                }
+            }
+
+            reader.close();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
