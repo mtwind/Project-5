@@ -25,6 +25,33 @@ public class ClientHandler implements Runnable {
                 //TODO: enter switch statement that takes input from client (based on button) and processes information
                 String email, type;
                 switch (buttonChoice) {
+                    case 1: // create an account, used for both sellers and customers
+                        String[] info = reader.readLine().split(",");
+                        boolean alreadyUsed = User.checkNewUser(info[1]);
+                        System.out.println(alreadyUsed);
+
+                        if (alreadyUsed == false) {
+                            boolean isCustomer = Boolean.parseBoolean(info[3]);
+
+                            if (isCustomer)
+                            {
+                                user = new Customer(info[0], info[1], info[2], true,
+                                        info[4], Integer.parseInt(info[5]));
+                            } else {
+                                user = new Seller(info[0], info[1], info[2], false,
+                                        info[4], Integer.parseInt(info[5]));
+                            }
+                            writer.write("new");
+                            writer.println();
+                            writer.flush();
+                        } else {
+                            writer.write("not new");
+                            writer.println();
+                            writer.flush();
+                        }
+                        break;
+
+
                     case 2: //seller log in
                         email = reader.readLine();
                         type = reader.readLine();
@@ -57,7 +84,7 @@ public class ClientHandler implements Runnable {
                             writer.flush();
                         }
                         break;
-                    case 4: //seller log in
+                    case 3: // customer log in
                         email = reader.readLine();
                         type = reader.readLine();
                         System.out.println(type);

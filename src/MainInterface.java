@@ -86,16 +86,72 @@ public class MainInterface extends JComponent implements Runnable {
                 login.setVisible(true);
                 createAccount.setVisible(false);
             }
+
             //new seller button sends to seller home page
-            //NEEDS OTHER IMPLEMENTATION
             //button 1
-            // TODO: add error checking for pre-existing email
             if (e.getSource() == createNewSellerButton) {
-                seller.setVisible(true);
-                createAccount.setVisible(false);
-                user = new Seller(createUsername.getText(),  createEmail.getText(), createPassword.getText(),
-                        false, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
+                writer.write("1");
+                writer.println();
+                writer.flush();
+
+                String newSellerInfo = "";
+                newSellerInfo += createUsername.getText() + "," + createEmail.getText() + "," + createPassword.getText()
+                        + ",false" + ","  + createSecurityAnswer.getText() + ","  + chooseSecurityQ.getSelectedIndex();
+
+                writer.write(newSellerInfo);
+                writer.println();
+                writer.flush();
+
+                String isNew = null;
+                try {
+                    isNew = reader.readLine();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                if (isNew.equals("new")) {
+                    seller.setVisible(true);
+                    createAccount.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "this email is already registered to an account", "error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
+
+            //creating new customer button sends to marketplace
+            // also button 1 because implementation is the same in the server
+            if (e.getSource() == createNewCustomerButton) {
+                writer.write("1");
+                writer.println();
+                writer.flush();
+
+                String newCustomerInfo = "";
+                newCustomerInfo += createUsername.getText() + "," + createEmail.getText() + "," + createPassword.getText()
+                        + ",true" + ","  + createSecurityAnswer.getText() + ","  + chooseSecurityQ.getSelectedIndex();
+
+                writer.write(newCustomerInfo);
+                writer.println();
+                writer.flush();
+
+                String isNew = null;
+                try {
+                    isNew = reader.readLine();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                if (isNew.equals("new")) {
+                    customer.setVisible(true);
+                    createAccount.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "this email is already registered to an account", "error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+
             //login seller button sends to seller home page
             //button num: 2
             //TODO allow for change password
@@ -146,21 +202,12 @@ public class MainInterface extends JComponent implements Runnable {
 
 
             }
-            //creating new customer button sends to marketplace
-            //NEEDS OTHER IMPLEMENTATION
-            //button 3
-            // TODO: add error checking for pre-existing email
-            if (e.getSource() == createNewCustomerButton) {
-                customer.setVisible(true);
-                createAccount.setVisible(false);
-                user = new Customer(createUsername.getText(), createEmail.getText(), createPassword.getText(),
-                        true, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
-            }
+
             //login customer button sends to marketplace
-            //button 4
+            //button 3
             //TODO allow for change password
             if (e.getSource() == loginCustomerButton) {
-                writer.write("4");
+                writer.write("3");
                 writer.println();
                 writer.flush();
                 String emailtxt = email.getText();

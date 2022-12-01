@@ -88,6 +88,30 @@ public class User {
         return "";
     }
 
+    // checks if the user is returning or not for create account button
+    public static boolean checkNewUser(String email) { //if the user exists, returns the type of user. if not, returns an
+        //empty string
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
+
+            String line = bfr.readLine();
+            if (line == null) {
+                return false;
+            } else {
+                while (line != null) {
+                    String e = line.split(",")[1];
+                    if (e.equals(email)) {
+                        return true;
+                    }
+                    line = bfr.readLine();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("That file does not exist.");
+        }
+        return false;
+    }
+
     // writes a file for new users
     // returns true if the file is written successfully
     // returns false if there is an error writing the file or the user is returning
