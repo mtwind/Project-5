@@ -153,7 +153,7 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == createNewCustomerButton) {
                 customer.setVisible(true);
                 createAccount.setVisible(false);
-                user = new Customer(createEmail.getText(), createUsername.getText(), createPassword.getText(),
+                user = new Customer(createUsername.getText(), createEmail.getText(), createPassword.getText(),
                         true, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
             }
             //login customer button sends to marketplace
