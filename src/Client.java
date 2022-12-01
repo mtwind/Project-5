@@ -42,7 +42,7 @@ public class Client
             // used if user is new, allows account creation
             if (unknownUser)
             {
-                // asks user to create acount, uses exceptions and loops to assure they answer 1 or 2
+                // asks user to create account, uses exceptions and loops to assure they answer 1 or 2
                 System.out.println("Would you like to create an account? 1 = yes, 2 = no");
                 while (true)
                 {
