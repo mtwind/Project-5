@@ -93,7 +93,7 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == createNewSellerButton) {
                 seller.setVisible(true);
                 createAccount.setVisible(false);
-                user = new Seller(createEmail.getText(), createUsername.getText(), createPassword.getText(),
+                user = new Seller(createUsername.getText(),  createEmail.getText(), createPassword.getText(),
                         false, createSecurityAnswer.getText(), chooseSecurityQ.getSelectedIndex());
             }
             //login seller button sends to seller home page
