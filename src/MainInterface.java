@@ -238,7 +238,7 @@ public class MainInterface extends JComponent implements Runnable {
                         writer.println();
                         writer.flush();
                         if (reader.readLine().equals("verified")) {
-                            seller.setVisible(true);
+                            customer.setVisible(true);
                             login.setVisible(false);
                         } else {
                             JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
@@ -306,6 +306,18 @@ public class MainInterface extends JComponent implements Runnable {
             //NEEDS OTHER IMPLEMENTATION
             //button 6
             if (e.getSource() == confirmEditCustomer) {
+                writer.write("6");
+                writer.println();
+                writer.flush();
+                writer.write(editPasswordCustomer.getText()); // write new password to server
+                writer.println();
+                writer.flush();
+                writer.write(editUsernameCustomer.getText());
+                writer.println();
+                writer.flush();
+                writer.write(editEmailCustomer.getText()); // write new email to server
+                writer.println();
+                writer.flush();
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
@@ -326,6 +338,7 @@ public class MainInterface extends JComponent implements Runnable {
                 stores.setVisible(true);
                 seller.setVisible(false);
             }
+
             //deletes the store that's currently selected and takes back to seller homepage
             //NEEDS OTHER IMPLEMENTATION 8
             if (e.getSource() == deleteStore) {

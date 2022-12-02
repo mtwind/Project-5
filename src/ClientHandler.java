@@ -132,11 +132,11 @@ public class ClientHandler implements Runnable {
                         String sellerNewPass = reader.readLine(); // read new pass from client
                         String sellerNewName = reader.readLine();
                         String sellerNewEmail = reader.readLine(); // read new email from client
-                        String oldEmail = user.getEmail();
+                        String oldSellerEmail = user.getEmail();
                         if (user == null) {
                             System.out.println("user null");
                         }
-                        user = Seller.parseSeller(oldEmail);
+                        user = Seller.parseSeller(oldSellerEmail);
                         if (user == null) {
                             System.out.println("user null2");
                         }
@@ -144,7 +144,7 @@ public class ClientHandler implements Runnable {
                         ArrayList<String> userLines = ((Seller)user).readUserFile();
                         for (int i = 0; i < userLines.size(); i++) {
                             String[] userData = userLines.get(i).split(",");
-                            if (userData[1].equals(oldEmail)) {
+                            if (userData[1].equals(oldSellerEmail)) {
                                 userData[1] = sellerNewEmail;
                                 userData[2] = sellerNewName;
                                 userData[3] = sellerNewPass;
@@ -159,7 +159,7 @@ public class ClientHandler implements Runnable {
                                 userLines.set(i, newUserLine);
                                 PrintWriter pw = new PrintWriter(new FileOutputStream("users.txt"));
                                 for (int x = 0; x < userLines.size(); x++) {
-                                    pw.println(userLines.get(i));
+                                    pw.println(userLines.get(x));
                                 }
                                 pw.flush();
                                 pw.close();
@@ -173,6 +173,51 @@ public class ClientHandler implements Runnable {
                             ((Seller) user).getStores().get(i).setOwner(sellerNewEmail);
                             ((Seller) user).getStores().get(i).editStoreFile();
                         }
+                        break;
+                    case 6: // confirmEditCustomer button
+                        System.out.println("here");
+                        String customerNewPass = reader.readLine(); // read new pass from client
+                        String customerNewName = reader.readLine();
+                        String customerNewEmail = reader.readLine(); // read new email from client
+                        String oldCustomerEmail = user.getEmail();
+                        if (user == null) {
+                            System.out.println("user null");
+                        }
+                        user = Customer.parseCustomer(oldCustomerEmail);
+                        if (user == null) {
+                            System.out.println("user null2");
+                        }
+                        System.out.println("here");
+                        ArrayList<String> customerLines = ((Customer)user).readUserFile();
+                        for (int i = 0; i < customerLines.size(); i++) {
+                            String[] userData = customerLines.get(i).split(",");
+                            if (userData[1].equals(oldCustomerEmail)) {
+                                userData[1] = customerNewEmail;
+                                userData[2] = customerNewName;
+                                userData[3] = customerNewPass;
+                                String newUserLine = "";
+                                for (int j = 0; j < userData.length; j++) {
+                                    if (j == userData.length - 1) {
+                                        newUserLine = newUserLine.concat(userData[j]);
+                                    } else {
+                                        newUserLine = newUserLine.concat(userData[j] + ",");
+                                    }
+                                }
+                                customerLines.set(i, newUserLine);
+                                PrintWriter pw = new PrintWriter(new FileOutputStream("users.txt"));
+                                for (int x = 0; x < customerLines.size(); x++) {
+                                    pw.println(customerLines.get(x));
+                                }
+                                pw.flush();
+                                pw.close();
+                                break;
+                            }
+                        }
+                        user.setPassword(customerNewPass);
+                        user.setName(customerNewName);
+                        user.setEmail(customerNewEmail);
+
+                        // TODO: implement changes to the emails in the store's list of customers
                         break;
                     case 7:
                         String selectedStore = reader.readLine();

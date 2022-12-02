@@ -373,7 +373,7 @@ public class Customer extends User {
             FileOutputStream fos = new FileOutputStream(f,true);
             PrintWriter pw = new PrintWriter(fos);
             String str = "customer," + this.getEmail() + "," + this.getName() + "," + this.getPassword() + "," +
-                    this.getSecurityQuestionNumber() + "," + this.getSecurityAnswer() + ",none,none";
+                    this.getSecurityQuestionNumber() + "," + this.getSecurityAnswer() + ",none" + ",none";
             pw.println(str);
             pw.close();
 
