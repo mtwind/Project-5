@@ -221,6 +221,30 @@ public class ClientHandler implements Runnable {
                         break;
                     case 7:
                         String selectedStore = reader.readLine();
+                        ArrayList<Store> fileStores = Store.getAllStores();
+                        Store selected = null;
+                        for (int i = 0; i < fileStores.size(); i++) {
+                            if (fileStores.get(i).getOwner().equals(user.getEmail()) &&
+                                    fileStores.get(i).getName().equals(selectedStore)) {
+                                selected = fileStores.get(i);
+                                break;
+                            }
+                        }
+                        ArrayList<Product> storeProducts;
+                        if (selected != null)
+                            storeProducts = selected.getProducts();
+                        else
+                            storeProducts = new ArrayList<>();
+
+                        StringBuilder str = new StringBuilder("");
+                        for (int i = 0; i < storeProducts.size(); i++) {
+                            str.append(storeProducts.get(i).getName());
+                            if (i != storeProducts.size() - 1)
+                                str.append(",");
+                        }
+                        writer.write(str.toString());
+                        writer.println();
+                        writer.flush();
 
                         break;
                     default:

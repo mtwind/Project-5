@@ -69,6 +69,7 @@ public class MainInterface extends JComponent implements Runnable {
     PrintWriter writer;
 
     String[] storeList = new String[0];
+    String[] productList = new String[0];
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
@@ -177,14 +178,19 @@ public class MainInterface extends JComponent implements Runnable {
                         if (reader.readLine().equals("verified")) {
                             login.setVisible(false);
                             try {
-                                //takes the store names seperated by commas
+                                //takes the store names separated by commas
                                 String line = reader.readLine();
                                 System.out.println(line);
                                 if (!line.equals(""))
                                     storeList = line.split(",");
-                                else
+                                else {
                                     storeList = new String[0];
+                                    storesDropdown.setVisible(false);
+                                    selectStoreButton.setVisible(false);
+                                }
                                 if (storeList.length > 0) {
+                                    storesDropdown.setVisible(true);
+                                    selectStoreButton.setVisible(true);
                                     storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
                                 } else {
                                     JOptionPane.showMessageDialog(null,
@@ -331,9 +337,34 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
+                System.out.println(storeList[storesDropdown.getSelectedIndex()]);
                 writer.write(storeList[storesDropdown.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
+
+                try {
+                    //takes the store names separated by commas
+                    String line = reader.readLine();
+                    System.out.println(line);
+                    if (!line.equals(""))
+                        productList = line.split(",");
+                    else {
+                        productList = new String[0];
+                        productsDropdown.setVisible(false);
+                        selectProductButton.setVisible(false);
+                    }
+                    if (storeList.length > 0) {
+                        productsDropdown.setVisible(true);
+                        productsDropdown.setVisible(true);
+                        productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "There are no products. add products", "error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } catch (Exception p) {
+                    p.printStackTrace();
+                }
 
                 stores.setVisible(true);
                 seller.setVisible(false);
