@@ -51,11 +51,9 @@ public class ClientHandler implements Runnable {
                         }
                         break;
 
-
                     case 2: //seller log in
                         email = reader.readLine();
-                        type = reader.readLine();
-                        System.out.println(type);
+                        type = User.userExists(email);
                         if (type.equals("seller")) {
                             writer.write("t");
                             writer.println();
@@ -86,8 +84,7 @@ public class ClientHandler implements Runnable {
                         break;
                     case 3: // customer log in
                         email = reader.readLine();
-                        type = reader.readLine();
-                        System.out.println(type);
+                        type = User.userExists(email);
                         if (type.equals("customer")) {
                             writer.write("t");
                             writer.println();

@@ -163,10 +163,7 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(emailtxt);
                 writer.println();
                 writer.flush();
-                String type = User.userExists(emailtxt);
-                writer.write(type);
-                writer.println();
-                writer.flush();
+
                 try {
                     String result = reader.readLine();
                     if (result.equals("t")) {
@@ -212,10 +209,6 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.flush();
                 String emailtxt = email.getText();
                 writer.write(emailtxt);
-                writer.println();
-                writer.flush();
-                String type = User.userExists(emailtxt);
-                writer.write(type);
                 writer.println();
                 writer.flush();
                 try {
