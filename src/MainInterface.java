@@ -278,9 +278,18 @@ public class MainInterface extends JComponent implements Runnable {
             //NEEDS OTHER IMPLEMENTATION
             //button 5
             if (e.getSource() == confirmEditSeller) {
-                user.setPassword(editPasswordSeller.getText());
-                user.setEmail(editEmailSeller.getText());
-                user.editUserFile();
+                writer.write("5");
+                writer.println();
+                writer.flush();
+                writer.write(editPasswordSeller.getText()); // write new password to server
+                writer.println();
+                writer.flush();
+                writer.write(editUsernameSeller.getText());
+                writer.println();
+                writer.flush();
+                writer.write(editEmailSeller.getText()); // write new email to server
+                writer.println();
+                writer.flush();
                 seller.setVisible(true);
                 editSeller.setVisible(false);
             }

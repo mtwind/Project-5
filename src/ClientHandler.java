@@ -1,8 +1,7 @@
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ClientHandler implements Runnable {
     Socket socket;
@@ -95,6 +94,7 @@ public class ClientHandler implements Runnable {
                             writer.println();
                             writer.flush();
                         }
+                        System.out.println("in seller log in");
                         break;
                     case 3: // customer log in
                         email = reader.readLine();
@@ -125,6 +125,53 @@ public class ClientHandler implements Runnable {
                             writer.write("noLog");
                             writer.println();
                             writer.flush();
+                        }
+                        break;
+                    case 5: // confirmEditSeller button, edits seller and store info in files
+                        System.out.println("here");
+                        String sellerNewPass = reader.readLine(); // read new pass from client
+                        String sellerNewName = reader.readLine();
+                        String sellerNewEmail = reader.readLine(); // read new email from client
+                        String oldEmail = user.getEmail();
+                        if (user == null) {
+                            System.out.println("user null");
+                        }
+                        user = Seller.parseSeller(oldEmail);
+                        if (user == null) {
+                            System.out.println("user null2");
+                        }
+                        System.out.println("here");
+                        ArrayList<String> userLines = ((Seller)user).readUserFile();
+                        for (int i = 0; i < userLines.size(); i++) {
+                            String[] userData = userLines.get(i).split(",");
+                            if (userData[1].equals(oldEmail)) {
+                                userData[1] = sellerNewEmail;
+                                userData[2] = sellerNewName;
+                                userData[3] = sellerNewPass;
+                                String newUserLine = "";
+                                for (int j = 0; j < userData.length; j++) {
+                                    if (j == userData.length - 1) {
+                                        newUserLine = newUserLine.concat(userData[j]);
+                                    } else {
+                                        newUserLine = newUserLine.concat(userData[j] + ",");
+                                    }
+                                }
+                                userLines.set(i, newUserLine);
+                                PrintWriter pw = new PrintWriter(new FileOutputStream("users.txt"));
+                                for (int x = 0; x < userLines.size(); x++) {
+                                    pw.println(userLines.get(i));
+                                }
+                                pw.flush();
+                                pw.close();
+                                break;
+                            }
+                        }
+                        user.setPassword(sellerNewPass);
+                        user.setName(sellerNewName);
+                        user.setEmail(sellerNewEmail);
+                        for (int i = 0; i < ((Seller)user).getStores().size(); i++) {
+                            ((Seller) user).getStores().get(i).setOwner(sellerNewEmail);
+                            ((Seller) user).getStores().get(i).editStoreFile();
                         }
                         break;
                     case 7:
