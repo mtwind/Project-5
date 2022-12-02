@@ -196,8 +196,6 @@ public class MainInterface extends JComponent implements Runnable {
                     user = null;
                     login.setVisible(true);
                     seller.setVisible(false);
-
-
             }
 
             //login customer button sends to marketplace
@@ -280,9 +278,10 @@ public class MainInterface extends JComponent implements Runnable {
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
-            //takes user to stores screen and needs to change values of dropdowns in store settings
-            //NEEDS OTHER IMPLEMENTATION
 
+
+            //takes user to stores screen and needs to change values of dropdowns in store settings
+            //NEEDS OTHER IMPLEMENTATION 7
             if (e.getSource() == selectStoreButton) {
                 stores.setVisible(true);
                 seller.setVisible(false);
