@@ -7,7 +7,7 @@ import java.util.Scanner;
  * Creates customer objects that can buy products from stores
  *
  * @author L12 group 2
- * @version 13 NOV 2022
+ * @version 2 DEC 2022
  */
 
 public class Customer extends User {

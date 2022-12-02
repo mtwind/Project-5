@@ -174,7 +174,7 @@ public class ClientHandler implements Runnable {
                             ((Seller) user).getStores().get(i).editStoreFile();
                         }
                         break;
-                    case 6: // confirmEditCustomer button
+                    case 6: // confirmEditCustomer buttons
                         System.out.println("here");
                         String customerNewPass = reader.readLine(); // read new pass from client
                         String customerNewName = reader.readLine();

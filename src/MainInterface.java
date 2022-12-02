@@ -308,7 +308,7 @@ public class MainInterface extends JComponent implements Runnable {
                 chooseSecurityQ.setSelectedIndex(0);
                 createSecurityAnswer.setText("Enter Answer");
             }
-            //takes user back to customer screen and edits settings
+            //takes user back to customer screen and edits account settings
             //NEEDS OTHER IMPLEMENTATION
             //button 6
             if (e.getSource() == confirmEditCustomer) {
