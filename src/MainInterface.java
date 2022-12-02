@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -33,7 +34,7 @@ public class MainInterface extends JComponent implements Runnable {
     JTextField createUsername;
     JTextField createEmail;
     JTextField createPassword;
-    JComboBox chooseSecurityQ;
+    JComboBox<String> chooseSecurityQ;
     JTextField createSecurityAnswer;
     JButton createNewSellerButton;
     JButton createNewCustomerButton;
@@ -41,7 +42,7 @@ public class MainInterface extends JComponent implements Runnable {
     JButton cartButton;
     JButton accountSeller;
     JButton accountCustomer;
-    JComboBox storesDropdown;
+    JComboBox<String> storesDropdown;
     JButton logoutButtonSeller;
     JButton logoutButtonCustomer;
     JButton sellerDashboard;
@@ -60,16 +61,19 @@ public class MainInterface extends JComponent implements Runnable {
     JButton confirmEditCustomer;
     JButton logoutButtonStore;
     JButton addProduct;
-    JComboBox productsDropdown;
+    JComboBox<String> productsDropdown;
     JButton selectProductButton;
     JButton deleteStore;
     Socket socket;
     BufferedReader reader;
     PrintWriter writer;
 
+    String[] storeList = new String[0];
+
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
         User user;
+
 
         @Override
         //Programming different buttons in action listener using if statements
@@ -171,8 +175,26 @@ public class MainInterface extends JComponent implements Runnable {
                         writer.println();
                         writer.flush();
                         if (reader.readLine().equals("verified")) {
-                            seller.setVisible(true);
                             login.setVisible(false);
+                            try {
+                                //takes the store names seperated by commas
+                                String line = reader.readLine();
+                                System.out.println(line);
+                                if (!line.equals(""))
+                                    storeList = line.split(",");
+                                else
+                                    storeList = new String[0];
+                                if (storeList.length > 0) {
+                                    storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
+                                } else {
+                                    JOptionPane.showMessageDialog(null,
+                                            "There are no stores. add stores", "error", JOptionPane.ERROR_MESSAGE);
+                                }
+
+                            } catch (Exception p) {
+                                p.printStackTrace();
+                            }
+                            seller.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
                                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -283,11 +305,20 @@ public class MainInterface extends JComponent implements Runnable {
             //takes user to stores screen and needs to change values of dropdowns in store settings
             //NEEDS OTHER IMPLEMENTATION 7
             if (e.getSource() == selectStoreButton) {
+
+                writer.write("7");
+                writer.println();
+                writer.flush();
+
+                writer.write(storeList[storesDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+
                 stores.setVisible(true);
                 seller.setVisible(false);
             }
             //deletes the store that's currently selected and takes back to seller homepage
-            //NEEDS OTHER IMPLEMENTATION
+            //NEEDS OTHER IMPLEMENTATION 8
             if (e.getSource() == deleteStore) {
                 seller.setVisible(true);
                 stores.setVisible(false);
@@ -612,7 +643,7 @@ public class MainInterface extends JComponent implements Runnable {
         addProduct.addActionListener(actionListener);
         buttonPanelStore.add(addProduct);
 
-        productsDropdown = new JComboBox();
+        productsDropdown = new JComboBox(storeList);
         productsDropdown.setBounds(400, 250, 200, 30);
         buttonPanelStore.add(productsDropdown);
 
@@ -649,5 +680,6 @@ public class MainInterface extends JComponent implements Runnable {
         storesContent.add(buttonPanelStore);
         accountContentCustomer.add(buttonPanelEditCustomer);
     }
+
 
 }

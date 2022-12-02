@@ -65,6 +65,20 @@ public class ClientHandler implements Runnable {
                                 writer.write("verified");
                                 writer.println();
                                 writer.flush();
+
+                                StringBuilder line = new StringBuilder();
+                                for (int i = 0; i < ((Seller)user).getStores().size(); i++) {
+                                    System.out.println(((Seller)user).getStores().get(i));
+                                    line.append(((Seller)user).getStores().get(i).getName());
+                                    if (i != ((Seller)user).getStores().size() - 1) {
+                                        line.append(",");
+                                    }
+                                }
+                                System.out.println(line.toString());
+                                writer.write(line.toString());
+                                writer.println();
+                                writer.flush();
+
                             } else {
                                 writer.write("!verified");
                                 writer.println();
@@ -112,6 +126,10 @@ public class ClientHandler implements Runnable {
                             writer.println();
                             writer.flush();
                         }
+                        break;
+                    case 7:
+                        String selectedStore = reader.readLine();
+
                         break;
                     default:
                         running = false;
