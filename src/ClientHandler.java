@@ -247,6 +247,44 @@ public class ClientHandler implements Runnable {
                         writer.flush();
 
                         break;
+                    case 8:
+                        String newStoreName = reader.readLine();
+                        ArrayList<Store> allStores = Store.getAllStores();
+                        boolean used = false;
+
+                        for (int i = 0; i < allStores.size(); i++)
+                        {
+                            if (newStoreName.equals(allStores.get(i).getName()))
+                            {
+                                writer.write("already used");
+                                writer.println();
+                                writer.flush();
+                                used = true;
+                                break;
+                            }
+                        }
+
+                        if (!used)
+                        {
+                            ArrayList<Store> temp = ((Seller) user).getStores();
+                            temp.add(new Store(user.getEmail(), newStoreName, new ArrayList<Product>()));
+                            ((Seller) user).setStores(temp);
+                            user.editUserFile();
+
+                            StringBuilder line = new StringBuilder();
+                            for (int i = 0; i < ((Seller)user).getStores().size(); i++) {
+                                line.append(((Seller)user).getStores().get(i).getName());
+                                if (i != ((Seller)user).getStores().size() - 1) {
+                                    line.append(",");
+                                }
+                            }
+
+                            writer.write(line.toString());
+                            writer.println();
+                            writer.flush();
+
+                        }
+                        break;
                     default:
                         running = false;
                         break;

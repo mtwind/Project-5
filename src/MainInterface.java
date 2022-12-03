@@ -25,6 +25,7 @@ public class MainInterface extends JComponent implements Runnable {
     JFrame stores;
     JFrame editSeller;
     JFrame editCustomer;
+
     JTextField email;
     JTextField password;
     JButton createAccountButton;
@@ -46,6 +47,7 @@ public class MainInterface extends JComponent implements Runnable {
     JButton logoutButtonSeller;
     JButton logoutButtonCustomer;
     JButton sellerDashboard;
+    JButton addStore;
     JButton selectStoreButton;
     JButton exitButtonSeller;
     JButton exitButtonCustomer;
@@ -221,9 +223,9 @@ public class MainInterface extends JComponent implements Runnable {
             //logout button for seller frame sends to login screen
             //NEEDS OTHER IMPLEMENTATION
             if (e.getSource() == logoutButtonSeller) {
-                    user = null;
-                    login.setVisible(true);
-                    seller.setVisible(false);
+                user = null;
+                login.setVisible(true);
+                seller.setVisible(false);
             }
 
             //login customer button sends to marketplace
@@ -370,8 +372,43 @@ public class MainInterface extends JComponent implements Runnable {
                 seller.setVisible(false);
             }
 
+            // add store button = button 8
+            if (e.getSource() == addStore)
+            {
+                writer.write("8");
+                writer.println();
+                writer.flush();
+
+                String newStoreName = JOptionPane.showInputDialog(null, "Enter the Store Name: ", "Create Store",
+                        JOptionPane.QUESTION_MESSAGE);
+                writer.write(newStoreName);
+                writer.println();
+                writer.flush();
+
+                String serverAnswer = null;
+                try {
+                    serverAnswer = reader.readLine();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                if (serverAnswer.equals("already used"))
+                {
+                    JOptionPane.showMessageDialog(null, "A store under that name already exists.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Store Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    //takes the store names separated by commas
+
+                    storeList = serverAnswer.split(",");
+                    storesDropdown.setVisible(true);
+                    selectStoreButton.setVisible(true);
+                    storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
+
+                }
+            }
+
             //deletes the store that's currently selected and takes back to seller homepage
-            //NEEDS OTHER IMPLEMENTATION 8
+            //NEEDS OTHER IMPLEMENTATION 9
             if (e.getSource() == deleteStore) {
                 seller.setVisible(true);
                 stores.setVisible(false);
@@ -438,6 +475,7 @@ public class MainInterface extends JComponent implements Runnable {
         editCustomer = new JFrame("Account Settings");
         Container accountContentCustomer = editCustomer.getContentPane();
         accountContentCustomer.setLayout(new BorderLayout());
+
 
 
         //Setting Default Sizes of frames and such
@@ -580,8 +618,13 @@ public class MainInterface extends JComponent implements Runnable {
         logoutButtonSeller.addActionListener(actionListener);
         buttonPanelSeller.add(logoutButtonSeller);
 
+        addStore = new JButton("Add Store");
+        addStore.setBounds(550, 20, 150, 30);
+        addStore.addActionListener(actionListener);
+        buttonPanelSeller.add(addStore);
+
         sellerDashboard = new JButton("View Dashboard");
-        sellerDashboard.setBounds(650, 20, 150, 30);
+        sellerDashboard.setBounds(700, 20, 150, 30);
         sellerDashboard.addActionListener(actionListener);
         buttonPanelSeller.add(sellerDashboard);
 
@@ -598,6 +641,7 @@ public class MainInterface extends JComponent implements Runnable {
         exitButtonSeller.setBounds(50, 475, 350, 60);
         exitButtonSeller.addActionListener(actionListener);
         buttonPanelSeller.add(exitButtonSeller);
+
 
 
         //Creating buttons and panel for Customer frame
