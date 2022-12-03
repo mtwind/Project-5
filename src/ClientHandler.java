@@ -1,11 +1,14 @@
 import javax.swing.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
+
 
 public class ClientHandler implements Runnable {
     Socket socket;
     User user;
+    Store store;
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -223,13 +226,19 @@ public class ClientHandler implements Runnable {
                         String selectedStore = reader.readLine();
                         ArrayList<Store> fileStores = Store.getAllStores();
                         Store selected = null;
-                        for (int i = 0; i < fileStores.size(); i++) {
+
+
+                        for (int i = 0; i < fileStores.size(); i++)
+                        {
                             if (fileStores.get(i).getOwner().equals(user.getEmail()) &&
-                                    fileStores.get(i).getName().equals(selectedStore)) {
+                                    fileStores.get(i).getName().equals(selectedStore))
+                            {
                                 selected = fileStores.get(i);
                                 break;
                             }
                         }
+                        store = selected;
+
                         ArrayList<Product> storeProducts;
                         if (selected != null)
                             storeProducts = selected.getProducts();
@@ -245,7 +254,6 @@ public class ClientHandler implements Runnable {
                         writer.write(str.toString());
                         writer.println();
                         writer.flush();
-
                         break;
                     case 8:
                         String newStoreName = reader.readLine();
@@ -283,6 +291,75 @@ public class ClientHandler implements Runnable {
                             writer.println();
                             writer.flush();
 
+                        }
+                        break;
+
+                    case 10:
+
+                        String[] newProductInfo = reader.readLine().split(",");
+                        if (newProductInfo[0].contains(",") || newProductInfo[0].contains("~") || newProductInfo[0].contains("-") || newProductInfo[0].isEmpty())
+                        {
+                            writer.write("name error");
+                            writer.println();
+                            writer.flush();
+                        } else if (newProductInfo[1].contains(",") || newProductInfo[1].contains("~") || newProductInfo[1].isEmpty()) {
+                            writer.write("description error");
+                            writer.println();
+                            writer.flush();
+                        } else {
+                            boolean keepGoing = true;
+                            try {
+                                double newProductPrice = Double.parseDouble(newProductInfo[3]);
+                                if (newProductPrice < 0)
+                                {
+                                    writer.write("price error");
+                                    writer.println();
+                                    writer.flush();
+                                    keepGoing = false;
+                                }
+                            } catch (NumberFormatException e) {
+                                writer.write("price error");
+                                writer.println();
+                                writer.flush();
+                                keepGoing = false;
+                            }
+
+                            if (keepGoing)
+                            {
+                                try {
+                                    int newProductQuantity = Integer.parseInt(newProductInfo[2]);
+                                    if (newProductQuantity < 0)
+                                    {
+                                        writer.write("quantity error");
+                                        writer.println();
+                                        writer.flush();
+                                        keepGoing = false;
+                                    }
+                                } catch (NumberFormatException e)
+                                {
+                                    writer.write("quantity error");
+                                    writer.println();
+                                    writer.flush();
+                                    keepGoing = false;
+                                }
+                            }
+
+
+                            if (keepGoing)
+                            {
+
+                                Product product = new Product(newProductInfo[0], store.getName(), newProductInfo[1],
+                                        Integer.parseInt(newProductInfo[2]), Double.parseDouble(newProductInfo[3]));
+                                ArrayList<Product> storeProductsNew = store.getProducts();
+                                storeProductsNew.add(product);
+                                store.setProducts(storeProductsNew);
+                                store.editStoreFile();
+                                writer.write(newProductInfo[0]);
+                                writer.println();
+                                writer.flush();
+
+
+                            }
                         }
                         break;
                     default:
