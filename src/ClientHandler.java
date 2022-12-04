@@ -23,7 +23,7 @@ public class ClientHandler implements Runnable {
             boolean running = true;
             while (running) {
                 buttonChoice = Integer.parseInt(reader.readLine());
-                System.out.println(buttonChoice);
+                //System.out.println(buttonChoice);
                 //TODO: enter switch statement that takes input from client (based on button) and processes information
                 String email, type;
                 switch (buttonChoice) {
@@ -292,6 +292,35 @@ public class ClientHandler implements Runnable {
                             writer.flush();
 
                         }
+                        break;
+                    case 9:
+                        String storeName = reader.readLine();
+
+                        ArrayList<Store> newStoreList = new ArrayList<Store>();
+                        ArrayList<Store> currentStores = ((Seller) user).getStores();
+
+                        // copies all non-target stores to a new array
+                        for(int i = 0; i < currentStores.size(); i++){
+                            if(!(currentStores.get(i).getName().equals(storeName))) {
+                                newStoreList.add(currentStores.get(i));
+                            }
+                        }
+
+                        // updating this user's list of stores and also
+                        ((Seller) user).setStores(newStoreList);
+                        ((Seller) user).editUserFile();
+
+                        String newStoreString = "";
+                        for (int i = 0; i < newStoreList.size(); i++) {
+                            newStoreString += newStoreList.get(i).getName();
+                            if (i != newStoreList.size() - 1) {
+                                newStoreString += ",";
+                            }
+                        }
+
+                        writer.write(newStoreString);
+                        writer.println();
+                        writer.flush();
                         break;
 
                     case 10:

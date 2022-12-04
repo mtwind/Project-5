@@ -417,8 +417,37 @@ public class MainInterface extends JComponent implements Runnable {
             //deletes the store that's currently selected and takes back to seller homepage
             //NEEDS OTHER IMPLEMENTATION 9
             if (e.getSource() == deleteStore) {
+                writer.write("9");
+                writer.println();
+                writer.flush();
+
+                // accesses and sends name of store to ClientHandler
+                String targetStore = storesDropdown.getItemAt(storesDropdown.getSelectedIndex());
+                writer.write(targetStore);
+                writer.println();
+                writer.flush();
+
+                String serverResponse;
+                try {
+                    serverResponse = reader.readLine();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                JOptionPane.showMessageDialog(null, "Store Removed.", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                storeList = serverResponse.split(",");
+                ArrayList<String> storeArrayList = new ArrayList<>();
+                System.out.println("storeList: ");
+                for(String s: storeList) {
+                    System.out.println(s);
+                    storeArrayList.add(s);
+                }
+
                 seller.setVisible(true);
                 stores.setVisible(false);
+                storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
+                storesDropdown.setVisible(true);
+                selectStoreButton.setVisible(true);
             }
 
             if (e.getSource() == newProductBackButton)
