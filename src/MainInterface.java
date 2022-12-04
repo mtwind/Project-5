@@ -126,6 +126,8 @@ public class MainInterface extends JComponent implements Runnable {
                 if (isNew.equals("new")) {
                     seller.setVisible(true);
                     createAccount.setVisible(false);
+                    storesDropdown.setVisible(false);
+                    selectStoreButton.setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(null,
                             "this email is already registered to an account", "error",
@@ -277,6 +279,7 @@ public class MainInterface extends JComponent implements Runnable {
                 login.setVisible(true);
                 customer.setVisible(false);
                 user = null;
+                storeList = new String[0];
             }
             //takes customer to account screen
 
