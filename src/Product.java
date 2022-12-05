@@ -238,5 +238,44 @@ public class Product {
         }
     }
 
+    public static ArrayList<Product> getAllProducts() {
+        ArrayList<Product> temp = new ArrayList<>();
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader("products.txt"));
+            String line = bfr.readLine();
+            String[] productInfo;
+
+            while (line != null) {
+                productInfo = line.split(",");
+                temp.add(getProduct(productInfo[0]));
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+
+        return temp;
+    }
+
+    public static ArrayList<Product> returnSearch(String search) {
+        ArrayList<Product> searchArray = new ArrayList<>();
+
+        ArrayList<Product> allProducts = getAllProducts();
+
+        String searchStr;
+        for (int i = 0; i < allProducts.size(); i++) {
+            searchStr = allProducts.get(i).getName() + allProducts.get(i).getProductDescription() +
+                    allProducts.get(i).getStore();
+            //System.out.println(searchStr);
+            if (searchStr.toLowerCase().contains(search.toLowerCase())) {
+                searchArray.add(allProducts.get(i));
+                //System.out.println("added " + allProducts.get(i).getName());
+            }
+        }
+
+        return searchArray;
+    }
+
 
 }

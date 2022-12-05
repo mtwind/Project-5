@@ -113,6 +113,23 @@ public class ClientHandler implements Runnable {
                                 writer.write("verified");
                                 writer.println();
                                 writer.flush();
+
+                                StringBuilder market = new StringBuilder();
+                                ArrayList<Product> pros = Product.getAllProducts();
+                                String productInfo;
+                                for (int i = 0; i < pros.size(); i++) {
+                                    productInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                            pros.get(i).getName(), pros.get(i).getStore(), pros.get(i).getPrice());
+                                    market.append(productInfo);
+                                    if (i != pros.size() - 1) {
+                                        market.append(",");
+                                    }
+                                }
+
+                                writer.write(market.toString());
+                                writer.println();
+                                writer.flush();
+
                             } else {
                                 writer.write("!verified");
                                 writer.println();
@@ -391,8 +408,45 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         break;
+                    case 12:
+                        String wantToFind = reader.readLine();
+                        ArrayList<Product> searchResult = Product.returnSearch(wantToFind);
+                        StringBuilder results = new StringBuilder();
+                        String productInfo;
+                        for (int i = 0; i < searchResult.size(); i++) {
+                            productInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                    searchResult.get(i).getName(), searchResult.get(i).getStore(),
+                                    searchResult.get(i).getPrice());
+                            results.append(productInfo);
+                            if (i != searchResult.size() - 1) {
+                                results.append(",");
+                            }
+                        }
+                        System.out.println(results.toString());
+                        writer.write(results.toString());
+                        writer.println();
+                        writer.flush();
+                        break;
+                    case 13:
+                        StringBuilder currentMarket = new StringBuilder();
+                        ArrayList<Product> marPros = Product.getAllProducts();
+                        String products;
+                        for (int i = 0; i < marPros.size(); i++) {
+                            products = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                    marPros.get(i).getName(), marPros.get(i).getStore(), marPros.get(i).getPrice());
+                            currentMarket.append(products);
+                            if (i != marPros.size() - 1) {
+                                currentMarket.append(",");
+                            }
+                        }
+
+                        writer.write(currentMarket.toString());
+                        writer.println();
+                        writer.flush();
+                        break;
                     default:
                         running = false;
+                        writer.close();
                         break;
                 }
             }

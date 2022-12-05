@@ -76,9 +76,16 @@ public class MainInterface extends JComponent implements Runnable {
     Socket socket;
     BufferedReader reader;
     PrintWriter writer;
+    JComboBox<String> marketSelect;
+    JTextField searchBox;
+    JButton searchBtn;
+    JButton allProBtn;
+    JButton customerViewProPage;
 
     String[] storeList = new String[0];
     String[] productList = new String[0];
+    String[] marketPlace = new String[0];
+
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
@@ -257,6 +264,26 @@ public class MainInterface extends JComponent implements Runnable {
                         if (reader.readLine().equals("verified")) {
                             customer.setVisible(true);
                             login.setVisible(false);
+
+                            String productList = reader.readLine();
+                            if (!productList.equals("")) {
+                                marketPlace = productList.split(",");
+                                marketSelect.setModel(new DefaultComboBoxModel<String>(marketPlace));
+                                marketSelect.setVisible(true);
+                                searchBox.setVisible(true);
+                                searchBtn.setVisible(true);
+                                customerViewProPage.setVisible(true);
+                                allProBtn.setVisible(true);
+                            } else {
+                                searchBtn.setVisible(false);
+                                marketSelect.setVisible(false);
+                                searchBox.setVisible(false);
+                                customerViewProPage.setVisible(false);
+                                allProBtn.setVisible(false);
+                                JOptionPane.showMessageDialog(null,
+                                        "There are currently no products in the marketplace.", "Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
                         } else {
                             JOptionPane.showMessageDialog(null, "Incorrect Credentials.",
                                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -528,6 +555,72 @@ public class MainInterface extends JComponent implements Runnable {
                 stores.setVisible(false);
             }
 
+            //can use for customer searches too? --> if user == customer
+            if (e.getSource() == selectProductButton) {// button 11, shows product page/details
+
+            }
+
+            if (e.getSource() == searchBtn) { //button 12
+                writer.write("12");
+                writer.println();
+                writer.flush();
+
+                if (!searchBox.getText().replaceAll(" ", "").equals("")) {
+                    writer.write(searchBox.getText());
+                    writer.println();
+                    writer.flush();
+                    String result = "";
+                    try {
+                        result = reader.readLine();
+                    } catch (Exception er) {
+                        er.printStackTrace();
+                    }
+
+                    if (!result.equals("")) {
+                        if (result.contains(","))
+                            marketPlace = result.split(",");
+                        else
+                            marketPlace =  new String[]{result};
+                        marketSelect.setModel(new DefaultComboBoxModel<String>(marketPlace));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No Results", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Enter a search", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+
+            if (e.getSource() == allProBtn) { //sets the marketplace back to all products. 13
+                writer.write("13");
+                writer.println();
+                writer.flush();
+
+                String list = "";
+                try {
+                    list = reader.readLine();
+                } catch (Exception ea) {
+                    ea.printStackTrace();
+                }
+
+                if (!list.equals("")) {
+                    if (list.contains(","))
+                        marketPlace = list.split(",");
+                    else
+                        marketPlace = new String[] {list};
+                    marketSelect.setModel(new DefaultComboBoxModel<String>(marketPlace));
+
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "There are currently no products in the marketplace.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+
 
         }
     };
@@ -739,7 +832,7 @@ public class MainInterface extends JComponent implements Runnable {
         sellerDashboard.addActionListener(actionListener);
         buttonPanelSeller.add(sellerDashboard);
 
-        storesDropdown = new JComboBox();
+        storesDropdown = new JComboBox<String>();
         storesDropdown.setBounds(400, 250, 200, 30);
         buttonPanelSeller.add(storesDropdown);
 
@@ -759,6 +852,7 @@ public class MainInterface extends JComponent implements Runnable {
         JPanel buttonPanelCustomer = new JPanel();
         buttonPanelCustomer.setLayout(null);
 
+
         accountCustomer = new JButton("Edit Account");
         accountCustomer.setBounds(850, 20, 150, 30);
         accountCustomer.addActionListener(actionListener);
@@ -773,6 +867,31 @@ public class MainInterface extends JComponent implements Runnable {
         logoutButtonCustomer.setBounds(50, 20, 150, 30);
         logoutButtonCustomer.addActionListener(actionListener);
         buttonPanelCustomer.add(logoutButtonCustomer);
+
+        searchBox = new JTextField("Enter a Search");
+        searchBox.setBounds(400, 290, 200, 30);
+        searchBox.addActionListener(actionListener);
+        buttonPanelCustomer.add(searchBox);
+
+        searchBtn = new JButton("search");
+        searchBtn.setBounds(200, 350, 200, 30);
+        searchBtn.addActionListener(actionListener);
+        buttonPanelCustomer.add(searchBtn);
+
+        allProBtn = new JButton("View All");
+        allProBtn.setBounds(400, 350, 200, 30);
+        allProBtn.addActionListener(actionListener);
+        buttonPanelCustomer.add(allProBtn);
+
+        customerViewProPage = new JButton("Select Product");
+        customerViewProPage.setBounds(600, 350, 200, 30);
+        customerViewProPage.addActionListener(actionListener);
+        buttonPanelCustomer.add(customerViewProPage);
+
+        marketSelect = new JComboBox<String>();
+        int temp = customer.getWidth() / 2;
+        marketSelect.setBounds(temp - 350, 250, 700, 30);
+        buttonPanelCustomer.add(marketSelect);
 
         exitButtonCustomer = new JButton("Exit");
         exitButtonCustomer.setBounds(50, 475, 350, 60);
@@ -851,7 +970,7 @@ public class MainInterface extends JComponent implements Runnable {
         addProduct.addActionListener(actionListener);
         buttonPanelStore.add(addProduct);
 
-        productsDropdown = new JComboBox(storeList);
+        productsDropdown = new JComboBox<String>(storeList);
         productsDropdown.setBounds(400, 250, 200, 30);
         buttonPanelStore.add(productsDropdown);
 
