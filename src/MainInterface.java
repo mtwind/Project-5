@@ -555,9 +555,21 @@ public class MainInterface extends JComponent implements Runnable {
                 stores.setVisible(false);
             }
 
-            //can use for customer searches too? --> if user == customer
-            if (e.getSource() == selectProductButton) {// button 11, shows product page/details
+            if (e.getSource() == selectProductButton) {// button 11, shows product page/details for SELLER w/in store
+                writer.write("11");
+                writer.println();
+                writer.flush();
 
+                writer.write(productList[productsDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+
+                writer.write(storeList[storesDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+
+                products.setVisible(true);
+                stores.setVisible(false);
             }
 
             if (e.getSource() == searchBtn) { //button 12
@@ -619,6 +631,23 @@ public class MainInterface extends JComponent implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
                 }
 
+            }
+
+            if (e.getSource() == customerViewProPage) { // 14 case for customer pressing button to see product -> own panel?
+                writer.write("14");
+                writer.println();
+                writer.flush();
+
+                writer.write(productList[productsDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+
+                writer.write(storeList[storesDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+
+                //products.setVisible(true);
+                //stores.setVisible(false);
             }
 
 

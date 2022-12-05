@@ -408,6 +408,13 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         break;
+                    case 11:
+                        String pName = reader.readLine();
+                        String sName = reader.readLine();
+                        Product p = Product.getProduct(pName, sName);
+
+
+                        break;
                     case 12:
                         String wantToFind = reader.readLine();
                         ArrayList<Product> searchResult = Product.returnSearch(wantToFind);
@@ -443,6 +450,12 @@ public class ClientHandler implements Runnable {
                         writer.write(currentMarket.toString());
                         writer.println();
                         writer.flush();
+                        break;
+                    case 14:
+                        pName = reader.readLine();
+                        sName = reader.readLine();
+                        p = Product.getProduct(pName, sName);
+
                         break;
                     default:
                         running = false;
