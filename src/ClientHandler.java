@@ -397,7 +397,7 @@ public class ClientHandler implements Runnable {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //when the client is done and leaves
         }
     }
 }
