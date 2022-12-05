@@ -215,7 +215,7 @@ public class Customer extends User {
     }
 
     @Override
-    public void editUserFile() { // updates user's file info
+    public synchronized void editUserFile() { // updates user's file info
         ArrayList<String> fileLines = readUserFile();
         try {
             PrintWriter pw = new PrintWriter(new FileOutputStream("users.txt", false));

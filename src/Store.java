@@ -104,7 +104,7 @@ public class Store {
         }
     }
 
-    public void editStoreFile() { //edits the store file based on this
+    public synchronized void editStoreFile() { //edits the store file based on this
         try {
             StringBuilder productNames = new StringBuilder();
             StringBuilder customerEmails = new StringBuilder();

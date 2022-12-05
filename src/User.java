@@ -118,7 +118,7 @@ public class User {
 
 
     // edits already existing files by updating all of their info
-    public void editUserFile() {
+    public synchronized void editUserFile() {
         try {
             FileWriter fw = new FileWriter(this.userFile);
             BufferedWriter bw = new BufferedWriter(fw);

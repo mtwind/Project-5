@@ -52,7 +52,7 @@ public class Product {
         }
     }
 
-    public void editProductFile() { // updates all product info EXCEPT THE NAME
+    public synchronized void editProductFile() { // updates all product info EXCEPT THE NAME
         try {
             ArrayList<String> productFileLines = new ArrayList<>();
             BufferedReader bfr = new BufferedReader(new FileReader("products.txt"));
@@ -276,6 +276,9 @@ public class Product {
 
         return searchArray;
     }
+
+
+
 
 
 }

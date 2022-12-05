@@ -127,7 +127,7 @@ public class Seller extends User{
         this.stores = stores;
     }
 
-    public void editStore(Scanner s) {
+    public synchronized void editStore(Scanner s) {
         try {
             Store store = null;
             if (stores.size() == 0) {
@@ -750,7 +750,7 @@ public class Seller extends User{
         return null;
     }
 
-    public void editUserFile() { // updates user's file info
+    public synchronized void editUserFile() { // updates user's file info
         ArrayList<String> fileLines = readUserFile();
         try {
             PrintWriter pw = new PrintWriter(new FileWriter("users.txt", false));
