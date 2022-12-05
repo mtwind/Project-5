@@ -287,6 +287,7 @@ public class MainInterface extends JComponent implements Runnable {
                 editSeller.setVisible(true);
                 seller.setVisible(false);
             }
+
             //takes user back to seller screen
             if (e.getSource() == backSeller) {
                 seller.setVisible(true);
@@ -455,7 +456,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             if (e.getSource() == newProductBackButton)
             {
-                seller.setVisible(true);
+                stores.setVisible(true);
                 makeProduct.setVisible(false);
             }
 
