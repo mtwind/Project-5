@@ -26,6 +26,7 @@ public class MainInterface extends JComponent implements Runnable {
     JFrame stores;
     JFrame editSeller;
     JFrame editCustomer;
+    JFrame sellerDash;
 
     JTextField email;
     JTextField password;
@@ -650,6 +651,11 @@ public class MainInterface extends JComponent implements Runnable {
                 //stores.setVisible(false);
             }
 
+            if(e.getSource() == sellerDashboard) {
+                seller.setVisible(false);
+                sellerDash.setVisible(true);
+            }
+
 
         }
     };
@@ -703,6 +709,9 @@ public class MainInterface extends JComponent implements Runnable {
         makeProduct = new JFrame("Create Product");
         Container makeProductContent = makeProduct.getContentPane();
         makeProductContent.setLayout(new BorderLayout());
+        sellerDash = new JFrame("Seller Dashboard");
+        Container sellerDashboardContent = sellerDash.getContentPane();
+        sellerDashboardContent.setLayout(new BorderLayout());
 
 
 
@@ -756,6 +765,11 @@ public class MainInterface extends JComponent implements Runnable {
         makeProduct.setLocationRelativeTo(null);
         makeProduct.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         makeProduct.setVisible(false);
+
+        sellerDash.setSize(1000, 600);
+        sellerDash.setLocationRelativeTo(null);
+        sellerDash.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sellerDash.setVisible(false);
 
         //Creating Panels and Buttons for Login
         JPanel buttonPanelLogin = new JPanel();
@@ -951,7 +965,7 @@ public class MainInterface extends JComponent implements Runnable {
         confirmEditSeller.addActionListener(actionListener);
         buttonPanelEditSeller.add(confirmEditSeller);
 
-        backSeller = new JButton("Back");
+        backSeller = new JButton("Back to Seller view");
         backSeller.setBounds(50, 475, 350, 60);
         backSeller.addActionListener(actionListener);
         buttonPanelEditSeller.add(backSeller);
