@@ -1,3 +1,0 @@
-seller,seller1,Seller 1,password,0,Enter Answer,none
-seller,seller2,Seller 2,password,0,Enter Answer,none
-customer,customer1,Customer 1,password,0,Green,none,none
