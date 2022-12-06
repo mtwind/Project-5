@@ -26,6 +26,7 @@ public class MainInterface extends JComponent implements Runnable {
     JFrame stores;
     JFrame editSeller;
     JFrame editCustomer;
+    JFrame sellerDash;
 
     JTextField email;
     JTextField password;
@@ -703,7 +704,9 @@ public class MainInterface extends JComponent implements Runnable {
         makeProduct = new JFrame("Create Product");
         Container makeProductContent = makeProduct.getContentPane();
         makeProductContent.setLayout(new BorderLayout());
-
+        sellerDash = new JFrame("Seller Dashboard");
+        Container sellerDashContent = sellerDash.getContentPane();
+        sellerDashContent.setLayout(new BorderLayout());
 
 
         //Setting Default Sizes of frames and such
@@ -790,6 +793,12 @@ public class MainInterface extends JComponent implements Runnable {
         password.setBounds(400, 250, 200, 30);
         password.addActionListener(actionListener);
         buttonPanelLogin.add(password);
+
+        sellerDash.setSize(1000, 600);
+        sellerDash.setLocationRelativeTo(null);
+        sellerDash.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sellerDash.setVisible(false);
+
 
 
         //Creating panel and buttons for creating account screen
