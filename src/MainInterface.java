@@ -82,6 +82,12 @@ public class MainInterface extends JComponent implements Runnable {
     JButton searchBtn;
     JButton allProBtn;
     JButton customerViewProPage;
+    JTextField productNameEdit;
+    JButton productButtonEdit;
+    JButton backButtonEdit;
+    JTextField productDescriptionEdit;
+    JTextField productQuantityEdit;
+    JTextField productPriceEdit;
 
     String[] storeList = new String[0];
     String[] productList = new String[0];
@@ -647,9 +653,44 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                //products.setVisible(true);
-                //stores.setVisible(false);
             }
+            if (e.getSource() == backButtonEdit) {
+                stores.setVisible(true);
+                products.setVisible(false);
+            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
+//            if (e.getSource() == ) {
+//
+//            }
 
 
         }
@@ -1061,10 +1102,64 @@ public class MainInterface extends JComponent implements Runnable {
         createNewProductButton.addActionListener(actionListener);
         buttonPanelNewProduct.add(createNewProductButton);
 
+        //frame for editing products, seller
+        JPanel buttonPanelEditProduct = new JPanel();
+        buttonPanelEditProduct.setLayout(null);
+
+        productNameEdit = new JTextField("Enter Product Name: ");
+        productNameEdit.setBounds(400, 100, 200, 30);
+        productNameEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(productNameEdit);
+
+        productDescriptionEdit = new JTextField("Enter Product Description: ");
+        productDescriptionEdit.setBounds(400, 150, 200, 30);
+        productDescriptionEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(productDescriptionEdit);
+
+        productPriceEdit = new JTextField("Enter Product Price: ");
+        productPriceEdit.setBounds(400, 200, 200, 30);
+        productPriceEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(productPriceEdit);
+
+        productQuantityEdit = new JTextField("Enter Product Quantity: ");
+        productQuantityEdit.setBounds(400, 250, 200, 30);
+        productQuantityEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(productQuantityEdit);
+
+        backButtonEdit = new JButton("Back");
+        backButtonEdit.setBounds(300, 300, 200, 30);
+        backButtonEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(backButtonEdit);
+
+        productButtonEdit = new JButton("Edit Product");
+        productButtonEdit.setBounds(500, 300, 200, 30);
+        productButtonEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(productButtonEdit);
+
+        //Creating buttons and panels for seller product page
+        //edit, remove
+
+
         //Creating buttons and panels for cart page (For this I don't know exactly what is needed i may need help)
         //Mik was here
 
+        //remove, remove all, purchase all, dropdown for items
 
+
+        //Create buttons and panels for product page for customers
+        //add to cart, back
+
+
+        //create a dashboard frame and the buttons and panels
+        //sortbyrevenue, sortbysales,
+
+
+
+        //create dashboard for customers
+        //sortbyownpop, sort by gen popularity
+
+
+        productsContent.add(buttonPanelEditProduct);
 
 
         accountContentSeller.add(buttonPanelEditSeller);
