@@ -1157,6 +1157,7 @@ public class MainInterface extends JComponent implements Runnable {
 
         //create dashboard for customers
         //sortbyownpop, sort by gen popularity
+        //
 
 
         productsContent.add(buttonPanelEditProduct);
