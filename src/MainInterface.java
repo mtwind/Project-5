@@ -1067,6 +1067,7 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelNewProduct.add(createNewProductButton);
 
         //Creating buttons and panels for cart page (For this I don't know exactly what is needed i may need help)
+        //Mik was here
 
 
 
