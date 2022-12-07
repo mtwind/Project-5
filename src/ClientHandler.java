@@ -485,6 +485,31 @@ public class ClientHandler implements Runnable {
                             String s = reader.readLine();
                             int t = Integer.parseInt(proNewQuantity);
                             double d = Double.parseDouble(proNewPrice);
+                            ArrayList<String> temp = Store.getAllLines();
+                            String[] preSplit = new String[0];
+                            boolean ayo = false;
+                            for (int i = 0; i < temp.size(); i++) {
+                                preSplit = temp.get(i).split(",");
+                                if(preSplit[0].equals(s)) {
+                                    ayo = true;
+                                    break;
+                                }
+                            }
+                            if (ayo) {
+                                boolean j = false;
+                                preSplit = preSplit[2].split("~");
+                                for (int i = 0; i < preSplit.length; i++) {
+                                    if (preSplit[i].equals(proNewName)) {
+                                        writer.write("repeat");
+                                        writer.println();
+                                        writer.flush();
+                                        j = true;
+                                        break;
+                                    }
+                                }
+                                if (j)
+                                    break;
+                            }
                             if (t < 0 || d < 0) {
                                 writer.write("error");
                                 writer.println();
@@ -521,13 +546,10 @@ public class ClientHandler implements Runnable {
                             p.setName(proNewName);
                             p.setQuantity(t);
                             p.setProductDescription(proNewDescription);
-                            ArrayList<String> temp = Store.getAllLines();
                             String[] split = null;
-                            int index = 0;
                             for (int i = 0; i < temp.size(); i++) {
                                 split = temp.get(i).split(",");
                                 if (split[0].equals(s)) {
-                                    index = i;
                                     String[] split2 = split[2].split("~");
                                     StringBuilder replace = new StringBuilder();
                                     for (int j = 0; j < split2.length; j++) {

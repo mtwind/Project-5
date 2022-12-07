@@ -716,14 +716,19 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
                 try {
-                    if (reader.readLine().equals("ok")) {
+                    String see = reader.readLine();
+                    if (see.equals("ok")) {
                         productList[productsDropdown.getSelectedIndex()] = productNameEdit.getText();
                         productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
                         stores.setVisible(true);
                         products.setVisible(false);
-                    } else {
+                    } else if (see.equals("error")){
                         JOptionPane.showMessageDialog(null,
                                 "Enter valid values for price and quantity.", "error",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else if (see.equals("repeat")) {
+                        JOptionPane.showMessageDialog(null,
+                                "a product with this name already exists in your store.", "error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (Exception ez) {
