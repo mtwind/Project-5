@@ -93,6 +93,14 @@ public class MainInterface extends JComponent implements Runnable {
     String[] productList = new String[0];
     String[] marketPlace = new String[0];
 
+    JLabel proName;
+    JLabel proPrice;
+    JLabel proQuantity;
+    JLabel proStore;
+    JLabel proDescription;
+
+    JButton deleteProduct;
+
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
@@ -575,6 +583,17 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
+                try {
+                    proName.setText("Product: " + productList[productsDropdown.getSelectedIndex()]);
+                    proStore.setText("Store: " + storeList[storesDropdown.getSelectedIndex()]);
+                    proPrice.setText(String.format("Price: $%.2f", Double.parseDouble(reader.readLine())));
+                    proDescription.setText("Description: " + reader.readLine());
+                    proQuantity.setText("Quantity: " + reader.readLine());
+
+                } catch (Exception ez) {
+                    ez.printStackTrace();
+                }
+
                 products.setVisible(true);
                 stores.setVisible(false);
             }
@@ -655,6 +674,34 @@ public class MainInterface extends JComponent implements Runnable {
 
             }
             if (e.getSource() == backButtonEdit) {
+                stores.setVisible(true);
+                products.setVisible(false);
+            }
+
+            if (e.getSource() == productButtonEdit) { // 15
+                writer.write("15");
+                writer.println();
+                writer.flush();
+                writer.write(productNameEdit.getText());
+                writer.println();
+                writer.flush();
+                writer.write(productDescriptionEdit.getText());
+                writer.println();
+                writer.flush();
+                writer.write(productPriceEdit.getText());
+                writer.println();
+                writer.flush();
+                writer.write(productQuantityEdit.getText());
+                writer.println();
+                writer.flush();
+                writer.write(productList[productsDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+                writer.write(storeList[storesDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+                productList[productsDropdown.getSelectedIndex()] = productNameEdit.getText();
+                productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
                 stores.setVisible(true);
                 products.setVisible(false);
             }
@@ -1135,6 +1182,26 @@ public class MainInterface extends JComponent implements Runnable {
         productButtonEdit.setBounds(500, 300, 200, 30);
         productButtonEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(productButtonEdit);
+
+        proDescription = new JLabel();
+        proPrice = new JLabel();
+        proName = new JLabel();
+        proStore = new JLabel();
+        proQuantity = new JLabel();
+        proDescription.setBounds(20, 125, 450, 20);
+        proPrice.setBounds(20, 175, 450, 20);
+        proName.setBounds(20, 100, 450, 20);
+        proStore.setBounds(20, 150, 450, 20);
+        proQuantity.setBounds(20, 200, 450, 20);
+        buttonPanelEditProduct.add(proDescription);
+        buttonPanelEditProduct.add(proPrice);
+        buttonPanelEditProduct.add(proName);
+        buttonPanelEditProduct.add(proStore);
+        buttonPanelEditProduct.add(proQuantity);
+
+        deleteProduct = new JButton("Delete Product");
+        deleteProduct.setBounds(400, 335, 200, 30);
+        buttonPanelEditProduct.add(deleteProduct);
 
         //Creating buttons and panels for seller product page
         //edit, remove

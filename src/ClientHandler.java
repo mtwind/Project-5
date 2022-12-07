@@ -195,7 +195,7 @@ public class ClientHandler implements Runnable {
                         }
                         break;
                     case 6: // confirmEditCustomer buttons
-                        System.out.println("here");
+                        //System.out.println("here");
                         String customerNewPass = reader.readLine(); // read new pass from client
                         String customerNewName = reader.readLine();
                         String customerNewEmail = reader.readLine(); // read new email from client
@@ -207,7 +207,7 @@ public class ClientHandler implements Runnable {
                         if (user == null) {
                             System.out.println("user null2");
                         }
-                        System.out.println("here");
+                        //System.out.println("here");
                         ArrayList<String> customerLines = ((Customer)user).readUserFile();
                         for (int i = 0; i < customerLines.size(); i++) {
                             String[] userData = customerLines.get(i).split(",");
@@ -413,6 +413,16 @@ public class ClientHandler implements Runnable {
                         String sName = reader.readLine();
                         Product p = Product.getProduct(pName, sName);
 
+                        assert p != null;
+                        writer.write(String.valueOf(p.getPrice()));
+                        writer.println();
+                        writer.flush();
+                        writer.write(p.getProductDescription());
+                        writer.println();
+                        writer.flush();
+                        writer.write(String.valueOf(p.getQuantity()));
+                        writer.println();
+                        writer.flush();
 
                         break;
                     case 12:
@@ -456,6 +466,51 @@ public class ClientHandler implements Runnable {
                         sName = reader.readLine();
                         p = Product.getProduct(pName, sName);
 
+                        break;
+                    case 15:
+                        String proNewName = reader.readLine(); // read new pass from client
+                        String proNewDescription = reader.readLine();
+                        String proNewPrice = reader.readLine(); // read new email from client
+                        String proNewQuantity = reader.readLine();
+                        String oldProductName = reader.readLine();
+                        String s = reader.readLine();
+                        p = Product.getProduct(oldProductName, s);
+                        ArrayList<String> productLines = Product.getAllLines();
+                        for (int i = 0; i < productLines.size(); i++) {
+                            String[] productData = productLines.get(i).split(",");
+                            if (productData[0].equals(oldProductName) && productData[1].equals(s)) {
+                                productData[0] = proNewName;
+                                productData[2] = proNewDescription;
+                                productData[3] = proNewQuantity;
+                                productData[4] = proNewPrice;
+                                StringBuilder newProductLine = new StringBuilder();
+                                for (int j = 0; j < productData.length; j++) {
+                                    newProductLine.append(productData[j]);
+                                    if (j != productData.length - 1) {
+                                        newProductLine.append(",");
+                                    }
+                                }
+                                productLines.set(i, newProductLine.toString());
+                                PrintWriter pw = new PrintWriter(new FileOutputStream("products.txt"));
+                                for (int j = 0; j < productLines.size(); j++) {
+                                    pw.println(productLines.get(j));
+                                }
+                                pw.flush();
+                                pw.close();
+                                break;
+                            }
+                        }
+                        p.setPrice(Double.parseDouble(proNewPrice));
+                        p.setName(proNewName);
+                        p.setQuantity(Integer.parseInt(proNewQuantity));
+                        p.setProductDescription(proNewDescription);
+                        ArrayList<Store> temp = Store.getAllStores();
+                        for (int i = 0; i < temp.size(); i++) {
+                            if(temp.get(i).getName().equals(s)) {
+                                temp.get(i).editStoreFile();
+                                break;
+                            }
+                        }
                         break;
                     default:
                         running = false;

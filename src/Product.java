@@ -277,6 +277,22 @@ public class Product {
         return searchArray;
     }
 
+    public static ArrayList<String> getAllLines() {
+        ArrayList<String> temp = new ArrayList<>();
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader("products.txt"));
+            String line = bfr.readLine();
+            while (line != null) {
+                temp.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return temp;
+    }
+
 
 
 
