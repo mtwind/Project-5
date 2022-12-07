@@ -1214,7 +1214,7 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelEditProduct.add(proQuantity);
 
         deleteProduct = new JButton("Delete Product");
-        deleteProduct.setBounds(400, 335, 200, 30);
+        deleteProduct.setBounds(600, 50, 350, 60);
         buttonPanelEditProduct.add(deleteProduct);
 
         //Creating buttons and panels for seller product page
