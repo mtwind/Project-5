@@ -26,7 +26,9 @@ public class MainInterface extends JComponent implements Runnable {
     JFrame stores;
     JFrame editSeller;
     JFrame editCustomer;
-    JFrame sellerDash;
+    JFrame sellerDashboardFrame;
+    JFrame customerDashboardFrame;
+
     JTextField email;
     JTextField password;
     JButton createAccountButton;
@@ -91,6 +93,17 @@ public class MainInterface extends JComponent implements Runnable {
     JButton logoutButtonEdit;
     JButton customerDashboard;
     JButton backCustomer;
+    JButton backButtonSellerDash;
+    JButton logoutButtonSellerDash;
+    JButton logoutButtonCustomerDash;
+    JButton backButtonCustomerDash;
+    JComboBox<String> customerDash;
+    JComboBox<String> sellerDash;
+    JButton sortByUserPop;
+    JButton sortByGenPop;
+    JButton sortBySales;
+    JButton sortByRevenue;
+
 
     String[] storeList = new String[0];
     String[] productList = new String[0];
@@ -680,7 +693,6 @@ public class MainInterface extends JComponent implements Runnable {
                 stores.setVisible(true);
                 products.setVisible(false);
             }
-
             if (e.getSource() == productButtonEdit) { // 15
                 writer.write("15");
                 writer.println();
@@ -708,6 +720,7 @@ public class MainInterface extends JComponent implements Runnable {
                 stores.setVisible(true);
                 products.setVisible(false);
             }
+
             if (e.getSource() == accountCustomer) {
                 editCustomer.setVisible(true);
                 customer.setVisible(false);
@@ -722,7 +735,6 @@ public class MainInterface extends JComponent implements Runnable {
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
-
             if (e.getSource() == deleteProduct) { //16
                 writer.write(productList[productsDropdown.getSelectedIndex()]);
                 writer.println();
@@ -731,24 +743,32 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
             }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
+            if (e.getSource() == sellerDashboard) {
+                sellerDashboardFrame.setVisible(true);
+                seller.setVisible(false);
+            }
+            if (e.getSource() == customerDashboard) {
+                customerDashboardFrame.setVisible(true);
+                customer.setVisible(false);
+            }
+            if (e.getSource() == backButtonCustomerDash) {
+                customer.setVisible(true);
+                customerDashboardFrame.setVisible(false);
+            }
+            if (e.getSource() == backButtonSellerDash) {
+                seller.setVisible(true);
+                sellerDashboardFrame.setVisible(false);
+            }
+            //NEEDS OTHER IMPLEMENTATION
+            if (e.getSource() == logoutButtonSellerDash) {
+                login.setVisible(true);
+                sellerDashboardFrame.setVisible(false);
+            }
+            //NEEDS OTHER IMPLEMENTATION
+            if (e.getSource() == logoutButtonCustomerDash) {
+                login.setVisible(true);
+                customerDashboardFrame.setVisible(false);
+            }
 //            if (e.getSource() == ) {
 //
 //            }
@@ -818,6 +838,12 @@ public class MainInterface extends JComponent implements Runnable {
         makeProduct = new JFrame("Create Product");
         Container makeProductContent = makeProduct.getContentPane();
         makeProductContent.setLayout(new BorderLayout());
+        sellerDashboardFrame = new JFrame("Seller Dashboard");
+        Container sellerDashboardContent = sellerDashboardFrame.getContentPane();
+        sellerDashboardContent.setLayout(new BorderLayout());
+        customerDashboardFrame = new JFrame("Customer Dashboard");
+        Container customerDashboardContent = customerDashboardFrame.getContentPane();
+        customerDashboardContent.setLayout(new BorderLayout());
 
 
 
@@ -871,6 +897,17 @@ public class MainInterface extends JComponent implements Runnable {
         makeProduct.setLocationRelativeTo(null);
         makeProduct.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         makeProduct.setVisible(false);
+
+        sellerDashboardFrame.setSize(1000, 600);
+        sellerDashboardFrame.setLocationRelativeTo(null);
+        sellerDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sellerDashboardFrame.setVisible(false);
+
+        customerDashboardFrame.setSize(1000, 600);
+        customerDashboardFrame.setLocationRelativeTo(null);
+        customerDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        customerDashboardFrame.setVisible(false);
+
 
         //Creating Panels and Buttons for Login
         JPanel buttonPanelLogin = new JPanel();
@@ -1206,6 +1243,16 @@ public class MainInterface extends JComponent implements Runnable {
         productButtonEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(productButtonEdit);
 
+        deleteProduct = new JButton("Delete Product");
+        deleteProduct.setBounds(800, 20, 150, 30);;
+        deleteProduct.addActionListener(actionListener);
+        buttonPanelEditProduct.add(deleteProduct);
+
+        logoutButtonEdit = new JButton("Logout");
+        logoutButtonEdit.setBounds(50, 20, 150, 30);
+        logoutButtonEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(logoutButtonEdit);
+
         proDescription = new JLabel();
         proPrice = new JLabel();
         proName = new JLabel();
@@ -1222,15 +1269,7 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelEditProduct.add(proStore);
         buttonPanelEditProduct.add(proQuantity);
 
-        deleteProduct = new JButton("Delete Product");
-        deleteProduct.setBounds(600, 50, 350, 60);
-        buttonPanelEditProduct.add(deleteProduct);
-
-        //Creating buttons and panels for seller product page
-        //edit, remove
-
-
-        //Creating buttons and panels for cart page (For this I don't know exactly what is needed i may need help)
+        //Creating buttons and panels for cart page (For this I don't know exactly what is needed I may need help)
         //remove, remove all, purchase all, dropdown for items
 
 
@@ -1240,11 +1279,61 @@ public class MainInterface extends JComponent implements Runnable {
 
         //create a seller dashboard frame and the buttons and panels
         //sortbyrevenue, sortbysales,
+        JPanel buttonPanelSellerDashboard = new JPanel();
+        buttonPanelSellerDashboard.setLayout(null);
 
+        backButtonSellerDash = new JButton("Back");
+        backButtonSellerDash.setBounds(50, 475, 350, 60);
+        backButtonSellerDash.addActionListener(actionListener);
+        buttonPanelSellerDashboard.add(backButtonSellerDash);
 
+        logoutButtonSellerDash = new JButton("Logout");
+        logoutButtonSellerDash.setBounds(50, 20, 150, 30);
+        logoutButtonSellerDash.addActionListener(actionListener);
+        buttonPanelSellerDashboard.add(logoutButtonSellerDash);
+
+        sellerDash = new JComboBox<>();
+        sellerDash.setBounds(400, 250, 200, 30);
+        buttonPanelSellerDashboard.add(sellerDash);
+
+        sortByRevenue = new JButton("Sort By Revenue");
+        sortByRevenue.setBounds(225,300,250,30);
+        sortByRevenue.addActionListener(actionListener);
+        buttonPanelSellerDashboard.add(sortByRevenue);
+
+        sortBySales = new JButton("Sort By Sales");
+        sortBySales.setBounds(525,300,250,30);
+        sortBySales.addActionListener(actionListener);
+        buttonPanelSellerDashboard.add(sortBySales);
 
         //create dashboard for customers
-        //sortbyownpop, sort by gen popularity
+        //sortbyownpop, sortbygenpop
+        JPanel buttonPanelCustomerDashboard = new JPanel();
+        buttonPanelCustomerDashboard.setLayout(null);
+
+        backButtonCustomerDash = new JButton("Back");
+        backButtonCustomerDash.setBounds(50, 475, 350, 60);
+        backButtonCustomerDash.addActionListener(actionListener);
+        buttonPanelCustomerDashboard.add(backButtonCustomerDash);
+
+        logoutButtonCustomerDash = new JButton("Logout");
+        logoutButtonCustomerDash.setBounds(50, 20, 150, 30);
+        logoutButtonCustomerDash.addActionListener(actionListener);
+        buttonPanelCustomerDashboard.add(logoutButtonCustomerDash);
+
+        customerDash = new JComboBox<>();
+        customerDash.setBounds(400, 250, 200, 30);
+        buttonPanelCustomerDashboard.add(customerDash);
+
+        sortByUserPop = new JButton("Sort By Your # of Purchases");
+        sortByUserPop.setBounds(225,300,250,30);
+        sortByUserPop.addActionListener(actionListener);
+        buttonPanelCustomerDashboard.add(sortByUserPop);
+
+        sortByGenPop = new JButton("Sort By General Popularity");
+        sortByGenPop.setBounds(525,300,250,30);
+        sortByGenPop.addActionListener(actionListener);
+        buttonPanelCustomerDashboard.add(sortByGenPop);
 
 
         productsContent.add(buttonPanelEditProduct);
@@ -1256,6 +1345,8 @@ public class MainInterface extends JComponent implements Runnable {
         storesContent.add(buttonPanelStore);
         accountContentCustomer.add(buttonPanelEditCustomer);
         makeProductContent.add(buttonPanelNewProduct);
+        customerDashboardContent.add(buttonPanelCustomerDashboard);
+        sellerDashboardContent.add(buttonPanelSellerDashboard);
     }
 
 
