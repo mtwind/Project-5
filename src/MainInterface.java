@@ -811,9 +811,20 @@ public class MainInterface extends JComponent implements Runnable {
                     //ex.printStackTrace();
                 }
             }
-//            if (e.getSource() == ) {
-//
-//            }
+            // button 18, sort by customer's favorite
+            if (e.getSource() == sortByUserPop) {
+                writer.write("18");
+                writer.println();
+                writer.flush();
+                String storeSortedByCustomerFavorite = null;
+                try {
+                    storeSortedByCustomerFavorite = reader.readLine();
+                    String[] sortedStoresByCustomerFavorite = storeSortedByCustomerFavorite.split(",");
+                    customerDash.setModel(new DefaultComboBoxModel<String>(sortedStoresByCustomerFavorite));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
 //            if (e.getSource() == ) {
 //
 //            }

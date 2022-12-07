@@ -635,7 +635,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 17:
+                    case 17: // Sort stores by general popularity for customer dashboard
                         ArrayList<Store> sortedByTotalProductsSold =
                                 Driver.sortByTotalProductsSold(Store.getAllStores());
                         StringBuilder storesSortedByProductsSold = new StringBuilder("");
@@ -650,6 +650,30 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         writer.write(String.valueOf(storesSortedByProductsSold));
+                        writer.println();
+                        writer.flush();
+                        break;
+                    case 18: // Sort stores by individual customer popularity for customer dashboard
+                        user = Customer.parseCustomer(user.getEmail());
+                        ArrayList<Store> sortedByCustomerFavorite =
+                                Driver.sortByProductsSoldToUser(Store.getAllStores(), ((Customer)user));
+                        StringBuilder storesSortedByCustomerFavorite = new StringBuilder("");
+                        for (int i = 0; i < sortedByCustomerFavorite.size(); i++) {
+                            if (i == sortedByCustomerFavorite.size() - 1) {
+                                storesSortedByCustomerFavorite.append("Name: " +
+                                        sortedByCustomerFavorite.get(i).getName() +
+                                        " Your purchases: " +
+                                        sortedByCustomerFavorite.get(i).getProductsBoughtByCurrentUser
+                                                (((Customer)user)));
+                            } else {
+                                storesSortedByCustomerFavorite.append("Name: " +
+                                        sortedByCustomerFavorite.get(i).getName() +
+                                        " Your purchases: " +
+                                        sortedByCustomerFavorite.get(i).getProductsBoughtByCurrentUser
+                                                (((Customer)user)) + ",");
+                            }
+                        }
+                        writer.write(String.valueOf(storesSortedByCustomerFavorite));
                         writer.println();
                         writer.flush();
                         break;
