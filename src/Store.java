@@ -328,4 +328,24 @@ public class Store {
         return repeat;
     }
 
+    public static ArrayList<String> getAllLines() {
+        ArrayList<String> stores = new ArrayList<>();
+
+        try {
+            FileReader fr = new FileReader("stores.txt");
+            BufferedReader bfr = new BufferedReader(fr);
+
+            String storeLine = bfr.readLine();
+
+            while (storeLine != null) {
+                stores.add(storeLine);
+                storeLine = bfr.readLine();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stores;
+    }
+
 }

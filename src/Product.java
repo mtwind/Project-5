@@ -293,6 +293,32 @@ public class Product {
         return temp;
     }
 
+    public void deleteProduct() {
+        ArrayList<String> lines = getAllLines();
+        ArrayList<String> newLines = new ArrayList<>();
+        String[] splitted;
+        for (int i = 0; i < lines.size(); i++) {
+            splitted = lines.get(i).split(",");
+            if (splitted[0].equals(this.getName()) && splitted[1].equals(this.getStore())) {
+                continue;
+            } else
+                newLines.add(lines.get(i));
+        }
+
+        try {
+            PrintWriter pw = new PrintWriter(new FileOutputStream("products.txt", false));
+            for (String fileLine : newLines) {
+                pw.println(fileLine);
+            }
+            pw.flush();
+            pw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
 
 
