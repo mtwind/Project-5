@@ -469,85 +469,98 @@ public class ClientHandler implements Runnable {
 
                         break;
                     case 15:
-                        String proNewName = reader.readLine(); // read new pass from client
-                        String proNewDescription = reader.readLine();
-                        String proNewPrice = reader.readLine(); // read new email from client
-                        String proNewQuantity = reader.readLine();
-                        String oldProductName = reader.readLine();
-                        String s = reader.readLine();
-                        p = Product.getProduct(oldProductName, s);
-                        ArrayList<String> productLines = Product.getAllLines();
-                        for (int i = 0; i < productLines.size(); i++) {
-                            String[] productData = productLines.get(i).split(",");
-                            if (productData[0].equals(oldProductName) && productData[1].equals(s)) {
-                                productData[0] = proNewName;
-                                productData[2] = proNewDescription;
-                                productData[3] = proNewQuantity;
-                                productData[4] = proNewPrice;
-                                StringBuilder newProductLine = new StringBuilder();
-                                for (int j = 0; j < productData.length; j++) {
-                                    newProductLine.append(productData[j]);
-                                    if (j != productData.length - 1) {
-                                        newProductLine.append(",");
+                        try {
+                            String proNewName = reader.readLine(); // read new pass from client
+                            String proNewDescription = reader.readLine();
+                            String proNewPrice = reader.readLine(); // read new email from client
+                            String proNewQuantity = reader.readLine();
+                            String oldProductName = reader.readLine();
+                            String s = reader.readLine();
+                            Integer.parseInt(proNewQuantity);
+                            Double.parseDouble(proNewPrice);
+                            p = Product.getProduct(oldProductName, s);
+                            ArrayList<String> productLines = Product.getAllLines();
+                            for (int i = 0; i < productLines.size(); i++) {
+                                String[] productData = productLines.get(i).split(",");
+                                if (productData[0].equals(oldProductName) && productData[1].equals(s)) {
+                                    productData[0] = proNewName;
+                                    productData[2] = proNewDescription;
+                                    productData[3] = proNewQuantity;
+                                    productData[4] = proNewPrice;
+                                    StringBuilder newProductLine = new StringBuilder();
+                                    for (int j = 0; j < productData.length; j++) {
+                                        newProductLine.append(productData[j]);
+                                        if (j != productData.length - 1) {
+                                            newProductLine.append(",");
+                                        }
                                     }
-                                }
-                                productLines.set(i, newProductLine.toString());
-                                PrintWriter pw = new PrintWriter(new FileOutputStream("products.txt"));
-                                for (int j = 0; j < productLines.size(); j++) {
-                                    pw.println(productLines.get(j));
-                                }
-                                pw.flush();
-                                pw.close();
-                                break;
-                            }
-                        }
-                        p.setPrice(Double.parseDouble(proNewPrice));
-                        p.setName(proNewName);
-                        p.setQuantity(Integer.parseInt(proNewQuantity));
-                        p.setProductDescription(proNewDescription);
-                        ArrayList<String> temp = Store.getAllLines();
-                        String[] split = null;
-                        int index = 0;
-                        for (int i = 0; i < temp.size(); i++) {
-                            split = temp.get(i).split(",");
-                            if(split[0].equals(s)) {
-                                index = i;
-                                String[] split2 = split[2].split("~");
-                                StringBuilder replace = new StringBuilder();
-                                for (int j = 0; j < split2.length; j++) {
-                                    if (split2[j].equals(oldProductName)) {
-                                        replace.append(proNewName);
-                                    } else
-                                        replace.append(split2[j]);
-                                    if (j != split2.length - 1) {
-                                        replace.append("~");
+                                    productLines.set(i, newProductLine.toString());
+                                    PrintWriter pw = new PrintWriter(new FileOutputStream("products.txt"));
+                                    for (int j = 0; j < productLines.size(); j++) {
+                                        pw.println(productLines.get(j));
                                     }
+                                    pw.flush();
+                                    pw.close();
+                                    break;
                                 }
-                                split[2] = replace.toString();
                             }
-                        }
-                        StringBuilder replace = new StringBuilder();
-                        for (int i = 0; i < Objects.requireNonNull(split).length; i++) {
-                            replace.append(split[i]);
-                            if (i != split.length - 1) {
-                                replace.append(",");
+                            p.setPrice(Double.parseDouble(proNewPrice));
+                            p.setName(proNewName);
+                            p.setQuantity(Integer.parseInt(proNewQuantity));
+                            p.setProductDescription(proNewDescription);
+                            ArrayList<String> temp = Store.getAllLines();
+                            String[] split = null;
+                            int index = 0;
+                            for (int i = 0; i < temp.size(); i++) {
+                                split = temp.get(i).split(",");
+                                if (split[0].equals(s)) {
+                                    index = i;
+                                    String[] split2 = split[2].split("~");
+                                    StringBuilder replace = new StringBuilder();
+                                    for (int j = 0; j < split2.length; j++) {
+                                        if (split2[j].equals(oldProductName)) {
+                                            replace.append(proNewName);
+                                        } else
+                                            replace.append(split2[j]);
+                                        if (j != split2.length - 1) {
+                                            replace.append("~");
+                                        }
+                                    }
+                                    split[2] = replace.toString();
+                                }
                             }
-                        }
+                            StringBuilder replace = new StringBuilder();
+                            for (int i = 0; i < Objects.requireNonNull(split).length; i++) {
+                                replace.append(split[i]);
+                                if (i != split.length - 1) {
+                                    replace.append(",");
+                                }
+                            }
 
-                        ArrayList<String> newTemp = new ArrayList<>();
-                        for (int i = 0; i < temp.size(); i++) {
-                            if (temp.get(i).split(",")[0].equals(s)) {
-                                newTemp.add(replace.toString());
-                            } else
-                                newTemp.add(temp.get(i));
-                        }
+                            ArrayList<String> newTemp = new ArrayList<>();
+                            for (int i = 0; i < temp.size(); i++) {
+                                if (temp.get(i).split(",")[0].equals(s)) {
+                                    newTemp.add(replace.toString());
+                                } else
+                                    newTemp.add(temp.get(i));
+                            }
 
-                        PrintWriter pw2 = new PrintWriter(new FileOutputStream("stores.txt", false));
-                        for (int j = 0; j < newTemp.size(); j++) {
-                            pw2.println(newTemp.get(j));
+                            PrintWriter pw2 = new PrintWriter(new FileOutputStream("stores.txt", false));
+                            for (int j = 0; j < newTemp.size(); j++) {
+                                pw2.println(newTemp.get(j));
+                            }
+                            pw2.flush();
+                            pw2.close();
+                            writer.write("ok");
+                            writer.println();
+                            writer.flush();
+
+
+                        } catch (Exception e) {
+                            writer.write("error");
+                            writer.println();
+                            writer.flush();
                         }
-                        pw2.flush();
-                        pw2.close();
                         break;
                     case 16:
                         String productName = reader.readLine();
@@ -573,6 +586,7 @@ public class ClientHandler implements Runnable {
 
                         store1.setProducts(ll);
                         store1.editStoreFile();
+                        assert p != null;
                         p.deleteProduct();
 
                         break;

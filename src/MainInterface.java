@@ -715,10 +715,20 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(storeList[storesDropdown.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
-                productList[productsDropdown.getSelectedIndex()] = productNameEdit.getText();
-                productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
-                stores.setVisible(true);
-                products.setVisible(false);
+                try {
+                    if (reader.readLine().equals("ok")) {
+                        productList[productsDropdown.getSelectedIndex()] = productNameEdit.getText();
+                        productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
+                        stores.setVisible(true);
+                        products.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Enter valid values for price and quantity.", "error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ez) {
+                    //ez.printStackTrace
+                }
             }
 
             if (e.getSource() == accountCustomer) {
