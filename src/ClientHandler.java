@@ -401,7 +401,14 @@ public class ClientHandler implements Runnable {
                                 storeProductsNew.add(product);
                                 store.setProducts(storeProductsNew);
                                 store.editStoreFile();
-                                writer.write(newProductInfo[0]);
+                                StringBuilder stri = new StringBuilder();
+                                for (int i = 0; i < storeProductsNew.size(); i++) {
+                                    stri.append(storeProductsNew.get(i).getName());
+                                    if (i != storeProductsNew.size() - 1) {
+                                        stri.append(",");
+                                    }
+                                }
+                                writer.write(stri.toString());
                                 writer.println();
                                 writer.flush();
 
@@ -476,8 +483,14 @@ public class ClientHandler implements Runnable {
                             String proNewQuantity = reader.readLine();
                             String oldProductName = reader.readLine();
                             String s = reader.readLine();
-                            Integer.parseInt(proNewQuantity);
-                            Double.parseDouble(proNewPrice);
+                            int t = Integer.parseInt(proNewQuantity);
+                            double d = Double.parseDouble(proNewPrice);
+                            if (t < 0 || d < 0) {
+                                writer.write("error");
+                                writer.println();
+                                writer.flush();
+                                break;
+                            }
                             p = Product.getProduct(oldProductName, s);
                             ArrayList<String> productLines = Product.getAllLines();
                             for (int i = 0; i < productLines.size(); i++) {
@@ -504,9 +517,9 @@ public class ClientHandler implements Runnable {
                                     break;
                                 }
                             }
-                            p.setPrice(Double.parseDouble(proNewPrice));
+                            p.setPrice(d);
                             p.setName(proNewName);
-                            p.setQuantity(Integer.parseInt(proNewQuantity));
+                            p.setQuantity(t);
                             p.setProductDescription(proNewDescription);
                             ArrayList<String> temp = Store.getAllLines();
                             String[] split = null;
@@ -589,6 +602,16 @@ public class ClientHandler implements Runnable {
                         assert p != null;
                         p.deleteProduct();
 
+                        StringBuilder stri = new StringBuilder();
+                        for (int i = 0; i < ll.size(); i++) {
+                            stri.append(ll.get(i).getName());
+                            if (i != ll.size() - 1) {
+                                stri.append(",");
+                            }
+                        }
+                        writer.write(stri.toString());
+                        writer.println();
+                        writer.flush();
                         break;
                     default:
                         running = false;

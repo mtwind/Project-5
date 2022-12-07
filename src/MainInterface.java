@@ -755,6 +755,15 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(storeList[storesDropdown.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
+                try {
+                    productList = reader.readLine().split(",");
+                    productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
+                    if (productList.length == 0 || productList[0].equals("")) {
+                        selectProductButton.setVisible(false);
+                    }
+                } catch (Exception ez) {
+                    //ez.printStackTrace();
+                }
                 stores.setVisible(true);
                 products.setVisible(false);
             }
