@@ -104,6 +104,18 @@ public class MainInterface extends JComponent implements Runnable {
     JButton sortBySales;
     JButton sortByRevenue;
 
+    //Buttons and frame for customerViewProduct frame
+    JFrame customerViewProductFrame;
+    JButton customerViewProdouctBack;
+    JButton addToCart;
+    JTextField customerViewProductHowMany;
+    JLabel customerViewProductHowManyLabel;
+    JLabel customerViewProductName;
+    JLabel customerViewProductStore;
+    JLabel customerViewProductDescription;
+    JLabel customerViewProductPrice;
+    JLabel customerViewProductStock;
+
 
     String[] storeList = new String[0];
     String[] productList = new String[0];
@@ -679,13 +691,16 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
+                /*
                 writer.write(productList[productsDropdown.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
-
                 writer.write(storeList[storesDropdown.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
+                 */
+                customerViewProductFrame.setVisible(true);
+                customer.setVisible(false);
 
             }
 
@@ -894,6 +909,9 @@ public class MainInterface extends JComponent implements Runnable {
         customerDashboardFrame = new JFrame("Customer Dashboard");
         Container customerDashboardContent = customerDashboardFrame.getContentPane();
         customerDashboardContent.setLayout(new BorderLayout());
+        customerViewProductFrame = new JFrame("View Product");
+        Container customerViewProductContent = customerViewProductFrame.getContentPane();
+        customerViewProductContent.setLayout(new BorderLayout());
 
 
 
@@ -957,6 +975,11 @@ public class MainInterface extends JComponent implements Runnable {
         customerDashboardFrame.setLocationRelativeTo(null);
         customerDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         customerDashboardFrame.setVisible(false);
+
+        customerViewProductFrame.setSize(1000, 600);
+        customerViewProductFrame.setLocationRelativeTo(null);
+        customerViewProductFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        customerViewProductFrame.setVisible(false);
 
 
         //Creating Panels and Buttons for Login
@@ -1325,6 +1348,37 @@ public class MainInterface extends JComponent implements Runnable {
 
         //Create buttons and panels for product page for customers
         //add to cart, back
+        JPanel buttonPanelCustomerViewProduct = new JPanel();
+        buttonPanelCustomerViewProduct.setLayout(null);
+        customerViewProdouctBack = new JButton("Back");
+        customerViewProdouctBack.setBounds(50,475,350,60);
+        customerViewProdouctBack.addActionListener(actionListener);
+        buttonPanelCustomerViewProduct.add(customerViewProdouctBack);
+        addToCart = new JButton("Add to Cart");
+        addToCart.setBounds(600, 475, 350, 60);
+        addToCart.addActionListener(actionListener);
+        buttonPanelCustomerViewProduct.add(addToCart);
+        customerViewProductName = new JLabel("Product Name: ");
+        customerViewProductName.setBounds(400, 100, 450, 20);
+        buttonPanelCustomerViewProduct.add(customerViewProductName);
+        customerViewProductDescription = new JLabel("Product Description: ");
+        customerViewProductDescription.setBounds(400, 125, 450, 20);
+        buttonPanelCustomerViewProduct.add(customerViewProductDescription);
+        customerViewProductStore = new JLabel("Product Store: ");
+        customerViewProductStore.setBounds(400, 150, 450, 20);
+        buttonPanelCustomerViewProduct.add(customerViewProductStore);
+        customerViewProductPrice = new JLabel("Product Price: ");
+        customerViewProductPrice.setBounds(400, 175, 450, 20);
+        buttonPanelCustomerViewProduct.add(customerViewProductPrice);
+        customerViewProductStock = new JLabel("Product Stock:");
+        customerViewProductStock.setBounds(400, 200, 450, 20);
+        buttonPanelCustomerViewProduct.add(customerViewProductStock);
+        customerViewProductHowMany = new JTextField("1");
+        customerViewProductHowMany.setBounds(400, 250, 50, 20);
+        buttonPanelCustomerViewProduct.add(customerViewProductHowMany);
+        customerViewProductHowManyLabel = new JLabel("Enter Quantity Above");
+        customerViewProductHowManyLabel.setBounds(400,270,450, 20);
+        buttonPanelCustomerViewProduct.add(customerViewProductHowManyLabel);
 
 
         //create a seller dashboard frame and the buttons and panels
@@ -1397,6 +1451,7 @@ public class MainInterface extends JComponent implements Runnable {
         makeProductContent.add(buttonPanelNewProduct);
         customerDashboardContent.add(buttonPanelCustomerDashboard);
         sellerDashboardContent.add(buttonPanelSellerDashboard);
+        customerViewProductContent.add(buttonPanelCustomerViewProduct);
     }
 
 
