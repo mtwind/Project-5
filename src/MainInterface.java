@@ -391,6 +391,7 @@ public class MainInterface extends JComponent implements Runnable {
                 chooseSecurityQ.setSelectedIndex(0);
                 createSecurityAnswer.setText("Enter Answer");
             }
+
             //takes user back to customer screen and edits account settings
             //NEEDS OTHER IMPLEMENTATION
             //button 6
@@ -691,14 +692,18 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
+                System.out.println(marketPlace[marketSelect.getSelectedIndex()]);
+                writer.write(marketPlace[marketSelect.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
                 /*
-                writer.write(productList[productsDropdown.getSelectedIndex()]);
-                writer.println();
-                writer.flush();
                 writer.write(storeList[storesDropdown.getSelectedIndex()]);
+                System.out.println(storeList[storesDropdown.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
+
                  */
+
                 customerViewProductFrame.setVisible(true);
                 customer.setVisible(false);
 
