@@ -210,6 +210,30 @@ public class MainInterface extends JComponent implements Runnable {
                 if (isNew.equals("new")) {
                     customer.setVisible(true);
                     createAccount.setVisible(false);
+
+                    try {
+                        String productList = reader.readLine();
+                        if (!productList.equals("")) {
+                            marketPlace = productList.split(",");
+                            marketSelect.setModel(new DefaultComboBoxModel<String>(marketPlace));
+                            marketSelect.setVisible(true);
+                            searchBox.setVisible(true);
+                            searchBtn.setVisible(true);
+                            customerViewProPage.setVisible(true);
+                            allProBtn.setVisible(true);
+                        } else {
+                            searchBtn.setVisible(false);
+                            marketSelect.setVisible(false);
+                            searchBox.setVisible(false);
+                            customerViewProPage.setVisible(false);
+                            allProBtn.setVisible(false);
+                            JOptionPane.showMessageDialog(null,
+                                    "There are currently no products in the marketplace.", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        //ex.printStackTrace();
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null,
                             "this email is already registered to an account", "error",
