@@ -26,7 +26,6 @@ public class MainInterface extends JComponent implements Runnable {
     JFrame stores;
     JFrame editSeller;
     JFrame editCustomer;
-    JFrame sellerDash;
 
     JTextField email;
     JTextField password;
@@ -88,6 +87,8 @@ public class MainInterface extends JComponent implements Runnable {
     JTextField productDescriptionEdit;
     JTextField productQuantityEdit;
     JTextField productPriceEdit;
+    JButton productButtonRemove;
+    JButton logoutButtonEdit;
 
     String[] storeList = new String[0];
     String[] productList = new String[0];
@@ -745,9 +746,7 @@ public class MainInterface extends JComponent implements Runnable {
         makeProduct = new JFrame("Create Product");
         Container makeProductContent = makeProduct.getContentPane();
         makeProductContent.setLayout(new BorderLayout());
-        sellerDash = new JFrame("Seller Dashboard");
-        Container sellerDashContent = sellerDash.getContentPane();
-        sellerDashContent.setLayout(new BorderLayout());
+
 
 
         //Setting Default Sizes of frames and such
@@ -834,12 +833,6 @@ public class MainInterface extends JComponent implements Runnable {
         password.setBounds(400, 250, 200, 30);
         password.addActionListener(actionListener);
         buttonPanelLogin.add(password);
-
-        sellerDash.setSize(1000, 600);
-        sellerDash.setLocationRelativeTo(null);
-        sellerDash.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        sellerDash.setVisible(false);
-
 
 
         //Creating panel and buttons for creating account screen
@@ -1073,32 +1066,32 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelNewProduct.setLayout(null);
 
         productName = new JTextField("Enter Product Name: ");
-        productName.setBounds(400, 100, 200, 30);
+        productName.setBounds(400, 200, 200, 30);
         productName.addActionListener(actionListener);
         buttonPanelNewProduct.add(productName);
 
         productDescription = new JTextField("Enter Product Description: ");
-        productDescription.setBounds(400, 150, 200, 30);
+        productDescription.setBounds(400, 250, 200, 30);
         productDescription.addActionListener(actionListener);
         buttonPanelNewProduct.add(productDescription);
 
         productPrice = new JTextField("Enter Product Price: ");
-        productPrice.setBounds(400, 200, 200, 30);
+        productPrice.setBounds(400, 300, 200, 30);
         productPrice.addActionListener(actionListener);
         buttonPanelNewProduct.add(productPrice);
 
         productQuantity = new JTextField("Enter Product Quantity: ");
-        productQuantity.setBounds(400, 250, 200, 30);
+        productQuantity.setBounds(400, 350, 200, 30);
         productQuantity.addActionListener(actionListener);
         buttonPanelNewProduct.add(productQuantity);
 
         newProductBackButton = new JButton("Back");
-        newProductBackButton.setBounds(300, 300, 200, 30);
+        newProductBackButton.setBounds(50, 475, 350, 60);
         newProductBackButton.addActionListener(actionListener);
         buttonPanelNewProduct.add(newProductBackButton);
 
         createNewProductButton = new JButton("Create Product");
-        createNewProductButton.setBounds(500, 300, 200, 30);
+        createNewProductButton.setBounds(600, 475, 350, 60);
         createNewProductButton.addActionListener(actionListener);
         buttonPanelNewProduct.add(createNewProductButton);
 
@@ -1107,42 +1100,47 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelEditProduct.setLayout(null);
 
         productNameEdit = new JTextField("Enter Product Name: ");
-        productNameEdit.setBounds(400, 100, 200, 30);
+        productNameEdit.setBounds(400, 200, 200, 30);
         productNameEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(productNameEdit);
 
         productDescriptionEdit = new JTextField("Enter Product Description: ");
-        productDescriptionEdit.setBounds(400, 150, 200, 30);
+        productDescriptionEdit.setBounds(400, 250, 200, 30);
         productDescriptionEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(productDescriptionEdit);
 
         productPriceEdit = new JTextField("Enter Product Price: ");
-        productPriceEdit.setBounds(400, 200, 200, 30);
+        productPriceEdit.setBounds(400, 300, 200, 30);
         productPriceEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(productPriceEdit);
 
         productQuantityEdit = new JTextField("Enter Product Quantity: ");
-        productQuantityEdit.setBounds(400, 250, 200, 30);
+        productQuantityEdit.setBounds(400, 350, 200, 30);
         productQuantityEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(productQuantityEdit);
 
         backButtonEdit = new JButton("Back");
-        backButtonEdit.setBounds(300, 300, 200, 30);
+        backButtonEdit.setBounds(50, 475, 350, 60);
         backButtonEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(backButtonEdit);
 
         productButtonEdit = new JButton("Edit Product");
-        productButtonEdit.setBounds(500, 300, 200, 30);
+        productButtonEdit.setBounds(600, 475, 350, 60);
         productButtonEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(productButtonEdit);
 
-        //Creating buttons and panels for seller product page
-        //edit, remove
+        productButtonRemove = new JButton("Delete Product");
+        productButtonRemove.setBounds(800, 20, 150, 30);;
+        productButtonRemove.addActionListener(actionListener);
+        buttonPanelEditProduct.add(productButtonRemove);
+
+        logoutButtonEdit = new JButton("Logout");
+        logoutButtonEdit.setBounds(50, 20, 150, 30);
+        logoutButtonEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(logoutButtonEdit);
 
 
         //Creating buttons and panels for cart page (For this I don't know exactly what is needed i may need help)
-        //Mik was here
-
         //remove, remove all, purchase all, dropdown for items
 
 
@@ -1161,8 +1159,6 @@ public class MainInterface extends JComponent implements Runnable {
 
 
         productsContent.add(buttonPanelEditProduct);
-
-
         accountContentSeller.add(buttonPanelEditSeller);
         loginContent.add(buttonPanelLogin);
         createAccountContent.add(buttonPanelCreate);
