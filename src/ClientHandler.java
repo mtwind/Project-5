@@ -3,6 +3,7 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class ClientHandler implements Runnable {
@@ -504,13 +505,76 @@ public class ClientHandler implements Runnable {
                         p.setName(proNewName);
                         p.setQuantity(Integer.parseInt(proNewQuantity));
                         p.setProductDescription(proNewDescription);
-                        ArrayList<Store> temp = Store.getAllStores();
+                        ArrayList<String> temp = Store.getAllLines();
+                        String[] split = null;
+                        int index = 0;
                         for (int i = 0; i < temp.size(); i++) {
-                            if(temp.get(i).getName().equals(s)) {
-                                temp.get(i).editStoreFile();
+                            split = temp.get(i).split(",");
+                            if(split[0].equals(s)) {
+                                index = i;
+                                String[] split2 = split[2].split("~");
+                                StringBuilder replace = new StringBuilder();
+                                for (int j = 0; j < split2.length; j++) {
+                                    if (split2[j].equals(oldProductName)) {
+                                        replace.append(proNewName);
+                                    } else
+                                        replace.append(split2[j]);
+                                    if (j != split2.length - 1) {
+                                        replace.append("~");
+                                    }
+                                }
+                                split[2] = replace.toString();
+                            }
+                        }
+                        StringBuilder replace = new StringBuilder();
+                        for (int i = 0; i < Objects.requireNonNull(split).length; i++) {
+                            replace.append(split[i]);
+                            if (i != split.length - 1) {
+                                replace.append(",");
+                            }
+                        }
+
+                        ArrayList<String> newTemp = new ArrayList<>();
+                        for (int i = 0; i < temp.size(); i++) {
+                            if (temp.get(i).split(",")[0].equals(s)) {
+                                newTemp.add(replace.toString());
+                            } else
+                                newTemp.add(temp.get(i));
+                        }
+
+                        PrintWriter pw2 = new PrintWriter(new FileOutputStream("stores.txt", false));
+                        for (int j = 0; j < newTemp.size(); j++) {
+                            pw2.println(newTemp.get(j));
+                        }
+                        pw2.flush();
+                        pw2.close();
+                        break;
+                    case 16:
+                        String productName = reader.readLine();
+                        String stoName = reader.readLine();
+                        ArrayList<Store> sto = Store.getAllStores();
+                        Store store1 = null;
+                        p = Product.getProduct(productName, stoName);
+                        for (int i = 0; i < sto.size(); i++) {
+                            if(sto.get(i).getName().equals(stoName)) {
+                                store1 = sto.get(i);
                                 break;
                             }
                         }
+                        assert store1 != null;
+                        ArrayList<Product> l = store1.getProducts();
+                        ArrayList<Product> ll = new ArrayList<>();
+
+                        for (int i = 0; i < l.size(); i++) {
+                            if (!l.get(i).equals(p)) {
+                                ll.add(l.get(i));
+                            }
+                        }
+
+                        store1.setProducts(ll);
+                        store1.editStoreFile();
+                        p.deleteProduct();
+
                         break;
                     default:
                         running = false;

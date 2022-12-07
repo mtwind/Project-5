@@ -722,6 +722,15 @@ public class MainInterface extends JComponent implements Runnable {
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
+
+            if (e.getSource() == deleteProduct) { //16
+                writer.write(productList[productsDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+                writer.write(storeList[storesDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+            }
 //            if (e.getSource() == ) {
 //
 //            }
