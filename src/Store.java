@@ -184,6 +184,43 @@ public class Store {
         }
     }
 
+    public static synchronized void updateProducts(String storeName) throws FileNotFoundException {
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader("products.txt"));
+            ArrayList<String> lines = new ArrayList();
+            ArrayList<String> newProducts = new ArrayList<>();
+
+            while(true) {
+                String line = "";
+                String[] elements;
+                line = bfr.readLine();
+                if (line == null) {
+                    break;
+                }
+                lines.add(line);
+            }
+
+            for(int i = 0; i < lines.size(); i++) {
+                String store = lines.get(i).split(",")[1];
+                if(!(store.equals(storeName))) {
+                    newProducts.add(lines.get(i));
+                }
+            }
+
+            PrintWriter pw = new PrintWriter(new FileOutputStream("products.txt", false));
+            for(String product : newProducts) {
+                pw.println(product);
+            }
+            pw.flush();
+            pw.close();
+
+
+        } catch(IOException io) {
+            System.out.println("Error: file products.txt was not properly updated.");
+        }
+
+    }
+
     public String toString() {
         String ret = String.format("Store Name: %s, Owner: %s, Sales: $%.2f, Total Products: %d,", name, owner, sales,
                 products.size());

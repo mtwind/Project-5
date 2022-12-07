@@ -327,6 +327,7 @@ public class ClientHandler implements Runnable {
                         // updating this user's list of stores and also
                         ((Seller) user).setStores(newStoreList);
                         ((Seller) user).editUserFile();
+                        Store.updateProducts(storeName);
 
                         String newStoreString = "";
                         for (int i = 0; i < newStoreList.size(); i++) {
