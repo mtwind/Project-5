@@ -1235,10 +1235,15 @@ public class MainInterface extends JComponent implements Runnable {
         productButtonEdit.addActionListener(actionListener);
         buttonPanelEditProduct.add(productButtonEdit);
 
-        productButtonRemove = new JButton("Delete Product");
-        productButtonRemove.setBounds(800, 20, 150, 30);;
-        productButtonRemove.addActionListener(actionListener);
-        buttonPanelEditProduct.add(productButtonRemove);
+        deleteProduct = new JButton("Delete Product");
+        deleteProduct.setBounds(800, 20, 150, 30);;
+        deleteProduct.addActionListener(actionListener);
+        buttonPanelEditProduct.add(deleteProduct);
+
+        logoutButtonEdit = new JButton("Logout");
+        logoutButtonEdit.setBounds(50, 20, 150, 30);
+        logoutButtonEdit.addActionListener(actionListener);
+        buttonPanelEditProduct.add(logoutButtonEdit);
 
         proDescription = new JLabel();
         proPrice = new JLabel();
@@ -1255,10 +1260,6 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelEditProduct.add(proName);
         buttonPanelEditProduct.add(proStore);
         buttonPanelEditProduct.add(proQuantity);
-
-        deleteProduct = new JButton("Delete Product");
-        deleteProduct.setBounds(600, 50, 350, 60);
-        buttonPanelEditProduct.add(deleteProduct);
 
         //Creating buttons and panels for seller product page
         //edit, remove
@@ -1287,6 +1288,9 @@ public class MainInterface extends JComponent implements Runnable {
         logoutButtonSellerDash.addActionListener(actionListener);
         buttonPanelSellerDashboard.add(logoutButtonSellerDash);
 
+        sellerDash = new JComboBox<>();
+        sellerDash.setBounds(400, 250, 200, 30);
+        buttonPanelSellerDashboard.add(sellerDash);
 
 
 
@@ -1304,6 +1308,11 @@ public class MainInterface extends JComponent implements Runnable {
         logoutButtonCustomerDash.setBounds(50, 20, 150, 30);
         logoutButtonCustomerDash.addActionListener(actionListener);
         buttonPanelCustomerDashboard.add(logoutButtonCustomerDash);
+
+        customerDash = new JComboBox<>();
+        customerDash.setBounds(400, 250, 200, 30);
+        buttonPanelCustomerDashboard.add(sellerDash);
+
 
 
 
