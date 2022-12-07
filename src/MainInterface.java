@@ -690,7 +690,7 @@ public class MainInterface extends JComponent implements Runnable {
             }
 
             if (e.getSource() == backButtonEdit) {
-                seller.setVisible(true);
+                stores.setVisible(true);
                 products.setVisible(false);
             }
             if (e.getSource() == productButtonEdit) { // 15
@@ -1261,10 +1261,6 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelEditProduct.add(proStore);
         buttonPanelEditProduct.add(proQuantity);
 
-        //Creating buttons and panels for seller product page
-        //edit, remove
-
-
         //Creating buttons and panels for cart page (For this I don't know exactly what is needed I may need help)
         //remove, remove all, purchase all, dropdown for items
 
@@ -1292,7 +1288,15 @@ public class MainInterface extends JComponent implements Runnable {
         sellerDash.setBounds(400, 250, 200, 30);
         buttonPanelSellerDashboard.add(sellerDash);
 
+        sortByRevenue = new JButton("Sort By Revenue");
+        sortByRevenue.setBounds(225,300,250,30);
+        sortByRevenue.addActionListener(actionListener);
+        buttonPanelSellerDashboard.add(sortByRevenue);
 
+        sortBySales = new JButton("Sort By Sales");
+        sortBySales.setBounds(525,300,250,30);
+        sortBySales.addActionListener(actionListener);
+        buttonPanelSellerDashboard.add(sortBySales);
 
         //create dashboard for customers
         //sortbyownpop, sortbygenpop
@@ -1311,9 +1315,17 @@ public class MainInterface extends JComponent implements Runnable {
 
         customerDash = new JComboBox<>();
         customerDash.setBounds(400, 250, 200, 30);
-        buttonPanelCustomerDashboard.add(sellerDash);
+        buttonPanelCustomerDashboard.add(customerDash);
 
+        sortByUserPop = new JButton("Sort By Your # of Purchases");
+        sortByUserPop.setBounds(225,300,250,30);
+        sortByUserPop.addActionListener(actionListener);
+        buttonPanelCustomerDashboard.add(sortByUserPop);
 
+        sortByGenPop = new JButton("Sort By General Popularity");
+        sortByGenPop.setBounds(525,300,250,30);
+        sortByGenPop.addActionListener(actionListener);
+        buttonPanelCustomerDashboard.add(sortByGenPop);
 
 
         productsContent.add(buttonPanelEditProduct);
