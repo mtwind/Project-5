@@ -798,9 +798,19 @@ public class MainInterface extends JComponent implements Runnable {
                 login.setVisible(true);
                 customerDashboardFrame.setVisible(false);
             }
-//            if (e.getSource() == ) {
-//
-//            }
+            // button 17, sort by general popularity on customer dash
+            if (e.getSource() == sortByGenPop) {
+                writer.write("17");
+                writer.println();
+                writer.flush();
+                try {
+                    String storeSortedByProductsSold = reader.readLine();
+                    String[] sortedStoresByTotalSoldArray = storeSortedByProductsSold.split(",");
+                    customerDash.setModel(new DefaultComboBoxModel<String>(sortedStoresByTotalSoldArray));
+                } catch (IOException ex) {
+                    //ex.printStackTrace();
+                }
+            }
 //            if (e.getSource() == ) {
 //
 //            }

@@ -635,6 +635,24 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
+                    case 17:
+                        ArrayList<Store> sortedByTotalProductsSold =
+                                Driver.sortByTotalProductsSold(Store.getAllStores());
+                        StringBuilder storesSortedByProductsSold = new StringBuilder("");
+                        for (int i = 0; i < sortedByTotalProductsSold.size(); i++) {
+                            if (i == sortedByTotalProductsSold.size() - 1) {
+                                storesSortedByProductsSold.append("Name: " + sortedByTotalProductsSold.get(i).getName()
+                                        + " Total Products Sold: " + sortedByTotalProductsSold.get(i).getTotalSales());
+                            } else {
+                                storesSortedByProductsSold.append("Name: " + sortedByTotalProductsSold.get(i).getName()
+                                        + " Total Products Sold: " + sortedByTotalProductsSold.get(i).getTotalSales()
+                                        + ",");
+                            }
+                        }
+                        writer.write(String.valueOf(storesSortedByProductsSold));
+                        writer.println();
+                        writer.flush();
+                        break;
                     default:
                         running = false;
                         writer.close();
