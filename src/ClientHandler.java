@@ -875,7 +875,33 @@ public class ClientHandler implements Runnable {
                         ((Customer) user).setShoppingCart(new ArrayList<Product>());
                         ((Customer) user).editUserFile();
                         break;
-
+                    case 26: // export customer's purchase history to a file on their PC ("emailPurchaseHistory.txt")
+                        StringBuilder purchaseHistoryString = new StringBuilder("");
+                        String[] split;
+                        if (((Customer) user).getPurchaseHistory().size() == 0) {
+                            purchaseHistoryString = new StringBuilder("empty");
+                        } else {
+                            String pInfo;
+                            for (int i = 0; i < ((Customer) user).getPurchaseHistory().size(); i++) {
+                                split = ((Customer) user).getPurchaseHistory().get(i).split("-");
+                                if (i == ((Customer) user).getPurchaseHistory().size() - 1) {
+                                    pInfo = "Product Name: " + split[1] + ", Store: " + split[0];
+                                } else {
+                                    pInfo = "Product Name: " + split[1] + ", Store: " + split[0] + "~";
+                                }
+                                purchaseHistoryString.append(pInfo);
+                            }
+                        }
+                        writer.write(String.valueOf(purchaseHistoryString));
+                        writer.println();
+                        writer.flush();
+                        if (((Customer)user).getPurchaseHistory().size() > 0) {
+                            String customerEmail = user.getEmail();
+                            writer.write(customerEmail);
+                            writer.println();
+                            writer.flush();
+                        }
+                        break;
                     default:
                         running = false;
                         writer.close();

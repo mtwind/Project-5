@@ -132,6 +132,9 @@ public class MainInterface extends JComponent implements Runnable {
     JLabel emptyCartLabel;
     String[] cartList = new String[0];
 
+    // Button for export Purchase History
+    JButton exportPurchaseHistory;
+
 
 
 
@@ -152,8 +155,6 @@ public class MainInterface extends JComponent implements Runnable {
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
-        User user;
-
 
         @Override
         //Programming different buttons in action listener using if statements
@@ -395,7 +396,6 @@ public class MainInterface extends JComponent implements Runnable {
             //logout button for seller frame sends to login screen
             //NEEDS OTHER IMPLEMENTATION
             if (e.getSource() == logoutButtonSeller) {
-                user = null;
                 login.setVisible(true);
                 seller.setVisible(false);
             }
@@ -405,7 +405,6 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == logoutButtonCustomer) {
                 login.setVisible(true);
                 customer.setVisible(false);
-                user = null;
                 storeList = new String[0];
             }
             //takes customer to account screen
@@ -1022,7 +1021,8 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                JOptionPane.showMessageDialog(null, "Cart Cleared!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Cart Cleared!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 resetViewCart(writer, reader);
             }
@@ -1074,12 +1074,35 @@ public class MainInterface extends JComponent implements Runnable {
                 viewPurchaseHistory.setVisible(false);
             }
 
-
-
-
-//            if (e.getSource() == ) {
-//
-//            }
+            // button 26, export customer purchase history
+            if (e.getSource() == exportPurchaseHistory) {
+                writer.write("26");
+                writer.println();
+                writer.flush();
+                try {
+                    String customerPurchaseHistory = reader.readLine();
+                    if (customerPurchaseHistory.equals("empty")) {
+                        JOptionPane.showMessageDialog(null,
+                                "You have no purchase history to export!", "Export Purchase History",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        String customerEmail = reader.readLine();
+                        PrintWriter pw = new PrintWriter(customerEmail + "PurchaseHistory.txt");
+                        String[] pHistoryData = customerPurchaseHistory.split("~");
+                        for (int i = 0; i < pHistoryData.length; i++) {
+                            pw.println(pHistoryData[i]);
+                            pw.flush();
+                        }
+                        pw.close();
+                        JOptionPane.showMessageDialog(null,
+                                "Purchase history exported successfully!", "Export Purchase History",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error exporting purchase history!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
 
 
         }
@@ -1808,6 +1831,11 @@ public class MainInterface extends JComponent implements Runnable {
         sortByGenPop.setBounds(525,300,250,30);
         sortByGenPop.addActionListener(actionListener);
         buttonPanelCustomerDashboard.add(sortByGenPop);
+
+        exportPurchaseHistory = new JButton("Export Purchase History");
+        exportPurchaseHistory.setBounds(675, 60, 200, 30);
+        exportPurchaseHistory.addActionListener(actionListener);
+        buttonPanelCustomer.add(exportPurchaseHistory);
 
 
         productsContent.add(buttonPanelEditProduct);
