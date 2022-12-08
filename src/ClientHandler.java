@@ -902,6 +902,9 @@ public class ClientHandler implements Runnable {
                             writer.flush();
                         }
                         break;
+                    case 27:
+
+                        break;
                     default:
                         running = false;
                         writer.close();

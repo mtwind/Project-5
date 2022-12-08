@@ -1047,8 +1047,8 @@ public class MainInterface extends JComponent implements Runnable {
                 viewCartFrame.setVisible(true);
             }
 
-            if (e.getSource() == historyBtn) { //26
-                writer.write("26");
+            if (e.getSource() == historyBtn) { //27
+                writer.write("27");
                 writer.println();
                 writer.flush();
                 String h;
