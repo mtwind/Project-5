@@ -106,6 +106,7 @@ public class MainInterface extends JComponent implements Runnable {
     //Buttons and frame for customerViewProduct frame
     JFrame customerViewProductFrame;
     JButton customerViewProdouctBack;
+    JButton customerViewProdouctBackForCart;
     JButton addToCart;
     JTextField customerViewProductHowMany;
     JLabel customerViewProductHowManyLabel;
@@ -729,29 +730,15 @@ public class MainInterface extends JComponent implements Runnable {
 
             }
 
-            if (e.getSource() == customerViewProPage) { // button 14, sends user to a products page
-                writer.write("14");
-                writer.println();
-                writer.flush();
+            if (e.getSource() == customerViewProPage) { // sends customer to product page
+                // view viewProductPage method for details
+                viewProductPage(writer, reader);
 
-                writer.write(marketPlace[marketSelect.getSelectedIndex()]);
-                writer.println();
-                writer.flush();
-
-                String[] productDataViewCustomer;
-                try {
-                    productDataViewCustomer = reader.readLine().split(",");
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-                customerViewProductName.setText("Product: " + productDataViewCustomer[0]);
-                customerViewProductDescription.setText("Description: " + productDataViewCustomer[1]);
-                customerViewProductStore.setText("Store: " + productDataViewCustomer[2]);
-                customerViewProductPrice.setText("Price: " + productDataViewCustomer[3]);
-                customerViewProductStock.setText("Quantity Available: " + productDataViewCustomer[4]);
-
-
+                customerViewProdouctBackForCart.setVisible(false);
+                customerViewProdouctBack.setVisible(true);
+                customerViewProductHowMany.setVisible(true);
+                customerViewProductHowManyLabel.setVisible(true);
+                addToCart.setVisible(true);
                 customerViewProductFrame.setVisible(true);
                 customer.setVisible(false);
 
@@ -1025,6 +1012,26 @@ public class MainInterface extends JComponent implements Runnable {
                 resetViewCart(writer, reader);
             }
 
+            if (e.getSource() == cartViewItem)
+            {
+                viewProductPage(writer, reader);
+
+
+                customerViewProdouctBackForCart.setVisible(true);
+                customerViewProdouctBack.setVisible(false);
+                customerViewProductHowMany.setVisible(false);
+                customerViewProductHowManyLabel.setVisible(false);
+                addToCart.setVisible(false);
+                customerViewProductFrame.setVisible(true);
+                viewCartFrame.setVisible(false);
+            }
+
+            if (e.getSource() == customerViewProdouctBackForCart)
+            {
+                customerViewProductFrame.setVisible(false);
+                viewCartFrame.setVisible(true);
+            }
+
 
 
 
@@ -1078,6 +1085,30 @@ public class MainInterface extends JComponent implements Runnable {
 
             emptyCartLabel.setVisible(false);
         }
+    }
+
+    public void viewProductPage(PrintWriter writer, BufferedReader reader)
+    {
+        writer.write("14");
+        writer.println();
+        writer.flush();
+
+        writer.write(marketPlace[marketSelect.getSelectedIndex()]);
+        writer.println();
+        writer.flush();
+
+        String[] productDataViewCustomer;
+        try {
+            productDataViewCustomer = reader.readLine().split(",");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        customerViewProductName.setText("Product: " + productDataViewCustomer[0]);
+        customerViewProductDescription.setText("Description: " + productDataViewCustomer[1]);
+        customerViewProductStore.setText("Store: " + productDataViewCustomer[2]);
+        customerViewProductPrice.setText("Price: " + productDataViewCustomer[3]);
+        customerViewProductStock.setText("Quantity Available: " + productDataViewCustomer[4]);
     }
 
     public void run() {
@@ -1614,10 +1645,17 @@ public class MainInterface extends JComponent implements Runnable {
         //add to cart, back
         JPanel buttonPanelCustomerViewProduct = new JPanel();
         buttonPanelCustomerViewProduct.setLayout(null);
+
         customerViewProdouctBack = new JButton("Back");
         customerViewProdouctBack.setBounds(50,475,350,60);
         customerViewProdouctBack.addActionListener(actionListener);
         buttonPanelCustomerViewProduct.add(customerViewProdouctBack);
+
+        customerViewProdouctBackForCart = new JButton("Back");
+        customerViewProdouctBackForCart.setBounds(50,475,350,60);
+        customerViewProdouctBackForCart.addActionListener(actionListener);
+        buttonPanelCustomerViewProduct.add(customerViewProdouctBackForCart);
+
         addToCart = new JButton("Add to Cart");
         addToCart.setBounds(600, 475, 350, 60);
         addToCart.addActionListener(actionListener);

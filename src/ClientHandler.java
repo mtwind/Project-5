@@ -482,7 +482,8 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 14:
+                    case 14: // sends the data of a selected product back to client
+                        // this allows client to list the data in the products' page
                         String productDataViewCustomer = reader.readLine();
                         String productNameViewCustomer = productDataViewCustomer.substring(9,
                                 productDataViewCustomer.indexOf("Store:") - 3);
@@ -824,6 +825,7 @@ public class ClientHandler implements Runnable {
                         ((Customer) user).setShoppingCart(new ArrayList<Product>());
                         ((Customer) user).editUserFile();
                         break;
+
                     default:
                         running = false;
                         writer.close();
