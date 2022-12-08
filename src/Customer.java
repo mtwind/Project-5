@@ -216,6 +216,125 @@ public class Customer extends User {
 
     }
 
+    public StringBuilder purchaseProductsInCartProject5() {
+
+        StringBuilder failedProducts = new StringBuilder("");
+
+        for (int i = 0; i < shoppingCart.size(); i++) {
+            if (shoppingCart.get(i).getQuantity() == 0) {
+                failedProducts.append(shoppingCart.get(i).getName());
+
+                if (i != shoppingCart.size() - 1) {
+                    failedProducts.append(",");
+                }
+                shoppingCart.remove(i);
+                i--;
+            } else {
+                purchaseHistory.add(shoppingCart.get(i).getStore() + "-" + shoppingCart.get(i).getName());
+                shoppingCart.get(i).setQuantity(shoppingCart.get(i).getQuantity() - 1); // decrement quantity
+                shoppingCart.get(i).setAmountSold(shoppingCart.get(i).getAmountSold() + 1); // increment amount sold
+                try {
+                    BufferedReader bfr = new BufferedReader(new FileReader("stores.txt"));
+                    BufferedReader bfr2 = new BufferedReader(new FileReader("products.txt"));
+                    String line = bfr.readLine();
+                    String[] parse;
+                    ArrayList<Product> p = new ArrayList<>();
+                    ArrayList<Customer> c = new ArrayList<>();
+                    ArrayList<Integer> it = new ArrayList<>();
+                    while (line != null) {
+                        parse = line.split(","); //splits store line
+                        if (parse[0].equals(shoppingCart.get(i).getStore())) {
+                            //find the store name based on the stores file. if equal, add the store to the seller
+                            //line 2 -> product names
+                            //line 4 -> customer emails
+                            //line 5 -> ints relating to customer sales
+                            if (!parse[2].equals("none")) { // if there are products
+                                String line2 = bfr2.readLine();
+                                String[] parsedProduct;
+                                while (line2 != null) {
+                                    parsedProduct = line2.split(",");//reads the product line
+                                    //splits up the product line
+                                    if(parsedProduct[1].equals(shoppingCart.get(i).getStore())) {
+                                        //if the product has the same store name, then it gets added to the store
+                                        p.add(new Product(parsedProduct[0], parsedProduct[1], parsedProduct[2],
+                                                Integer.parseInt(parsedProduct[3]),
+                                                Double.parseDouble(parsedProduct[4]),
+                                                Integer.parseInt(parsedProduct[5])));
+                                    } //0: produce name 1: storeName 2: description 3: quantity, 4: price 5: sold
+                                    line2 = bfr2.readLine(); //goes to the next line in products
+                                }
+                            }
+                            if (!parse[4].equals("none")) { //if there are customers
+                                String[] parsedEmails;
+                                String[] parsedNums;
+                                if (parse[4].contains("~")) {
+                                    parsedEmails = parse[4].split("~");
+                                    parsedNums = parse[5].split("~");
+                                } else {
+                                    parsedEmails = new String[]{ parse[4] };
+                                    parsedNums = new String[]{ parse[5] };
+                                }
+
+                                for (int j = 0; j < parsedEmails.length; j++) {
+                                    c.add(Customer.parseCustomer(parsedEmails[j]));
+                                    it.add(Integer.parseInt(parsedNums[j]));
+                                }
+                            }
+
+                            boolean contains = false;
+
+                            int j;
+                            for (j = 0; j < c.size(); j++) {
+                                if(c.get(j).getEmail().equals(this.getEmail())) {
+                                    contains = true;
+                                    break;
+                                }
+                            }
+                            if (contains) {
+                                it.set(j, it.get(j) + 1);
+                            } else {
+                                c.add(Customer.parseCustomer(this.getEmail()));
+                                it.add(1);
+                            }
+
+                            Store store = new Store(parse[1], shoppingCart.get(i).getStore(), p,
+                                    Double.parseDouble(parse[3]), c, it);
+                            store.setSales(store.getSales() + shoppingCart.get(i).getPrice());
+                            //email, storeName, products, sales, customers, customerSales
+                            store.editStoreFile();
+                            break;
+                        }
+                        line = bfr.readLine(); //moves onto the next line in Stores
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error reading file. ");
+                    e.printStackTrace();
+                }
+
+                shoppingCart.get(i).editProductFile();
+            }
+
+        }
+        shoppingCart.clear(); // empty the cart
+        editUserFile();
+        return failedProducts;
+
+    }
+
+    /*
+    public boolean canBuy(Product product)
+    {
+        return product.getQuantity() > 0;
+    }
+
+    public void buyIndividualProduct(Product product)
+    {
+
+    }
+
+     */
+
+
     @Override
     public synchronized void editUserFile() { // updates user's file info
         ArrayList<String> fileLines = readUserFile();
