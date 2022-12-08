@@ -1047,9 +1047,31 @@ public class MainInterface extends JComponent implements Runnable {
                 viewCartFrame.setVisible(true);
             }
 
-            if (e.getSource() == historyBtn) {
+            if (e.getSource() == historyBtn) { //26
+                writer.write("26");
+                writer.println();
+                writer.flush();
+                String h;
+                try {
+                    h = reader.readLine();
+                    if (!h.equals("none")) {
+                       //get the purchase history from the server, split into store and product, put into the dropdown
+
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "You have no purchase History to view!", "error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ez) {
+                    //ez.printStackTrace();
+                }
                 customer.setVisible(false);
                 viewPurchaseHistory.setVisible(true);
+            }
+
+            if (e.getSource() == historyBack) {
+                customer.setVisible(true);
+                viewPurchaseHistory.setVisible(false);
             }
 
 
