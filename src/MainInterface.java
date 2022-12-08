@@ -1120,7 +1120,24 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write("28");
                 writer.println();
                 writer.flush();
+                try {
+                    String s = reader.readLine();
+                    if (!s.equals("none")) {
+                        items.setModel(new DefaultComboBoxModel<String>(s.split(",")));
+                        viewProductsInCartsFrame.setVisible(true);
+                        seller.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "No products in carts", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ez) {
+                    //ez.printStackTrace();
+                }
 
+            }
+            if (e.getSource() == inCartsBack) {
+                viewProductsInCartsFrame.setVisible(false);
+                seller.setVisible(true);
             }
 
 
@@ -1355,8 +1372,8 @@ public class MainInterface extends JComponent implements Runnable {
         inCartsBack.addActionListener(actionListener);
         productsInCartsContent.add(inCartsBack);
         items = new JComboBox<String>();
-        items.setBounds(viewProductsInCartsFrame.getWidth() / 2 - 350, 250, 700, 30);
-        purchaseHistoryContent.add(items);
+        items.setBounds(viewProductsInCartsFrame.getWidth() / 2 - 450, 250, 900, 30);
+        productsInCartsContent.add(items);
 
         //Creating Panels and Buttons for Login
         JPanel buttonPanelLogin = new JPanel();

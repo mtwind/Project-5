@@ -919,6 +919,23 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
+                    case 28:
+                        ArrayList<String> sending = ((Seller)user).viewCustomerCarts();
+                        if (sending.size() > 0) {
+                            StringBuilder s = new StringBuilder();
+                            for (int i = 0; i < sending.size(); i++) {
+                                s.append(sending.get(i));
+                                if (i != sending.size() -1) {
+                                    s.append(",");
+                                }
+                            }
+                            writer.write(s.toString());
+                        } else {
+                            writer.write("none");
+                        }
+                        writer.println();
+                        writer.flush();
+                        break;
                     default:
                         running = false;
                         writer.close();
