@@ -729,6 +729,7 @@ public class ClientHandler implements Runnable {
                             writer.println();
                             writer.flush();
                         }
+                        break;
                     default:
                         running = false;
                         writer.close();
