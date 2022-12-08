@@ -770,15 +770,7 @@ public class ClientHandler implements Runnable {
                         StringBuilder itemsInCartInfo = new StringBuilder();
                         String singleProductInfo;
 
-                        /*
-                        if (userCart == null)
-                        {
-                            writer.write("empty cart");
-                            writer.println();
-                            writer.flush();
-                        } else {
 
-                         */
                         for (int i = 0; i < userCart.size(); i++)
                         {
                             singleProductInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
@@ -794,7 +786,6 @@ public class ClientHandler implements Runnable {
                         writer.write(itemsInCartInfo.toString());
                         writer.println();
                         writer.flush();
-                        //}
 
                         break;
                     default:
