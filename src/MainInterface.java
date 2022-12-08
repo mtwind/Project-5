@@ -1059,7 +1059,7 @@ public class MainInterface extends JComponent implements Runnable {
                        String[] sp3;
                        for (int i = 0; i < sp.length; i++) {
                            sp3 = sp[i].split("-");
-                           sp2[i] = ("Product: " + sp3[0] + "     Store: " + sp3[1]);
+                           sp2[i] = ("Store: " + sp3[0] + "     Product: " + sp3[1]);
                        }
                         history.setModel(new DefaultComboBoxModel<String>(sp2));
                         customer.setVisible(false);
