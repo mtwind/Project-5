@@ -903,7 +903,21 @@ public class ClientHandler implements Runnable {
                         }
                         break;
                     case 27:
-
+                        ArrayList<String> history = ((Customer)user).getPurchaseHistory();
+                        if (history.size() == 0) {
+                            writer.write("none");
+                        } else {
+                            StringBuilder string = new StringBuilder();
+                            for (int i = 0; i < history.size(); i++) {
+                                string.append(history.get(i));
+                                if (i != history.size() - 1) {
+                                    string.append(",");
+                                }
+                            }
+                            writer.write(string.toString());
+                        }
+                        writer.println();
+                        writer.flush();
                         break;
                     default:
                         running = false;

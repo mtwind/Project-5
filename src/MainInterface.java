@@ -118,7 +118,6 @@ public class MainInterface extends JComponent implements Runnable {
 
     JFrame viewPurchaseHistory;
     JButton historyBack;
-    JButton historySelect;
     JComboBox<String> history;
 
     // Buttons and frame for view cart
@@ -1055,7 +1054,16 @@ public class MainInterface extends JComponent implements Runnable {
                 try {
                     h = reader.readLine();
                     if (!h.equals("none")) {
-                       //get the purchase history from the server, split into store and product, put into the dropdown
+                       String[] sp = h.split(",");
+                       String[] sp2 = new String[sp.length];
+                       String[] sp3;
+                       for (int i = 0; i < sp.length; i++) {
+                           sp3 = sp[i].split("-");
+                           sp2[i] = ("Product: " + sp3[0] + "     Store: " + sp3[1]);
+                       }
+                        history.setModel(new DefaultComboBoxModel<String>(sp2));
+                        customer.setVisible(false);
+                        viewPurchaseHistory.setVisible(true);
 
                     } else {
                         JOptionPane.showMessageDialog(null,
@@ -1065,8 +1073,7 @@ public class MainInterface extends JComponent implements Runnable {
                 } catch (Exception ez) {
                     //ez.printStackTrace();
                 }
-                customer.setVisible(false);
-                viewPurchaseHistory.setVisible(true);
+
             }
 
             if (e.getSource() == historyBack) {
@@ -1318,10 +1325,6 @@ public class MainInterface extends JComponent implements Runnable {
         historyBack.setBounds(50, 475, 350, 60);
         historyBack.addActionListener(actionListener);
         purchaseHistoryContent.add(historyBack);
-        historySelect = new JButton("Select");
-        historySelect.setBounds(600, 475, 350, 60);
-        historySelect.addActionListener(actionListener);
-        purchaseHistoryContent.add(historySelect);
         history = new JComboBox<String>();
         history.setBounds(viewPurchaseHistory.getWidth() / 2 - 350, 250, 700, 30);
         purchaseHistoryContent.add(history);
