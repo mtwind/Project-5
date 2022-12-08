@@ -957,43 +957,10 @@ public class MainInterface extends JComponent implements Runnable {
 
             }
 
-            // button 22 takes customer to their cart
+            // button 22 takes customer to their cart, look at resetViewCart method for implementation details
             if (e.getSource() == cartButton)
             {
-                writer.write("22");
-                writer.println();
-                writer.flush();
-                String cartInfo = "";
-
-                try {
-                    cartInfo = reader.readLine();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                viewCartFrame.setVisible(true);
-                customer.setVisible(false);
-
-                if (cartInfo.equals(""))
-                {
-                    itemsInCartDropdown.setVisible(false);
-                    buyCart.setVisible(false);
-                    removeAllFromCart.setVisible(false);
-                    removeFromCart.setVisible(false);
-                    cartViewItem.setVisible(false);
-
-                    emptyCartLabel.setVisible(true);
-                } else {
-                    cartList = cartInfo.split(",");
-                    itemsInCartDropdown.setModel(new DefaultComboBoxModel<>(cartList));
-
-                    itemsInCartDropdown.setVisible(true);
-                    buyCart.setVisible(true);
-                    removeAllFromCart.setVisible(true);
-                    removeFromCart.setVisible(true);
-                    cartViewItem.setVisible(true);
-
-                    emptyCartLabel.setVisible(false);
-                }
+                resetViewCart(writer, reader);
             }
 
             if (e.getSource() == cartBackButton)
@@ -1016,47 +983,25 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                System.out.println(cartList[itemsInCartDropdown.getSelectedIndex()]);
+
                 writer.write(cartList[itemsInCartDropdown.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
 
                 JOptionPane.showMessageDialog(null, "Product Removed!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                writer.write("22");
+                resetViewCart(writer, reader);
+            }
+
+            if (e.getSource() == removeAllFromCart)
+            {
+                writer.write("25");
                 writer.println();
                 writer.flush();
-                String cartInfo = "";
 
-                try {
-                    cartInfo = reader.readLine();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                viewCartFrame.setVisible(true);
-                customer.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Cart Cleared!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                if (cartInfo.equals(""))
-                {
-                    itemsInCartDropdown.setVisible(false);
-                    buyCart.setVisible(false);
-                    removeAllFromCart.setVisible(false);
-                    removeFromCart.setVisible(false);
-                    cartViewItem.setVisible(false);
-
-                    emptyCartLabel.setVisible(true);
-                } else {
-                    cartList = cartInfo.split(",");
-                    itemsInCartDropdown.setModel(new DefaultComboBoxModel<>(cartList));
-
-                    itemsInCartDropdown.setVisible(true);
-                    buyCart.setVisible(true);
-                    removeAllFromCart.setVisible(true);
-                    removeFromCart.setVisible(true);
-                    cartViewItem.setVisible(true);
-
-                    emptyCartLabel.setVisible(false);
-                }
+                resetViewCart(writer, reader);
             }
 
 
@@ -1074,6 +1019,44 @@ public class MainInterface extends JComponent implements Runnable {
     public static void main(String[] args) {
 
 
+    }
+
+    // method to reset a users cart after they choose the view cart button or buy/remove items from cart
+    public void resetViewCart(PrintWriter writer, BufferedReader reader) {
+        writer.write("22");
+        writer.println();
+        writer.flush();
+        String cartInfo = "";
+
+        try {
+            cartInfo = reader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        viewCartFrame.setVisible(true);
+        customer.setVisible(false);
+
+        if (cartInfo.equals(""))
+        {
+            itemsInCartDropdown.setVisible(false);
+            buyCart.setVisible(false);
+            removeAllFromCart.setVisible(false);
+            removeFromCart.setVisible(false);
+            cartViewItem.setVisible(false);
+
+            emptyCartLabel.setVisible(true);
+        } else {
+            cartList = cartInfo.split(",");
+            itemsInCartDropdown.setModel(new DefaultComboBoxModel<>(cartList));
+
+            itemsInCartDropdown.setVisible(true);
+            buyCart.setVisible(true);
+            removeAllFromCart.setVisible(true);
+            removeFromCart.setVisible(true);
+            cartViewItem.setVisible(true);
+
+            emptyCartLabel.setVisible(false);
+        }
     }
 
     public void run() {

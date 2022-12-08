@@ -815,6 +815,11 @@ public class ClientHandler implements Runnable {
                         ((Customer) user).setShoppingCart(newCart);
                         ((Customer) user).editUserFile();
                         break;
+
+                    case 25:
+                        ((Customer) user).setShoppingCart(new ArrayList<Product>());
+                        ((Customer) user).editUserFile();
+                        break;
                     default:
                         running = false;
                         writer.close();
