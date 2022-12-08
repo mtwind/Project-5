@@ -10,6 +10,7 @@ public class ClientHandler implements Runnable {
     Socket socket;
     User user;
     Store store;
+    Object obj;
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -40,21 +41,7 @@ public class ClientHandler implements Runnable {
                             {
                                 user = new Customer(info[0], info[1], info[2], true,
                                         info[4], Integer.parseInt(info[5]));
-                                StringBuilder market = new StringBuilder();
-                                ArrayList<Product> pros = Product.getAllProducts();
-                                String productInfo;
-                                for (int i = 0; i < pros.size(); i++) {
-                                    productInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
-                                            pros.get(i).getName(), pros.get(i).getStore(), pros.get(i).getPrice());
-                                    market.append(productInfo);
-                                    if (i != pros.size() - 1) {
-                                        market.append(",");
-                                    }
-                                }
 
-                                writer.write(market.toString());
-                                writer.println();
-                                writer.flush();
                             } else {
                                 user = new Seller(info[0], info[1], info[2], false,
                                         info[4], Integer.parseInt(info[5]));
@@ -62,6 +49,23 @@ public class ClientHandler implements Runnable {
                             writer.write("new");
                             writer.println();
                             writer.flush();
+
+                            StringBuilder market = new StringBuilder();
+                            ArrayList<Product> pros = Product.getAllProducts();
+                            String productInfo;
+                            for (int i = 0; i < pros.size(); i++) {
+                                productInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                        pros.get(i).getName(), pros.get(i).getStore(), pros.get(i).getPrice());
+                                market.append(productInfo);
+                                if (i != pros.size() - 1) {
+                                    market.append(",");
+                                }
+                            }
+
+                            writer.write(market.toString());
+                            writer.println();
+                            writer.flush();
+
                         } else {
                             writer.write("not new");
                             writer.println();
