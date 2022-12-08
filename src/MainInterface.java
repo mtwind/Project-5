@@ -1707,7 +1707,7 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelSellerDashboard.add(logoutButtonSellerDash);
 
         sellerDash = new JComboBox<>();
-        sellerDash.setBounds(400, 250, 200, 30);
+        sellerDash.setBounds(275, 250, 475, 30);
         buttonPanelSellerDashboard.add(sellerDash);
 
         sortByRevenue = new JButton("Sort By Revenue");
@@ -1736,7 +1736,7 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelCustomerDashboard.add(logoutButtonCustomerDash);
 
         customerDash = new JComboBox<>();
-        customerDash.setBounds(400, 250, 200, 30);
+        customerDash.setBounds(275, 250, 475, 30);
         buttonPanelCustomerDashboard.add(customerDash);
 
         sortByUserPop = new JButton("Sort By Your # of Purchases");

@@ -760,50 +760,50 @@ public class ClientHandler implements Runnable {
                          * store each store's revenue in an arraylist and sort from highest to lowest
                          */
 
-                       stores = ((Seller) user).getStores();
-                       ArrayList<Product> prod;
-                       ArrayList<Double> storeRevenue = new ArrayList<Double>();
-                       double rev;
-                       for(int i = 0; i < stores.size(); i++) {
-                           prod = new ArrayList<Product>();
-                           rev = 0;
-                           prod = stores.get(i).getProducts();
-                           for(Product product : prod) {
-                               rev += product.getPrice() * product.getAmountSold();
-                           }
-                           storeRevenue.add(rev);
-                       }
+                        stores = ((Seller) user).getStores();
+                        ArrayList<Product> prod;
+                        ArrayList<Double> storeRevenue = new ArrayList<Double>();
+                        double rev;
+                        for(int i = 0; i < stores.size(); i++) {
+                            prod = new ArrayList<Product>();
+                            rev = 0;
+                            prod = stores.get(i).getProducts();
+                            for(Product product : prod) {
+                                rev += product.getPrice() * product.getAmountSold();
+                            }
+                            storeRevenue.add(rev);
+                        }
 
-                       for(int j = 0; j < stores.size(); j++) {
-                           int max = j;
-                           for (int k = j; k < stores.size(); k++) {
-                               if(storeRevenue.get(k) > storeRevenue.get(j)) {
-                                   max = k;
-                               }
-                               double revSwap = storeRevenue.get(j);
-                               storeRevenue.set(j, storeRevenue.get(max));
-                               storeRevenue.set(max, revSwap);
+                        for(int j = 0; j < stores.size(); j++) {
+                            int max = j;
+                            for (int k = j; k < stores.size(); k++) {
+                                if(storeRevenue.get(k) > storeRevenue.get(j)) {
+                                    max = k;
+                                }
+                                double revSwap = storeRevenue.get(j);
+                                storeRevenue.set(j, storeRevenue.get(max));
+                                storeRevenue.set(max, revSwap);
 
-                               Store swap = stores.get(j);
-                               stores.set(j, stores.get(max));
-                               stores.set(max, swap);
-                           }
-                       }
-                       String storesSortedByRevenue = "";
-                       for(int i = 0; i < stores.size(); i++) {
-                           if(i == stores.size() - 1) {
-                               storesSortedByRevenue += "Store: " + stores.get(i).getName() + " - Revenue: $"
-                                       + storeRevenue.get(i);
-                           } else {
-                               storesSortedByRevenue += "Store: " + stores.get(i).getName() + " - Revenue: $"
-                                       + storeRevenue.get(i) + ", ";
-                           }
-                       }
+                                Store swap = stores.get(j);
+                                stores.set(j, stores.get(max));
+                                stores.set(max, swap);
+                            }
+                        }
+                        String storesSortedByRevenue = "";
+                        for(int i = 0; i < stores.size(); i++) {
+                            if(i == stores.size() - 1) {
+                                storesSortedByRevenue += "Store: " + stores.get(i).getName() + " - Revenue: $"
+                                        + storeRevenue.get(i);
+                            } else {
+                                storesSortedByRevenue += "Store: " + stores.get(i).getName() + " - Revenue: $"
+                                        + storeRevenue.get(i) + ", ";
+                            }
+                        }
 
-                       writer.write(storesSortedByRevenue);
-                       writer.println();
-                       writer.flush();
-                       break;
+                        writer.write(storesSortedByRevenue);
+                        writer.println();
+                        writer.flush();
+                        break;
                     case 22:
                         ArrayList<Product> userCart = ((Customer) user).getShoppingCart();
                         StringBuilder itemsInCartInfo = new StringBuilder();
@@ -887,4 +887,3 @@ public class ClientHandler implements Runnable {
         }
     }
 }
-
