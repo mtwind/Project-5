@@ -759,6 +759,44 @@ public class ClientHandler implements Runnable {
                         break;
                     case 21:
 
+                        break;
+                    case 22:
+                        ArrayList<Product> userCart = ((Customer) user).getShoppingCart();
+                        System.out.println(userCart.size());
+                        for (int i = 0; i < userCart.size(); i++)
+                        {
+                            System.out.println(userCart.get(i).toString());
+                        }
+                        StringBuilder itemsInCartInfo = new StringBuilder();
+                        String singleProductInfo;
+
+                        /*
+                        if (userCart == null)
+                        {
+                            writer.write("empty cart");
+                            writer.println();
+                            writer.flush();
+                        } else {
+
+                         */
+                        for (int i = 0; i < userCart.size(); i++)
+                        {
+                            singleProductInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                    userCart.get(i).getName(), userCart.get(i).getStore(),
+                                    userCart.get(i).getPrice());
+                            itemsInCartInfo.append(singleProductInfo);
+
+                            if (i != userCart.size() - 1) {
+                                itemsInCartInfo.append(",");
+                            }
+                        }
+
+                        writer.write(itemsInCartInfo.toString());
+                        writer.println();
+                        writer.flush();
+                        //}
+
+                        break;
                     default:
                         running = false;
                         writer.close();

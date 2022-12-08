@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * A marketplace that allows for multiple users to connect, uses GUI, and is fully run on servers and sockets
@@ -115,6 +114,19 @@ public class MainInterface extends JComponent implements Runnable {
     JLabel customerViewProductDescription;
     JLabel customerViewProductPrice;
     JLabel customerViewProductStock;
+
+    // Buttons and frame for view cart
+    JFrame viewCartFrame;
+    JButton buyCart;
+    JButton removeFromCart;
+    JButton cartViewItem;
+    JButton removeAllFromCart;
+    JButton cartBackButton;
+    JComboBox<String> itemsInCartDropdown;
+    JLabel emptyCartLabel;
+    String[] cartList = new String[0];
+
+
 
 
     String[] storeList = new String[0];
@@ -945,6 +957,42 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.flush();
 
             }
+
+            // button 22 takes customer to their cart
+            if (e.getSource() == cartButton)
+            {
+                writer.write("22");
+                writer.println();
+                writer.flush();
+                String cartInfo = "";
+
+                try {
+                    cartInfo = reader.readLine();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                viewCartFrame.setVisible(true);
+                customer.setVisible(false);
+
+                if (cartInfo.equals(""))
+                {
+                    itemsInCartDropdown.setVisible(false);
+                    emptyCartLabel.setVisible(true);
+                } else {
+                    cartList = cartInfo.split(",");
+                    itemsInCartDropdown.setModel(new DefaultComboBoxModel<>(cartList));
+                    emptyCartLabel.setVisible(false);
+                    itemsInCartDropdown.setVisible(true);
+                }
+
+
+            }
+
+            if (e.getSource() == cartBackButton)
+            {
+                viewCartFrame.setVisible(false);
+                customer.setVisible(true);
+            }
 //            if (e.getSource() == ) {
 //
 //            }
@@ -1011,6 +1059,9 @@ public class MainInterface extends JComponent implements Runnable {
         customerViewProductFrame = new JFrame("View Product");
         Container customerViewProductContent = customerViewProductFrame.getContentPane();
         customerViewProductContent.setLayout(new BorderLayout());
+        viewCartFrame = new JFrame("View Cart");
+        Container viewCartContent = viewCartFrame.getContentPane();
+        viewCartContent.setLayout(new BorderLayout());
 
 
 
@@ -1079,6 +1130,11 @@ public class MainInterface extends JComponent implements Runnable {
         customerViewProductFrame.setLocationRelativeTo(null);
         customerViewProductFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         customerViewProductFrame.setVisible(false);
+
+        viewCartFrame.setSize(1000, 600);
+        viewCartFrame.setLocationRelativeTo(null);
+        viewCartFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        viewCartFrame.setVisible(false);
 
 
         //Creating Panels and Buttons for Login
@@ -1443,6 +1499,42 @@ public class MainInterface extends JComponent implements Runnable {
 
         //Creating buttons and panels for cart page (For this I don't know exactly what is needed I may need help)
         //remove, remove all, purchase all, dropdown for items
+        JPanel buttonPanelViewCart = new JPanel();
+        buttonPanelViewCart.setLayout(null);
+
+        removeAllFromCart = new JButton("Clear Cart");
+        removeAllFromCart.setBounds(650, 475, 300, 60);
+        removeAllFromCart.addActionListener(actionListener);
+        buttonPanelViewCart.add(removeAllFromCart);
+
+        removeFromCart = new JButton("Remove Selected Item");
+        removeFromCart.setBounds(300, 400, 200, 40);
+        removeFromCart.addActionListener(actionListener);
+        buttonPanelViewCart.add(removeFromCart);
+
+        buyCart = new JButton("Buy All");
+        buyCart.setBounds(350, 150, 300, 60);
+        buyCart.addActionListener(actionListener);
+        buttonPanelViewCart.add(buyCart);
+
+        cartBackButton = new JButton("Back");
+        cartBackButton.setBounds(50, 475, 300, 60);
+        cartBackButton.addActionListener(actionListener);
+        buttonPanelViewCart.add(cartBackButton);
+
+        cartViewItem = new JButton("View Item Details");
+        cartViewItem.setBounds(500, 400, 200, 40);
+        cartViewItem.addActionListener(actionListener);
+        buttonPanelViewCart.add(cartViewItem);
+
+        itemsInCartDropdown = new JComboBox<>();
+        itemsInCartDropdown.setBounds(300, 300, 400, 40);
+        buttonPanelViewCart.add(itemsInCartDropdown);
+
+        emptyCartLabel = new JLabel("Your cart is empty.");
+        emptyCartLabel.setBounds(450, 300, 150, 40);
+        buttonPanelViewCart.add(emptyCartLabel);
+
 
 
         //Create buttons and panels for product page for customers
@@ -1551,6 +1643,7 @@ public class MainInterface extends JComponent implements Runnable {
         customerDashboardContent.add(buttonPanelCustomerDashboard);
         sellerDashboardContent.add(buttonPanelSellerDashboard);
         customerViewProductContent.add(buttonPanelCustomerViewProduct);
+        viewCartContent.add(buttonPanelViewCart);
     }
 
 
