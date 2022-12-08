@@ -36,37 +36,38 @@ public class ClientHandler implements Runnable {
 
                         if (alreadyUsed == false) {
                             boolean isCustomer = Boolean.parseBoolean(info[3]);
+                            writer.write("new");
+                            writer.println();
+                            writer.flush();
 
                             if (isCustomer)
                             {
                                 user = new Customer(info[0], info[1], info[2], true,
                                         info[4], Integer.parseInt(info[5]));
 
+                                StringBuilder market = new StringBuilder();
+                                ArrayList<Product> pros = Product.getAllProducts();
+                                String productInfo;
+                                for (int i = 0; i < pros.size(); i++) {
+                                    productInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                            pros.get(i).getName(), pros.get(i).getStore(), pros.get(i).getPrice());
+                                    market.append(productInfo);
+                                    if (i != pros.size() - 1) {
+                                        market.append(",");
+                                    }
+                                }
+
+                                writer.write(market.toString());
+                                writer.println();
+                                writer.flush();
+
                             } else {
                                 user = new Seller(info[0], info[1], info[2], false,
                                         info[4], Integer.parseInt(info[5]));
                             }
-                            writer.write("new");
-                            writer.println();
-                            writer.flush();
-
-                            StringBuilder market = new StringBuilder();
-                            ArrayList<Product> pros = Product.getAllProducts();
-                            String productInfo;
-                            for (int i = 0; i < pros.size(); i++) {
-                                productInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
-                                        pros.get(i).getName(), pros.get(i).getStore(), pros.get(i).getPrice());
-                                market.append(productInfo);
-                                if (i != pros.size() - 1) {
-                                    market.append(",");
-                                }
-                            }
-
-                            writer.write(market.toString());
-                            writer.println();
-                            writer.flush();
 
                         } else {
+                            System.out.println("already used");
                             writer.write("not new");
                             writer.println();
                             writer.flush();
@@ -481,7 +482,8 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 14:
+                    case 14: // sends the data of a selected product back to client
+                        // this allows client to list the data in the products' page
                         String productDataViewCustomer = reader.readLine();
                         String productNameViewCustomer = productDataViewCustomer.substring(9,
                                 productDataViewCustomer.indexOf("Store:") - 3);
@@ -826,7 +828,10 @@ public class ClientHandler implements Runnable {
                         break;
 
                     case 23:
-                        ((Customer) user).purchaseProductsInCart();
+                        StringBuilder failedProducts = ((Customer) user).purchaseProductsInCartProject5();
+                        writer.write(failedProducts.toString());
+                        writer.println();
+                        writer.flush();
 
                         break;
                     case 24:
@@ -870,6 +875,7 @@ public class ClientHandler implements Runnable {
                         ((Customer) user).setShoppingCart(new ArrayList<Product>());
                         ((Customer) user).editUserFile();
                         break;
+
                     default:
                         running = false;
                         writer.close();
