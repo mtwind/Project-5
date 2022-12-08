@@ -277,7 +277,7 @@ public class MainInterface extends JComponent implements Runnable {
                             try {
                                 //takes the store names separated by commas
                                 String line = reader.readLine();
-                                System.out.println(line);
+                                //System.out.println(line);
                                 if (!line.equals(""))
                                     storeList = line.split(",");
                                 else {
@@ -463,7 +463,7 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                System.out.println(storeList[storesDropdown.getSelectedIndex()]);
+                //System.out.println(storeList[storesDropdown.getSelectedIndex()]);
                 writer.write(storeList[storesDropdown.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
@@ -471,7 +471,7 @@ public class MainInterface extends JComponent implements Runnable {
                 try {
                     //takes the store names separated by commas
                     String line = reader.readLine();
-                    System.out.println(line);
+                    //System.out.println(line);
                     if (!line.equals(""))
                         productList = line.split(",");
                     else {
@@ -554,9 +554,9 @@ public class MainInterface extends JComponent implements Runnable {
 
                 storeList = serverResponse.split(",");
                 ArrayList<String> storeArrayList = new ArrayList<>();
-                System.out.println("storeList: ");
+                //System.out.println("storeList: ");
                 for(String s: storeList) {
-                    System.out.println(s);
+                    //System.out.println(s);
                     storeArrayList.add(s);
                 }
 
@@ -734,7 +734,6 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                System.out.println(marketPlace[marketSelect.getSelectedIndex()]);
                 writer.write(marketPlace[marketSelect.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
@@ -977,15 +976,24 @@ public class MainInterface extends JComponent implements Runnable {
                 if (cartInfo.equals(""))
                 {
                     itemsInCartDropdown.setVisible(false);
+                    buyCart.setVisible(false);
+                    removeAllFromCart.setVisible(false);
+                    removeFromCart.setVisible(false);
+                    cartViewItem.setVisible(false);
+
                     emptyCartLabel.setVisible(true);
                 } else {
                     cartList = cartInfo.split(",");
                     itemsInCartDropdown.setModel(new DefaultComboBoxModel<>(cartList));
-                    emptyCartLabel.setVisible(false);
+
                     itemsInCartDropdown.setVisible(true);
+                    buyCart.setVisible(true);
+                    removeAllFromCart.setVisible(true);
+                    removeFromCart.setVisible(true);
+                    cartViewItem.setVisible(true);
+
+                    emptyCartLabel.setVisible(false);
                 }
-
-
             }
 
             if (e.getSource() == cartBackButton)
@@ -993,6 +1001,67 @@ public class MainInterface extends JComponent implements Runnable {
                 viewCartFrame.setVisible(false);
                 customer.setVisible(true);
             }
+
+            // button 23 purchases all products in cart
+            if (e.getSource() == buyCart)
+            {
+                writer.write("23");
+                writer.println();
+                writer.flush();
+            }
+
+            if (e.getSource() == removeFromCart)
+            {
+                writer.write("24");
+                writer.println();
+                writer.flush();
+
+                System.out.println(cartList[itemsInCartDropdown.getSelectedIndex()]);
+                writer.write(cartList[itemsInCartDropdown.getSelectedIndex()]);
+                writer.println();
+                writer.flush();
+
+                JOptionPane.showMessageDialog(null, "Product Removed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                writer.write("22");
+                writer.println();
+                writer.flush();
+                String cartInfo = "";
+
+                try {
+                    cartInfo = reader.readLine();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                viewCartFrame.setVisible(true);
+                customer.setVisible(false);
+
+                if (cartInfo.equals(""))
+                {
+                    itemsInCartDropdown.setVisible(false);
+                    buyCart.setVisible(false);
+                    removeAllFromCart.setVisible(false);
+                    removeFromCart.setVisible(false);
+                    cartViewItem.setVisible(false);
+
+                    emptyCartLabel.setVisible(true);
+                } else {
+                    cartList = cartInfo.split(",");
+                    itemsInCartDropdown.setModel(new DefaultComboBoxModel<>(cartList));
+
+                    itemsInCartDropdown.setVisible(true);
+                    buyCart.setVisible(true);
+                    removeAllFromCart.setVisible(true);
+                    removeFromCart.setVisible(true);
+                    cartViewItem.setVisible(true);
+
+                    emptyCartLabel.setVisible(false);
+                }
+            }
+
+
+
+
 //            if (e.getSource() == ) {
 //
 //            }

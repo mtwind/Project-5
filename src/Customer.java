@@ -102,13 +102,14 @@ public class Customer extends User {
     }
 
     public boolean addToCart(Product product) { // allows user to add a product to their shopping cart
+
         if (product.getQuantity() > 0) { // only add if product's quantity is greater than 0
             shoppingCart.add(product);
             editUserFile();
-            System.out.println("Added to cart!");
+
             return true;
         }
-        System.out.println("Product is out of stock!");
+
         return false; // return false if the product is out of stock
     }
 
@@ -212,6 +213,7 @@ public class Customer extends User {
         shoppingCart.clear(); // empty the cart
 
         editUserFile();
+
     }
 
     @Override

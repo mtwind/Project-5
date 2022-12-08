@@ -32,7 +32,7 @@ public class ClientHandler implements Runnable {
                     case 1: // create an account, used for both sellers and customers
                         String[] info = reader.readLine().split(",");
                         boolean alreadyUsed = User.checkNewUser(info[1]);
-                        System.out.println(alreadyUsed);
+                        //System.out.println(alreadyUsed);
 
                         if (alreadyUsed == false) {
                             boolean isCustomer = Boolean.parseBoolean(info[3]);
@@ -90,13 +90,13 @@ public class ClientHandler implements Runnable {
 
                                 StringBuilder line = new StringBuilder();
                                 for (int i = 0; i < ((Seller)user).getStores().size(); i++) {
-                                    System.out.println(((Seller)user).getStores().get(i));
+                                    //System.out.println(((Seller)user).getStores().get(i));
                                     line.append(((Seller)user).getStores().get(i).getName());
                                     if (i != ((Seller)user).getStores().size() - 1) {
                                         line.append(",");
                                     }
                                 }
-                                System.out.println(line.toString());
+                                //System.out.println(line.toString());
                                 writer.write(line.toString());
                                 writer.println();
                                 writer.flush();
@@ -117,7 +117,7 @@ public class ClientHandler implements Runnable {
                             writer.println();
                             writer.flush();
                         }
-                        System.out.println("in seller log in");
+                        //System.out.println("in seller log in");
                         break;
                     case 3: // customer log in
                         email = reader.readLine();
@@ -168,19 +168,15 @@ public class ClientHandler implements Runnable {
                         }
                         break;
                     case 5: // confirmEditSeller button, edits seller and store info in files
-                        System.out.println("here");
+
                         String sellerNewPass = reader.readLine(); // read new pass from client
                         String sellerNewName = reader.readLine();
                         String sellerNewEmail = reader.readLine(); // read new email from client
                         String oldSellerEmail = user.getEmail();
-                        if (user == null) {
-                            System.out.println("user null");
-                        }
+
                         user = Seller.parseSeller(oldSellerEmail);
-                        if (user == null) {
-                            System.out.println("user null2");
-                        }
-                        System.out.println("here");
+
+
                         ArrayList<String> userLines = ((Seller)user).readUserFile();
                         for (int i = 0; i < userLines.size(); i++) {
                             String[] userData = userLines.get(i).split(",");
@@ -215,19 +211,15 @@ public class ClientHandler implements Runnable {
                         }
                         break;
                     case 6: // confirmEditCustomer buttons
-                        //System.out.println("here");
+
                         String customerNewPass = reader.readLine(); // read new pass from client
                         String customerNewName = reader.readLine();
                         String customerNewEmail = reader.readLine(); // read new email from client
                         String oldCustomerEmail = user.getEmail();
-                        if (user == null) {
-                            System.out.println("user null");
-                        }
+
                         user = Customer.parseCustomer(oldCustomerEmail);
-                        if (user == null) {
-                            System.out.println("user null2");
-                        }
-                        //System.out.println("here");
+
+
                         ArrayList<String> customerLines = ((Customer)user).readUserFile();
                         for (int i = 0; i < customerLines.size(); i++) {
                             String[] userData = customerLines.get(i).split(",");
@@ -467,7 +459,7 @@ public class ClientHandler implements Runnable {
                                 results.append(",");
                             }
                         }
-                        System.out.println(results.toString());
+                        //System.out.println(results.toString());
                         writer.write(results.toString());
                         writer.println();
                         writer.flush();
@@ -493,11 +485,11 @@ public class ClientHandler implements Runnable {
                         String productDataViewCustomer = reader.readLine();
                         String productNameViewCustomer = productDataViewCustomer.substring(9,
                                 productDataViewCustomer.indexOf("Store:") - 3);
-                        System.out.println(productNameViewCustomer);
+
                         String productStoreViewCustomer = productDataViewCustomer.substring(
                                 productDataViewCustomer.indexOf("Store:") + 7,
                                 productDataViewCustomer.indexOf("Price:") - 3);
-                        System.out.println(productStoreViewCustomer);
+
                         Product viewCustomerProduct = null;
                         viewCustomerProduct = Product.getProduct(productNameViewCustomer, productStoreViewCustomer);
                         productDataViewCustomer = viewCustomerProduct.getName() + "," + viewCustomerProduct.getProductDescription() + "," +
@@ -762,14 +754,8 @@ public class ClientHandler implements Runnable {
                         break;
                     case 22:
                         ArrayList<Product> userCart = ((Customer) user).getShoppingCart();
-                        System.out.println(userCart.size());
-                        for (int i = 0; i < userCart.size(); i++)
-                        {
-                            System.out.println(userCart.get(i).toString());
-                        }
                         StringBuilder itemsInCartInfo = new StringBuilder();
                         String singleProductInfo;
-
 
                         for (int i = 0; i < userCart.size(); i++)
                         {
@@ -787,6 +773,47 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
 
+                        break;
+
+                    case 23:
+                        ((Customer) user).purchaseProductsInCart();
+
+                        break;
+                    case 24:
+                        String line = reader.readLine();
+
+                        String removableProductName = line.substring(9, line.indexOf("Store:") - 3);
+                        String removableProductStore =
+                                line.substring(line.indexOf("Store:") + 7, line.indexOf("Price:") - 3);
+
+                        ArrayList<Product> cart = ((Customer) user).getShoppingCart();
+                        ArrayList<Product> newCart = new ArrayList<Product>();
+
+                        Product remove = null;
+                        for (int i = 0; i < cart.size(); i++)
+                        {
+                            if (cart.get(i).getName().equals(removableProductName) &&
+                                    cart.get(i).getStore().equals(removableProductStore))
+                            {
+                                remove = cart.get(i);
+                                break;
+                            }
+                        }
+
+                        boolean removed = false;
+
+
+                        for (int i = 0; i < cart.size(); i++) {
+                            if (!cart.get(i).getName().equals(remove.getName())) {
+                                newCart.add(cart.get(i));
+                            } else if (cart.get(i).getName().equals(remove.getName()) && removed) {
+                                newCart.add(cart.get(i));
+                            } else {
+                                removed = true;
+                            }
+                        }
+                        ((Customer) user).setShoppingCart(newCart);
+                        ((Customer) user).editUserFile();
                         break;
                     default:
                         running = false;
