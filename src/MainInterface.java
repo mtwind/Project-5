@@ -955,6 +955,14 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
+                try{
+                    String sortedStores = reader.readLine();
+                    String[] stores = sortedStores.split(",");
+                    sellerDash.setModel(new DefaultComboBoxModel<String>(stores));
+                } catch(IOException ioException) {
+                    System.out.println("Error sorting by revenue");
+                }
+
             }
 
             // button 22 takes customer to their cart, look at resetViewCart method for implementation details
