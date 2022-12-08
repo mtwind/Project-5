@@ -303,13 +303,7 @@ public class MainInterface extends JComponent implements Runnable {
                 }
 
             }
-            //logout button for seller frame sends to login screen
-            //NEEDS OTHER IMPLEMENTATION
-            if (e.getSource() == logoutButtonSeller) {
-                user = null;
-                login.setVisible(true);
-                seller.setVisible(false);
-            }
+
 
             //login customer button sends to marketplace
             //button 3
@@ -367,6 +361,25 @@ public class MainInterface extends JComponent implements Runnable {
                     h.printStackTrace();
                 }
             }
+
+            // resets account creation text fields after an account is created
+            if (e.getSource() == logoutButtonCustomer || e.getSource() == logoutButtonSeller) {
+                createEmail.setText("Enter Email");
+                createUsername.setText("Enter Username");
+                createPassword.setText("Enter Password");
+                chooseSecurityQ.setSelectedIndex(0);
+                createSecurityAnswer.setText("Enter Answer");
+                email.setText("Enter Email");
+                password.setText("Enter Password");
+            }
+            //logout button for seller frame sends to login screen
+            //NEEDS OTHER IMPLEMENTATION
+            if (e.getSource() == logoutButtonSeller) {
+                user = null;
+                login.setVisible(true);
+                seller.setVisible(false);
+            }
+
             //logs customer out sends to login screen
             //NEEDS OTHER IMPLEMENTATION
             if (e.getSource() == logoutButtonCustomer) {
@@ -407,14 +420,7 @@ public class MainInterface extends JComponent implements Runnable {
                 editSeller.setVisible(false);
             }
 
-            // resets account creation text fields after an account is created
-            if (e.getSource() == logoutButtonCustomer || e.getSource() == logoutButtonSeller) {
-                createEmail.setText("Enter Email");
-                createUsername.setText("Enter Username");
-                createPassword.setText("Enter Password");
-                chooseSecurityQ.setSelectedIndex(0);
-                createSecurityAnswer.setText("Enter Answer");
-            }
+
 
             //takes user back to customer screen and edits account settings
             //NEEDS OTHER IMPLEMENTATION
@@ -711,7 +717,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             }
 
-            if (e.getSource() == customerViewProPage) { // 14 case for customer pressing button to see product -> own panel?
+            if (e.getSource() == customerViewProPage) { // button 14, sends user to a products page
                 writer.write("14");
                 writer.println();
                 writer.flush();
@@ -720,17 +726,30 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(marketPlace[marketSelect.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
-                /*
-                writer.write(storeList[storesDropdown.getSelectedIndex()]);
-                System.out.println(storeList[storesDropdown.getSelectedIndex()]);
-                writer.println();
-                writer.flush();
 
-                 */
+                String[] productDataViewCustomer;
+                try {
+                    productDataViewCustomer = reader.readLine().split(",");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                customerViewProductName.setText("Product: " + productDataViewCustomer[0]);
+                customerViewProductDescription.setText("Description: " + productDataViewCustomer[1]);
+                customerViewProductStore.setText("Store: " + productDataViewCustomer[2]);
+                customerViewProductPrice.setText("Price: " + productDataViewCustomer[3]);
+                customerViewProductStock.setText("Quantity Available: " + productDataViewCustomer[4]);
+
 
                 customerViewProductFrame.setVisible(true);
                 customer.setVisible(false);
 
+            }
+
+            if (e.getSource() == customerViewProdouctBack)
+            {
+                customerViewProductFrame.setVisible(false);
+                customer.setVisible(true);
             }
 
             if (e.getSource() == backButtonEdit) {
@@ -869,6 +888,43 @@ public class MainInterface extends JComponent implements Runnable {
                     throw new RuntimeException(ex);
                 }
             }
+
+            if (e.getSource() == addToCart) // button 19, adds a product to cart
+            {
+                writer.write("19");
+                writer.println();
+                writer.flush();
+
+                String productName = customerViewProductName.getText().substring(9);
+                String productStore = customerViewProductStore.getText().substring(7);
+
+                writer.write(productName + "," + productStore + "," + customerViewProductHowMany.getText());
+                writer.println();
+                writer.flush();
+
+
+                try {
+                    String serverResponse = reader.readLine();
+
+
+                    if (serverResponse.equals("added to cart"))
+                    {
+                        JOptionPane.showMessageDialog(null, "Product Added!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        customer.setVisible(true);
+                        customerViewProductFrame.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Quantity Error. Decrease the quantity desired until it is " +
+                                        "less than the quantity available.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+
+            }
+
+
 //            if (e.getSource() == ) {
 //
 //            }
