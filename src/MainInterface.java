@@ -925,12 +925,26 @@ public class MainInterface extends JComponent implements Runnable {
             }
 
 
-//            if (e.getSource() == ) {
-//
-//            }
-//            if (e.getSource() == ) {
-//
-//            }
+            if (e.getSource() == sortBySales) {
+                writer.write("20");
+                writer.println();
+                writer.flush();
+                String sortedStores;
+                try {
+                    sortedStores = reader.readLine();
+                    String[] stores = sortedStores.split(",");
+                    sellerDash.setModel(new DefaultComboBoxModel<String>(stores));
+                } catch (IOException ex) {
+                    System.out.println("Error sorting by sales");
+                }
+
+            }
+            if (e.getSource() == sortByRevenue) {
+                writer.write("21");
+                writer.println();
+                writer.flush();
+
+            }
 //            if (e.getSource() == ) {
 //
 //            }

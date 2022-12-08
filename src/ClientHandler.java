@@ -730,6 +730,35 @@ public class ClientHandler implements Runnable {
                             writer.flush();
                         }
                         break;
+                    case 20:
+                        ArrayList<Store> stores = ((Seller) user).getStores();
+                        for(int i = 0; i < stores.size(); i++) {
+                            int max = i;
+                            for(int j = i; j < stores.size(); j++) {
+                                if(stores.get(j).getTotalSales() > stores.get(max).getTotalSales()) {
+                                    max = j;
+                                }
+                                Store swap = stores.get(i);
+                                stores.set(i, stores.get(max));
+                                stores.set(max, swap);
+                            }
+                        }
+                        String sortedStores = "";
+                        for(int k = 0; k < stores.size(); k++) {
+                            if(k == stores.size() - 1) {
+                                sortedStores += "Name: " + stores.get(k).getName() + " Sales: " +
+                                        stores.get(k).getTotalSales();
+                            } else {
+                                sortedStores += "Name: " + stores.get(k).getName() + " Sales: " +
+                                        stores.get(k).getTotalSales() + ",";
+                            }
+                        }
+                        writer.write(sortedStores);
+                        writer.println();
+                        writer.flush();
+                        break;
+                    case 21:
+
                     default:
                         running = false;
                         writer.close();
