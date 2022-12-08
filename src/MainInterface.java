@@ -120,6 +120,10 @@ public class MainInterface extends JComponent implements Runnable {
     JButton historyBack;
     JComboBox<String> history;
 
+    JFrame viewProductsInCartsFrame;
+    JButton inCartsBack;
+    JComboBox<String> items;
+
     // Buttons and frame for view cart
     JFrame viewCartFrame;
     JButton buyCart;
@@ -133,6 +137,7 @@ public class MainInterface extends JComponent implements Runnable {
 
     // Button for export Purchase History
     JButton exportPurchaseHistory;
+    JButton viewProductsInCarts;
 
 
 
@@ -1111,6 +1116,13 @@ public class MainInterface extends JComponent implements Runnable {
                 }
             }
 
+            if (e.getSource() == viewProductsInCarts) {//28
+                writer.write("28");
+                writer.println();
+                writer.flush();
+
+            }
+
 
         }
     };
@@ -1329,6 +1341,23 @@ public class MainInterface extends JComponent implements Runnable {
         history.setBounds(viewPurchaseHistory.getWidth() / 2 - 350, 250, 700, 30);
         purchaseHistoryContent.add(history);
 
+        viewProductsInCartsFrame = new JFrame("Products in Carts");
+        Container productsInCartsContent = viewProductsInCartsFrame.getContentPane();
+        productsInCartsContent.setLayout(new BorderLayout());
+        viewProductsInCartsFrame.setSize(1000, 600);
+        viewProductsInCartsFrame.setLocationRelativeTo(null);
+        viewProductsInCartsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        viewProductsInCartsFrame.setVisible(false);
+        items = new JComboBox<String>();
+        inCartsBack = new JButton("Back");
+        productsInCartsContent.setLayout(null);
+        inCartsBack.setBounds(50, 475, 350, 60);
+        inCartsBack.addActionListener(actionListener);
+        productsInCartsContent.add(inCartsBack);
+        items = new JComboBox<String>();
+        items.setBounds(viewProductsInCartsFrame.getWidth() / 2 - 350, 250, 700, 30);
+        purchaseHistoryContent.add(items);
+
         //Creating Panels and Buttons for Login
         JPanel buttonPanelLogin = new JPanel();
 
@@ -1417,6 +1446,11 @@ public class MainInterface extends JComponent implements Runnable {
         accountSeller.setBounds(850, 20, 150, 30);
         accountSeller.addActionListener(actionListener);
         buttonPanelSeller.add(accountSeller);
+
+        viewProductsInCarts = new JButton("View Products in Carts");
+        viewProductsInCarts.setBounds(300, 20, 250, 30);
+        viewProductsInCarts.addActionListener(actionListener);
+        buttonPanelSeller.add(viewProductsInCarts);
 
         logoutButtonSeller = new JButton("Logout");
         logoutButtonSeller.setBounds(50, 20, 150, 30);
