@@ -711,7 +711,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             }
 
-            if (e.getSource() == customerViewProPage) { // 14 case for customer pressing button to see product -> own panel?
+            if (e.getSource() == customerViewProPage) { // button 14, sends user to a products page
                 writer.write("14");
                 writer.println();
                 writer.flush();
@@ -720,17 +720,30 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(marketPlace[marketSelect.getSelectedIndex()]);
                 writer.println();
                 writer.flush();
-                /*
-                writer.write(storeList[storesDropdown.getSelectedIndex()]);
-                System.out.println(storeList[storesDropdown.getSelectedIndex()]);
-                writer.println();
-                writer.flush();
 
-                 */
+                String[] productDataViewCustomer;
+                try {
+                    productDataViewCustomer = reader.readLine().split(",");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                customerViewProductName.setText("Product: " + productDataViewCustomer[0]);
+                customerViewProductDescription.setText("Description: " + productDataViewCustomer[1]);
+                customerViewProductStore.setText("Store: " + productDataViewCustomer[2]);
+                customerViewProductPrice.setText("Price: " + productDataViewCustomer[3]);
+                customerViewProductStock.setText("Quantity Available: " + productDataViewCustomer[4]);
+
 
                 customerViewProductFrame.setVisible(true);
                 customer.setVisible(false);
 
+            }
+
+            if (e.getSource() == customerViewProdouctBack)
+            {
+                customerViewProductFrame.setVisible(false);
+                customer.setVisible(true);
             }
 
             if (e.getSource() == backButtonEdit) {
@@ -869,6 +882,43 @@ public class MainInterface extends JComponent implements Runnable {
                     throw new RuntimeException(ex);
                 }
             }
+
+            if (e.getSource() == addToCart) // button 19, adds a product to cart
+            {
+                writer.write("19");
+                writer.println();
+                writer.flush();
+
+                String productName = customerViewProductName.getText().substring(9);
+                String productStore = customerViewProductStore.getText().substring(7);
+
+                writer.write(productName + "," + productStore + "," + customerViewProductHowMany.getText());
+                writer.println();
+                writer.flush();
+
+
+                try {
+                    String serverResponse = reader.readLine();
+
+
+                    if (serverResponse.equals("added to cart"))
+                    {
+                        JOptionPane.showMessageDialog(null, "Product Added!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        customer.setVisible(true);
+                        customerViewProductFrame.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Quantity Error. Decrease the quantity desired until it is " +
+                                        "less than the quantity available.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+
+            }
+
+
 //            if (e.getSource() == ) {
 //
 //            }

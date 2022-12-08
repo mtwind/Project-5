@@ -126,7 +126,7 @@ public class ClientHandler implements Runnable {
                             writer.write("t");
                             writer.println();
                             writer.flush();
-                            user = Seller.parseSeller(email);
+                            user = Customer.parseCustomer(email);
                             String pass = reader.readLine();
                             boolean verified = user.passwordCheck(pass);
                             if (verified) {
@@ -490,9 +490,21 @@ public class ClientHandler implements Runnable {
                         writer.flush();
                         break;
                     case 14:
-                        pName = reader.readLine();
-                        sName = reader.readLine();
-                        p = Product.getProduct(pName, sName);
+                        String productDataViewCustomer = reader.readLine();
+                        String productNameViewCustomer = productDataViewCustomer.substring(9,
+                                productDataViewCustomer.indexOf("Store:") - 3);
+                        System.out.println(productNameViewCustomer);
+                        String productStoreViewCustomer = productDataViewCustomer.substring(
+                                productDataViewCustomer.indexOf("Store:") + 7,
+                                productDataViewCustomer.indexOf("Price:") - 3);
+                        System.out.println(productStoreViewCustomer);
+                        Product viewCustomerProduct = null;
+                        viewCustomerProduct = Product.getProduct(productNameViewCustomer, productStoreViewCustomer);
+                        productDataViewCustomer = viewCustomerProduct.getName() + "," + viewCustomerProduct.getProductDescription() + "," +
+                                viewCustomerProduct.getStore() + "," + viewCustomerProduct.getPrice() + "," + viewCustomerProduct.getQuantity();
+                        writer.write(productDataViewCustomer);
+                        writer.println();
+                        writer.flush();
 
                         break;
                     case 15:
@@ -697,6 +709,26 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
+                    case 19:
+                        String[] currentProductData = reader.readLine().split(",");
+                        String currentProductName = currentProductData[0];
+                        String currentProductStore = currentProductData[1];
+                        int quantityDesired = Integer.parseInt(currentProductData[2]);
+                        Product currentProduct = Product.getProduct(currentProductName, currentProductStore);
+                        if (quantityDesired > currentProduct.getQuantity())
+                        {
+                            writer.write("quantity error");
+                            writer.println();
+                            writer.flush();
+                        } else {
+                            for (int i = 0; i < quantityDesired; i++)
+                            {
+                                ((Customer) user).addToCart(currentProduct);
+                            }
+                            writer.write("added to cart");
+                            writer.println();
+                            writer.flush();
+                        }
                     default:
                         running = false;
                         writer.close();
