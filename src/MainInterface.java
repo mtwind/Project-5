@@ -116,6 +116,11 @@ public class MainInterface extends JComponent implements Runnable {
     JLabel customerViewProductPrice;
     JLabel customerViewProductStock;
 
+    JFrame viewPurchaseHistory;
+    JButton historyBack;
+    JButton historySelect;
+    JComboBox<String> history;
+
     // Buttons and frame for view cart
     JFrame viewCartFrame;
     JButton buyCart;
@@ -134,11 +139,13 @@ public class MainInterface extends JComponent implements Runnable {
     String[] productList = new String[0];
     String[] marketPlace = new String[0];
 
+
     JLabel proName;
     JLabel proPrice;
     JLabel proQuantity;
     JLabel proStore;
     JLabel proDescription;
+    JButton historyBtn;
 
     JButton deleteProduct;
 
@@ -1040,6 +1047,11 @@ public class MainInterface extends JComponent implements Runnable {
                 viewCartFrame.setVisible(true);
             }
 
+            if (e.getSource() == historyBtn) {
+                customer.setVisible(false);
+                viewPurchaseHistory.setVisible(true);
+            }
+
 
 
 
@@ -1248,6 +1260,26 @@ public class MainInterface extends JComponent implements Runnable {
         viewCartFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         viewCartFrame.setVisible(false);
 
+        viewPurchaseHistory = new JFrame("Purchase History");
+        Container purchaseHistoryContent = viewPurchaseHistory.getContentPane();
+        purchaseHistoryContent.setLayout(new BorderLayout());
+        viewPurchaseHistory.setSize(1000, 600);
+        viewPurchaseHistory.setLocationRelativeTo(null);
+        viewPurchaseHistory.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        viewPurchaseHistory.setVisible(false);
+        history = new JComboBox<String>();
+        historyBack = new JButton("Back");
+        purchaseHistoryContent.setLayout(null);
+        historyBack.setBounds(50, 475, 350, 60);
+        historyBack.addActionListener(actionListener);
+        purchaseHistoryContent.add(historyBack);
+        historySelect = new JButton("Select");
+        historySelect.setBounds(600, 475, 350, 60);
+        historySelect.addActionListener(actionListener);
+        purchaseHistoryContent.add(historySelect);
+        history = new JComboBox<String>();
+        history.setBounds(viewPurchaseHistory.getWidth() / 2 - 350, 250, 700, 30);
+        purchaseHistoryContent.add(history);
 
         //Creating Panels and Buttons for Login
         JPanel buttonPanelLogin = new JPanel();
@@ -1388,6 +1420,12 @@ public class MainInterface extends JComponent implements Runnable {
         customerDashboard.setBounds(700, 20, 150, 30);
         customerDashboard.addActionListener(actionListener);
         buttonPanelCustomer.add(customerDashboard);
+
+        historyBtn = new JButton("View Purchase History");
+        historyBtn.setBounds(300, 20, 250, 30);
+        historyBtn.addActionListener(actionListener);
+        buttonPanelCustomer.add(historyBtn);
+        historyBtn.setVisible(true);
 
         logoutButtonCustomer = new JButton("Logout");
         logoutButtonCustomer.setBounds(50, 20, 150, 30);
