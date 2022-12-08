@@ -975,6 +975,27 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write("23");
                 writer.println();
                 writer.flush();
+
+                String failedProducts;
+
+                try {
+                    failedProducts = reader.readLine();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                if (failedProducts.equals(""))
+                {
+                    JOptionPane.showMessageDialog(null, "All Products Purchased!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    String[] failedProductNames = failedProducts.split(",");
+                    JOptionPane.showInputDialog(null, "These items could not be added to the cart because they were " +
+                                    "out of stock.", "Failed Purchases", JOptionPane.ERROR_MESSAGE,
+                            null, failedProductNames, null);
+                }
+
+                resetViewCart(writer, reader);
             }
 
             if (e.getSource() == removeFromCart)
