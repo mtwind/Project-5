@@ -937,6 +937,38 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
+                    case 29: // import products for stores from a file
+                        String importProductFileData = reader.readLine();
+                        ArrayList<String> productFileLines = Seller.readProductFile();
+                        String[] importProductData = importProductFileData.split("~");
+                        for (int i = 0; i < importProductData.length; i++) {
+                            boolean alreadyExists = false; // true if the product already exists in the user's store
+                            String[] importLineData = importProductData[i].split(",");
+                            for (int j = 0; j < productFileLines.size(); j++) {
+                                String[] productLineData = productFileLines.get(j).split(",");
+                                if (importLineData[0].equals(productLineData[0]) &&
+                                        importLineData[1].equals(productLineData[1])) {
+                                    alreadyExists = true; // product exists in user's store already so set true
+                                    break;
+                                }
+                            }
+                            if (!alreadyExists) { // creates new product and updates the store file accordingly
+                                try {
+                                    Product newP = new Product(importLineData[0], importLineData[1], importLineData[2],
+                                            Integer.parseInt(importLineData[3]), Double.parseDouble(importLineData[4]));
+                                    ArrayList<Store> userStores = ((Seller) user).getStores();
+                                    for (int x = 0; x < userStores.size(); x++) {
+                                        if (userStores.get(x).getName().equals(newP.getStore())) {
+                                            userStores.get(x).getProducts().add(newP);
+                                            userStores.get(x).editStoreFile();
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    // System.out.println("Error parsing products!");
+                                }
+                            }
+                        }
+                        break;
                     default:
                         running = false;
                         writer.close();

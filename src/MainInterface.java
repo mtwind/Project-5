@@ -1,10 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -135,10 +132,11 @@ public class MainInterface extends JComponent implements Runnable {
     JLabel emptyCartLabel;
     String[] cartList = new String[0];
 
-    // Button for export Purchase History
+    // Buttons for export and imports csv files
     JButton exportPurchaseHistory;
     JButton viewProductsInCarts;
-
+    JButton importProducts;
+    JButton exportProductsFromAStore;
 
 
 
@@ -1140,6 +1138,47 @@ public class MainInterface extends JComponent implements Runnable {
                 seller.setVisible(true);
             }
 
+            // button 29, import products to stores from a file
+            if (e.getSource() == importProducts) {
+                StringBuilder productImportFileData = new StringBuilder();
+                String fileName = JOptionPane.showInputDialog(null,
+                        "Enter the filename you wish to import from");
+                if (fileName.isEmpty()) {
+                    JOptionPane.showMessageDialog(null,
+                            "File name cannot be empty!", "Import Products", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    File f = new File(fileName);
+                    if (f.exists()) {
+                        ArrayList<String> productImportFileLines = Seller.readCSVProductFile(fileName);
+                        if (productImportFileLines.size() == 0) {
+                            JOptionPane.showMessageDialog(null,
+                                    "File is empty!", "Import Products", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            writer.write("29");
+                            writer.println();
+                            writer.flush();
+                            for (int i = 0; i < productImportFileLines.size(); i++) {
+                                if (i == productImportFileLines.size() - 1) {
+                                    productImportFileData.append(productImportFileLines.get(i));
+                                } else {
+                                    productImportFileData.append(productImportFileLines.get(i) + "~");
+                                }
+                            }
+                            writer.write(String.valueOf(productImportFileData));
+                            writer.println();
+                            writer.flush();
+                            JOptionPane.showMessageDialog(null,
+                                    "New products imported successfully!",
+                                    "Import Products", JOptionPane.ERROR_MESSAGE);
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "File does not exist!", "Import Products", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+
 
         }
     };
@@ -1891,6 +1930,10 @@ public class MainInterface extends JComponent implements Runnable {
         exportPurchaseHistory.addActionListener(actionListener);
         buttonPanelCustomer.add(exportPurchaseHistory);
 
+        importProducts = new JButton("Import Products");
+        importProducts.setBounds(825, 70, 150, 30);
+        importProducts.addActionListener(actionListener);
+        buttonPanelSeller.add(importProducts);
 
         productsContent.add(buttonPanelEditProduct);
         accountContentSeller.add(buttonPanelEditSeller);

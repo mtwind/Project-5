@@ -297,7 +297,7 @@ public class Driver {
                     user.importStoreProducts(s);
                     break;
                 case 7:
-                    user.viewCustomerCarts(s);
+                    //user.viewCustomerCarts(s);
                     break;
                 case 8:
                     user.deleteAccount();

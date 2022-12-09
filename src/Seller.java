@@ -684,7 +684,7 @@ public class Seller extends User{
 
     }
 
-    public ArrayList<String> readCSVProductFile(String filename) {
+    public static ArrayList<String> readCSVProductFile(String filename) {
         try {
             ArrayList<String> csvProductFileImportLines = new ArrayList<>();
             BufferedReader bfr = new BufferedReader(new FileReader(filename));
@@ -698,16 +698,16 @@ public class Seller extends User{
             }
             return csvProductFileImportLines;
         } catch (FileNotFoundException e) {
-            System.out.println("CSV file of products could not be found!");
+            //System.out.println("CSV file of products could not be found!");
             return null;
         } catch (IOException e) {
-            System.out.println("Error reading the csv file of products!");
+            //System.out.println("Error reading the csv file of products!");
             return null;
         }
     }
 
 
-    public ArrayList<String> readProductFile() {
+    public static ArrayList<String> readProductFile() {
         try {
             ArrayList<String> productFileLines = new ArrayList<>();
             BufferedReader bfrProduct = new BufferedReader(new FileReader("products.txt"));
