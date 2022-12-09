@@ -10,7 +10,7 @@ public class ClientHandler implements Runnable {
     Socket socket;
     User user;
     Store store;
-    Object obj;
+    public static final Object obj = new Object();
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -196,7 +196,9 @@ public class ClientHandler implements Runnable {
                                 userLines.set(i, newUserLine);
                                 PrintWriter pw = new PrintWriter(new FileOutputStream("users.txt"));
                                 for (int x = 0; x < userLines.size(); x++) {
-                                    pw.println(userLines.get(x));
+                                    synchronized (obj) {
+                                        pw.println(userLines.get(x));
+                                    }
                                 }
                                 pw.flush();
                                 pw.close();
@@ -239,7 +241,9 @@ public class ClientHandler implements Runnable {
                                 customerLines.set(i, newUserLine);
                                 PrintWriter pw = new PrintWriter(new FileOutputStream("users.txt"));
                                 for (int x = 0; x < customerLines.size(); x++) {
-                                    pw.println(customerLines.get(x));
+                                    synchronized (obj) {
+                                        pw.println(customerLines.get(x));
+                                    }
                                 }
                                 pw.flush();
                                 pw.close();
@@ -561,7 +565,9 @@ public class ClientHandler implements Runnable {
                                     productLines.set(i, newProductLine.toString());
                                     PrintWriter pw = new PrintWriter(new FileOutputStream("products.txt"));
                                     for (int j = 0; j < productLines.size(); j++) {
-                                        pw.println(productLines.get(j));
+                                        synchronized (obj) {
+                                            pw.println(productLines.get(j));
+                                        }
                                     }
                                     pw.flush();
                                     pw.close();
@@ -608,7 +614,9 @@ public class ClientHandler implements Runnable {
 
                             PrintWriter pw2 = new PrintWriter(new FileOutputStream("stores.txt", false));
                             for (int j = 0; j < newTemp.size(); j++) {
-                                pw2.println(newTemp.get(j));
+                                synchronized (obj) {
+                                    pw2.println(newTemp.get(j));
+                                }
                             }
                             pw2.flush();
                             pw2.close();
