@@ -339,10 +339,39 @@ public class ClientHandler implements Runnable {
                             }
                         }
 
+                        //updating customer carts by removing product that belong to the target store
+                        ArrayList<Store> allStores1 = Store.getAllStores();
+                        Store selectStore = null;
+                        for(Store store : allStores1) {
+                            if(store.getName().equals(storeName)) {
+                                selectStore = store;
+                                //System.out.println("selectStore: " + selectStore.getName());
+                            }
+                        }
+                        ArrayList<Product> prods;
+                        ArrayList<Customer> customer = Customer.getAllCustomers();
+                        ArrayList<Product> tempArr;
+                        for(int i = 0; i < customer.size(); i++) {
+                            tempArr = new ArrayList<Product>();
+                            prods = customer.get(i).getShoppingCart();
+                            for(int j = 0; j < prods.size(); j++) {
+                                if(!(prods.get(j).getStore().equals(selectStore.getName()))) {
+                                    tempArr.add(prods.get(j));
+                                }
+                            }
+                            /*System.out.println("New Products: ");
+                            for(Product x : tempArr)
+                                System.out.print(x.getName());*/
+                            //System.out.println();
+                            customer.get(i).setShoppingCart(tempArr);
+                            customer.get(i).editUserFile();
+                        }
+
                         // updating this user's list of stores and also
-                        ((Seller) user).setStores(newStoreList);
-                        ((Seller) user).editUserFile();
-                        Store.updateProducts(storeName);
+                        ((Seller) user).setStores(newStoreList); // changes Seller object's stores array
+                        user.removeStoreFromFile(storeName); // removes store from stores.txt
+                        ((Seller) user).editUserFile(); // updates users.txt with new stores arraylist
+                        Store.updateProducts(storeName); //updates products.txt; removes all products from deleted store
 
                         String newStoreString = "";
                         for (int i = 0; i < newStoreList.size(); i++) {
