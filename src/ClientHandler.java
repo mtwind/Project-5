@@ -261,7 +261,6 @@ public class ClientHandler implements Runnable {
                         ArrayList<Store> fileStores = Store.getAllStores();
                         Store selected = null;
 
-
                         for (int i = 0; i < fileStores.size(); i++)
                         {
                             if (fileStores.get(i).getOwner().equals(user.getEmail()) &&
@@ -1025,6 +1024,71 @@ public class ClientHandler implements Runnable {
                             storeProductData.append(productString);
                         }
                         writer.write(String.valueOf(storeProductData));
+                        writer.println();
+                        writer.flush();
+                        break;
+                    case 31:
+                        ArrayList<Product> pro = Product.getAllProducts();
+                        StringBuilder pro2 = new StringBuilder();
+                        String singlePro;
+
+                        for (int i = 0; i < pro.size(); i++)
+                        {
+                            singlePro = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                    pro.get(i).getName(), pro.get(i).getStore(),
+                                    pro.get(i).getPrice());
+                            pro2.append(singlePro);
+
+                            if (i != pro.size() - 1) {
+                                pro2.append(",");
+                            }
+                        }
+                        writer.write(pro2.toString());
+                        writer.println();
+                        writer.flush();
+                        break;
+                    case 32:
+                        StringBuilder lines = new StringBuilder();
+                        for (int i = 0; i < ((Seller)user).getStores().size(); i++) {
+                            lines.append(((Seller)user).getStores().get(i).getName());
+                            if (i != ((Seller)user).getStores().size() - 1) {
+                                lines.append(",");
+                            }
+                        }
+                        //System.out.println(line.toString());
+                        writer.write(lines.toString());
+                        writer.println();
+                        writer.flush();
+                        break;
+                    case 33:
+                        String ss = reader.readLine();
+                        ArrayList<Store> fileStore = Store.getAllStores();
+                        Store select = null;
+
+                        for (int i = 0; i < fileStore.size(); i++)
+                        {
+                            if (fileStore.get(i).getOwner().equals(user.getEmail()) &&
+                                    fileStore.get(i).getName().equals(ss))
+                            {
+                                select = fileStore.get(i);
+                                break;
+                            }
+                        }
+                        store = select;
+
+                        ArrayList<Product> storeProduct;
+                        if (select != null)
+                            storeProduct = select.getProducts();
+                        else
+                            storeProduct = new ArrayList<>();
+
+                        StringBuilder strings = new StringBuilder("");
+                        for (int i = 0; i < storeProduct.size(); i++) {
+                            strings.append(storeProduct.get(i).getName());
+                            if (i != storeProduct.size() - 1)
+                                strings.append(",");
+                        }
+                        writer.write(strings.toString());
                         writer.println();
                         writer.flush();
                         break;

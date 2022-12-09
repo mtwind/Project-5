@@ -422,6 +422,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             //takes user back to seller screen
             if (e.getSource() == backSeller) {
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 editSeller.setVisible(false);
             }
@@ -441,6 +442,7 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(editEmailSeller.getText()); // write new email to server
                 writer.println();
                 writer.flush();
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 editSeller.setVisible(false);
             }
@@ -463,6 +465,7 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(editEmailCustomer.getText()); // write new email to server
                 writer.println();
                 writer.flush();
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
@@ -574,7 +577,7 @@ public class MainInterface extends JComponent implements Runnable {
                     //System.out.println(s);
                     storeArrayList.add(s);
                 }
-
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 stores.setVisible(false);
                 storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
@@ -652,6 +655,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             //takes user back to seller homepage
             if (e.getSource() == backStore) {
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 stores.setVisible(false);
             }
@@ -768,6 +772,7 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == customerViewProdouctBack)
             {
                 customerViewProductFrame.setVisible(false);
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
             }
 
@@ -829,6 +834,7 @@ public class MainInterface extends JComponent implements Runnable {
                 products.setVisible(false);
             }
             if (e.getSource() == backCustomer) {
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
@@ -864,9 +870,11 @@ public class MainInterface extends JComponent implements Runnable {
             }
             if (e.getSource() == backButtonCustomerDash) {
                 customer.setVisible(true);
+                refreshCustomerPage(writer, reader);
                 customerDashboardFrame.setVisible(false);
             }
             if (e.getSource() == backButtonSellerDash) {
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 sellerDashboardFrame.setVisible(false);
             }
@@ -930,6 +938,7 @@ public class MainInterface extends JComponent implements Runnable {
                     {
                         JOptionPane.showMessageDialog(null, "Product Added!", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        refreshCustomerPage(writer, reader);
                         customer.setVisible(true);
                         customerViewProductFrame.setVisible(false);
                     } else {
@@ -983,6 +992,7 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == cartBackButton)
             {
                 viewCartFrame.setVisible(false);
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
             }
 
@@ -1063,6 +1073,7 @@ public class MainInterface extends JComponent implements Runnable {
             {
                 customerViewProductFrame.setVisible(false);
                 viewCartFrame.setVisible(true);
+                resetViewCart(writer, reader);
             }
 
             if (e.getSource() == historyBtn) { //27
@@ -1096,6 +1107,7 @@ public class MainInterface extends JComponent implements Runnable {
             }
 
             if (e.getSource() == historyBack) {
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
                 viewPurchaseHistory.setVisible(false);
             }
@@ -1151,6 +1163,7 @@ public class MainInterface extends JComponent implements Runnable {
             }
             if (e.getSource() == inCartsBack) {
                 viewProductsInCartsFrame.setVisible(false);
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
             }
 
@@ -1276,6 +1289,94 @@ public class MainInterface extends JComponent implements Runnable {
             emptyCartLabel.setVisible(false);
         }
     }
+
+    public void refreshSellerPage(PrintWriter writer, BufferedReader reader) {
+        writer.write("32");
+        writer.println();
+        writer.flush();
+        String str = "";
+
+        try {
+            str = reader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        if (str.equals("")) {
+            storesDropdown.setVisible(false);
+            selectStoreButton.setVisible(false);
+
+            JOptionPane.showMessageDialog(null, "you have no stores", "error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            storeList = str.split(",");
+            selectStoreButton.setVisible(true);
+            storesDropdown.setModel(new DefaultComboBoxModel<>(storeList));
+        }
+    }
+    public void refreshStoresPage(PrintWriter writer, BufferedReader reader) {
+        writer.write("33");
+        writer.println();
+        writer.flush();
+
+        writer.write(storeList[storesDropdown.getSelectedIndex()]);
+        writer.println();
+        writer.flush();
+        String str = "";
+
+        try {
+            str = reader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        if (str.equals("")) {
+            productsDropdown.setVisible(false);
+            selectProductButton.setVisible(false);
+
+            JOptionPane.showMessageDialog(null, "you have no products in this store",
+                    "error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            productList = str.split(",");
+            selectProductButton.setVisible(true);
+            productsDropdown.setModel(new DefaultComboBoxModel<>(productList));
+        }
+    }
+
+
+    public void refreshCustomerPage(PrintWriter writer, BufferedReader reader) {
+        writer.write("31");
+        writer.println();
+        writer.flush();
+        String str = "";
+
+        try {
+            str = reader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        if (str.equals("")) {
+            marketSelect.setVisible(false);
+            selectProductButton.setVisible(false);
+            searchBtn.setVisible(false);
+            searchBox.setVisible(false);
+            allProBtn.setVisible(false);
+            JOptionPane.showMessageDialog(null, "No Products in the marketplace", "error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            marketPlace = str.split(",");
+            marketSelect.setModel(new DefaultComboBoxModel<>(marketPlace));
+
+            marketSelect.setVisible(true);
+            selectProductButton.setVisible(true);
+            searchBtn.setVisible(true);
+            searchBox.setVisible(true);
+            allProBtn.setVisible(true);
+
+        }
+    }
+
 
     public void viewProductPage(PrintWriter writer, BufferedReader reader)
     {
