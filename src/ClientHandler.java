@@ -630,6 +630,8 @@ public class ClientHandler implements Runnable {
                                     newTemp.add(temp.get(i));
                             }
 
+
+
                             PrintWriter pw2 = new PrintWriter(new FileOutputStream("stores.txt", false));
                             for (int j = 0; j < newTemp.size(); j++) {
                                 synchronized (obj) {
@@ -638,12 +640,28 @@ public class ClientHandler implements Runnable {
                             }
                             pw2.flush();
                             pw2.close();
+
+                            ArrayList<Customer> cus = Customer.getAllCustomers();
+                            ArrayList<Product> editing;
+                            for (int i = 0; i < cus.size(); i++) {
+                                editing = cus.get(i).getShoppingCart();
+                                for (int j = 0; j < editing.size(); j++) {
+                                    if (editing.get(j).getName().equals(oldProductName) &&
+                                            editing.get(j).getStore().equals(s)) {
+                                        editing.get(j).setName(proNewName);
+                                    }
+                                }
+                                cus.get(i).setShoppingCart(editing);
+                                cus.get(i).editUserFile();
+                            }
+
                             writer.write("ok");
                             writer.println();
                             writer.flush();
 
 
                         } catch (Exception e) {
+                            e.printStackTrace();
                             writer.write("error");
                             writer.println();
                             writer.flush();
