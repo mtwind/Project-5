@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 /**
  * CUSTOMER CLASS
@@ -534,6 +535,28 @@ public class Customer extends User {
         }
         return null;
     }
+
+    public static ArrayList<Customer> getAllCustomers() {
+        ArrayList<Customer> r = new ArrayList<>();
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
+
+            String line = bfr.readLine();
+            Customer c;
+            while (line != null) {
+                String[] parse = line.split(",");
+                if (parse[0].equals("customer")) {
+                    c = parseCustomer(parse[1]);
+                    r.add(c);
+                }
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file");
+        }
+        return r;
+    }
+
     /*
     TODO: NEED TO DEBUG! core: Sort dashboard, view marketplace?
      */

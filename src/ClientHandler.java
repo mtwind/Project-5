@@ -683,6 +683,21 @@ public class ClientHandler implements Runnable {
                                 stri.append(",");
                             }
                         }
+                        ArrayList<Customer> c = Customer.getAllCustomers();
+                        ArrayList<Product> temp;
+                        ArrayList<Product> temp2;
+                        for (int i = 0; i < c.size(); i++) {
+                            temp2 = new ArrayList<Product>();
+                            temp = c.get(i).getShoppingCart();
+                            for (int j = 0; j < temp.size(); j++) {
+                                if (!temp.get(j).getName().equals(productName) && !temp.get(j).getStore().equals(stoName)) {
+                                    temp2.add(temp.get(j));
+                                }
+                            }
+                            c.get(i).setShoppingCart(temp2);
+                            c.get(i).editUserFile();
+                        }
+
                         writer.write(stri.toString());
                         writer.println();
                         writer.flush();
