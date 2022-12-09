@@ -629,11 +629,15 @@ public class MainInterface extends JComponent implements Runnable {
                     JOptionPane.showMessageDialog(null, "The quantity must be a number " +
                                     "greater than 0", "Quantity Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Product Created!", "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
 
                     //takes the product names separated by commas
-                    productList = serverResponse.split(",");
+                    if (serverResponse.equals("duplicate")) {
+                        JOptionPane.showMessageDialog(null, "Product already exists in store!",
+                                "Add Product", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Product Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        productList = serverResponse.split(",");
+                    }
                     productsDropdown.setVisible(true);
                     selectProductButton.setVisible(true);
                     productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
@@ -936,6 +940,8 @@ public class MainInterface extends JComponent implements Runnable {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+
+
             }
 
 
@@ -1227,6 +1233,12 @@ public class MainInterface extends JComponent implements Runnable {
         }
     };
 
+
+    public static void main(String[] args) {
+
+
+    }
+
     // method to reset a users cart after they choose the view cart button or buy/remove items from cart
     public void resetViewCart(PrintWriter writer, BufferedReader reader) {
         writer.write("22");
@@ -1290,6 +1302,8 @@ public class MainInterface extends JComponent implements Runnable {
     }
 
     public void run() {
+
+
         // creating socket
         try {
             socket = new Socket("localhost", 1);
@@ -1298,6 +1312,8 @@ public class MainInterface extends JComponent implements Runnable {
         } catch (IOException e) {
 //            throw new RuntimeException(e);
         }
+
+
         // set up JFrames for all different frames
         login = new JFrame("Login");
         Container loginContent = login.getContentPane();
@@ -1988,4 +2004,6 @@ public class MainInterface extends JComponent implements Runnable {
         customerViewProductContent.add(buttonPanelCustomerViewProduct);
         viewCartContent.add(buttonPanelViewCart);
     }
+
+
 }

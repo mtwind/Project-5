@@ -411,21 +411,40 @@ public class ClientHandler implements Runnable {
 
                             if (keepGoing)
                             {
-
-                                Product product = new Product(newProductInfo[0], store.getName(), newProductInfo[1],
-                                        Integer.parseInt(newProductInfo[2]), Double.parseDouble(newProductInfo[3]));
-                                ArrayList<Product> storeProductsNew = store.getProducts();
-                                storeProductsNew.add(product);
-                                store.setProducts(storeProductsNew);
-                                store.editStoreFile();
-                                StringBuilder stri = new StringBuilder();
-                                for (int i = 0; i < storeProductsNew.size(); i++) {
-                                    stri.append(storeProductsNew.get(i).getName());
-                                    if (i != storeProductsNew.size() - 1) {
-                                        stri.append(",");
+                                ArrayList<String> productFileLines = Seller.readProductFile();
+                                boolean duplicate = false;
+                                for (int i = 0; i < productFileLines.size(); i++) {
+                                    String[] productSplit = productFileLines.get(i).split(",");
+                                    int pQuantity = Integer.parseInt(productSplit[3]);
+                                    double pPrice = Double.parseDouble(productSplit[4]);
+                                    if (productSplit[0].equals(newProductInfo[0]) &&
+                                            productSplit[1].equals(store.getName()) &&
+                                            productSplit[2].equals(newProductInfo[1]) &&
+                                            pQuantity == Integer.parseInt(newProductInfo[2]) &&
+                                            pPrice == Double.parseDouble(newProductInfo[3])) {
+                                        duplicate = true;
+                                        break;
                                     }
                                 }
-                                writer.write(stri.toString());
+
+                                if (duplicate) {
+                                    writer.write("duplicate");
+                                } else {
+                                    Product product = new Product(newProductInfo[0], store.getName(), newProductInfo[1],
+                                            Integer.parseInt(newProductInfo[2]), Double.parseDouble(newProductInfo[3]));
+                                    ArrayList<Product> storeProductsNew = store.getProducts();
+                                    storeProductsNew.add(product);
+                                    store.setProducts(storeProductsNew);
+                                    store.editStoreFile();
+                                    StringBuilder stri = new StringBuilder("");
+                                    for (int i = 0; i < storeProductsNew.size(); i++) {
+                                        stri.append(storeProductsNew.get(i).getName());
+                                        if (i != storeProductsNew.size() - 1) {
+                                            stri.append(",");
+                                        }
+                                    }
+                                    writer.write(stri.toString());
+                                }
                                 writer.println();
                                 writer.flush();
 
