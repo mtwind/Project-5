@@ -340,9 +340,10 @@ public class ClientHandler implements Runnable {
                         }
 
                         // updating this user's list of stores and also
-                        ((Seller) user).setStores(newStoreList);
-                        ((Seller) user).editUserFile();
-                        Store.updateProducts(storeName);
+                        ((Seller) user).setStores(newStoreList); // changes Seller object's stores array
+                        user.removeStoreFromFile(storeName); // removes store from stores.txt
+                        ((Seller) user).editUserFile(); // updates users.txt with new stores arraylist
+                        Store.updateProducts(storeName); //updates products.txt; removes all products from deleted store
 
                         String newStoreString = "";
                         for (int i = 0; i < newStoreList.size(); i++) {
