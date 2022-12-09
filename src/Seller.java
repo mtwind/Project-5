@@ -684,7 +684,7 @@ public class Seller extends User{
 
     }
 
-    public ArrayList<String> readCSVProductFile(String filename) {
+    public static ArrayList<String> readCSVProductFile(String filename) {
         try {
             ArrayList<String> csvProductFileImportLines = new ArrayList<>();
             BufferedReader bfr = new BufferedReader(new FileReader(filename));
@@ -698,16 +698,16 @@ public class Seller extends User{
             }
             return csvProductFileImportLines;
         } catch (FileNotFoundException e) {
-            System.out.println("CSV file of products could not be found!");
+            //System.out.println("CSV file of products could not be found!");
             return null;
         } catch (IOException e) {
-            System.out.println("Error reading the csv file of products!");
+            //System.out.println("Error reading the csv file of products!");
             return null;
         }
     }
 
 
-    public ArrayList<String> readProductFile() {
+    public static ArrayList<String> readProductFile() {
         try {
             ArrayList<String> productFileLines = new ArrayList<>();
             BufferedReader bfrProduct = new BufferedReader(new FileReader("products.txt"));
@@ -813,10 +813,12 @@ public class Seller extends User{
         }
     }
 
-    public void viewCustomerCarts(Scanner s) {
+    public ArrayList<String> viewCustomerCarts() {
         Customer c;
         ArrayList<Product> carts;
         int totalInCarts = 0;
+        StringBuilder str = new StringBuilder();
+        ArrayList<String> built = new ArrayList<>();
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
             String line = bfr.readLine();
@@ -828,6 +830,7 @@ public class Seller extends User{
                     continue;
                 } else {
                     c = Customer.parseCustomer(parse[1]);
+                    assert c != null;
                     carts = c.getShoppingCart();
                     if (carts == null || carts.size() == 0) {
                         line = bfr.readLine();
@@ -836,30 +839,27 @@ public class Seller extends User{
                         for (int i = 0; i < this.getStores().size(); i ++) {
                             for (int j = 0; j < carts.size(); j++) {
                                 if (carts.get(j).getStore().equals(this.getStores().get(i).getName())) {
+                                    str = new StringBuilder();
                                     totalInCarts++;
-                                    System.out.println("-------------------------------------------------------------");
-                                    System.out.printf("Customer: %s,   Store: %s,   Product: %s   \n", c.getEmail(),
-                                            this.getStores().get(i).getName(), carts.get(j).getName());
-                                    System.out.printf("Product Quantity: %d,   Product Price: $%.2f,   " +
-                                                    "Product Description: %s,   Amount Sold: %d\n", carts.get(j).getQuantity(),
+                                    str.append(String.format("Customer: %s   Store: %s   Product: %s  ", c.getEmail(),
+                                            this.getStores().get(i).getName(), carts.get(j).getName()));
+                                    str.append(String.format("Product Quantity: %d   Product Price: $%.2f   " +
+                                                    "Product Description: %s   Amount Sold: %d", carts.get(j).getQuantity(),
                                             carts.get(j).getPrice(), carts.get(j).getProductDescription(),
-                                            carts.get(j).getAmountSold());
-                                    System.out.println();
+                                            carts.get(j).getAmountSold()));
+                                    built.add(str.toString());
                                 }
                             }
                         }
-                        System.out.println("-------------------------------------------------------------");
 
                     }
                 }
                 line = bfr.readLine();
-
             }
-            System.out.println();
-            System.out.println("Total number of products in carts: " + totalInCarts);
         } catch (Exception e) {
             System.out.println("Error reading users file");
         }
+        return built;
     }
 
 }

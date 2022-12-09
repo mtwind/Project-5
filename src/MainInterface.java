@@ -1,10 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -116,6 +113,14 @@ public class MainInterface extends JComponent implements Runnable {
     JLabel customerViewProductPrice;
     JLabel customerViewProductStock;
 
+    JFrame viewPurchaseHistory;
+    JButton historyBack;
+    JComboBox<String> history;
+
+    JFrame viewProductsInCartsFrame;
+    JButton inCartsBack;
+    JComboBox<String> items;
+
     // Buttons and frame for view cart
     JFrame viewCartFrame;
     JButton buyCart;
@@ -127,6 +132,11 @@ public class MainInterface extends JComponent implements Runnable {
     JLabel emptyCartLabel;
     String[] cartList = new String[0];
 
+    // Buttons for export and imports csv files
+    JButton exportPurchaseHistory;
+    JButton viewProductsInCarts;
+    JButton importProducts;
+    JButton exportProductsFromAStore;
 
 
 
@@ -134,19 +144,19 @@ public class MainInterface extends JComponent implements Runnable {
     String[] productList = new String[0];
     String[] marketPlace = new String[0];
 
+
     JLabel proName;
     JLabel proPrice;
     JLabel proQuantity;
     JLabel proStore;
     JLabel proDescription;
+    JButton historyBtn;
 
     JButton deleteProduct;
 
 
     /* action listener for buttons */
     final ActionListener actionListener = new ActionListener() {
-        User user;
-
 
         @Override
         //Programming different buttons in action listener using if statements
@@ -206,8 +216,9 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.flush();
 
                 String newCustomerInfo = "";
-                newCustomerInfo += createUsername.getText() + "," + createEmail.getText() + "," + createPassword.getText()
-                        + ",true" + ","  + createSecurityAnswer.getText() + ","  + chooseSecurityQ.getSelectedIndex();
+                newCustomerInfo += createUsername.getText() + "," + createEmail.getText() + "," +
+                        createPassword.getText() + ",true" + ","  + createSecurityAnswer.getText() + ","  +
+                        chooseSecurityQ.getSelectedIndex();
 
                 writer.write(newCustomerInfo);
                 writer.println();
@@ -292,7 +303,8 @@ public class MainInterface extends JComponent implements Runnable {
                                     storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
                                 } else {
                                     JOptionPane.showMessageDialog(null,
-                                            "There are no stores. add stores", "error", JOptionPane.ERROR_MESSAGE);
+                                            "There are no stores. add stores", "error",
+                                            JOptionPane.ERROR_MESSAGE);
                                 }
 
                             } catch (Exception p) {
@@ -305,7 +317,8 @@ public class MainInterface extends JComponent implements Runnable {
                         }
                     } else if (result.equals("customerLog")) {
                         JOptionPane.showMessageDialog(null,
-                                "this email is registered as a customer.", "error", JOptionPane.ERROR_MESSAGE);
+                                "this email is registered as a customer.", "error",
+                                JOptionPane.ERROR_MESSAGE);
                     } else if (result.equals("noLog")) {
                         JOptionPane.showMessageDialog(null,
                                 "this email is not registered! create a new account.", "error",
@@ -364,7 +377,8 @@ public class MainInterface extends JComponent implements Runnable {
                         }
                     } else if (result.equals("sellerLog")) {
                         JOptionPane.showMessageDialog(null,
-                                "this email is registered as a seller.", "error", JOptionPane.ERROR_MESSAGE);
+                                "this email is registered as a seller.", "error",
+                                JOptionPane.ERROR_MESSAGE);
                     } else if (result.equals("noLog")) {
                         JOptionPane.showMessageDialog(null,
                                 "this email is not registered! create a new account.", "error",
@@ -388,7 +402,6 @@ public class MainInterface extends JComponent implements Runnable {
             //logout button for seller frame sends to login screen
             //NEEDS OTHER IMPLEMENTATION
             if (e.getSource() == logoutButtonSeller) {
-                user = null;
                 login.setVisible(true);
                 seller.setVisible(false);
             }
@@ -398,7 +411,6 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == logoutButtonCustomer) {
                 login.setVisible(true);
                 customer.setVisible(false);
-                user = null;
                 storeList = new String[0];
             }
             //takes customer to account screen
@@ -410,6 +422,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             //takes user back to seller screen
             if (e.getSource() == backSeller) {
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 editSeller.setVisible(false);
             }
@@ -429,6 +442,7 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(editEmailSeller.getText()); // write new email to server
                 writer.println();
                 writer.flush();
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 editSeller.setVisible(false);
             }
@@ -451,6 +465,7 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.write(editEmailCustomer.getText()); // write new email to server
                 writer.println();
                 writer.flush();
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
@@ -504,8 +519,8 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                String newStoreName = JOptionPane.showInputDialog(null, "Enter the Store Name: ", "Create Store",
-                        JOptionPane.QUESTION_MESSAGE);
+                String newStoreName = JOptionPane.showInputDialog(null, "Enter the Store Name: ",
+                        "Create Store", JOptionPane.QUESTION_MESSAGE);
                 writer.write(newStoreName);
                 writer.println();
                 writer.flush();
@@ -518,10 +533,11 @@ public class MainInterface extends JComponent implements Runnable {
                 }
                 if (serverAnswer.equals("already used"))
                 {
-                    JOptionPane.showMessageDialog(null, "A store under that name already exists.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,
+                            "A store under that name already exists.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Store Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Store Created!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
                     //takes the store names separated by commas
 
                     storeList = serverAnswer.split(",");
@@ -551,7 +567,8 @@ public class MainInterface extends JComponent implements Runnable {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                JOptionPane.showMessageDialog(null, "Store Removed.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Store Removed.", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 storeList = serverResponse.split(",");
                 ArrayList<String> storeArrayList = new ArrayList<>();
@@ -560,7 +577,7 @@ public class MainInterface extends JComponent implements Runnable {
                     //System.out.println(s);
                     storeArrayList.add(s);
                 }
-
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 stores.setVisible(false);
                 storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
@@ -569,6 +586,7 @@ public class MainInterface extends JComponent implements Runnable {
             }
 
             if (e.getSource() == newProductBackButton) {
+                refreshStoresPage(writer, reader);
                 stores.setVisible(true);
                 makeProduct.setVisible(false);
             }
@@ -601,22 +619,29 @@ public class MainInterface extends JComponent implements Runnable {
                 }
 
                 if (serverResponse.equals("name error")) {
-                    JOptionPane.showMessageDialog(null, "The product name must not be empty or contain the characters"
-                            + " [\",\" \"~\" \"-\"]", "Name Error", JOptionPane.ERROR_MESSAGE);
-                } else if (serverResponse.equals("description error")) {
-                    JOptionPane.showMessageDialog(null, "The product name must not be empty or contain the characters "
-                            + "[\",\" \"~\"]", "Description Error", JOptionPane.ERROR_MESSAGE);
-                } else if (serverResponse.equals("price error")) {
-                    JOptionPane.showMessageDialog(null, "The price must be a number greater than 0.00", "Price Error",
+                    JOptionPane.showMessageDialog(null, "The product name must not be empty or " +
+                            "contain the characters" + " [\",\" \"~\" \"-\"]", "Name Error",
                             JOptionPane.ERROR_MESSAGE);
+                } else if (serverResponse.equals("description error")) {
+                    JOptionPane.showMessageDialog(null, "The product name must not be empty or " +
+                            "contain the characters " + "[\",\" \"~\"]", "Description Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else if (serverResponse.equals("price error")) {
+                    JOptionPane.showMessageDialog(null, "The price must be a number greater" +
+                                    " than 0.00", "Price Error", JOptionPane.ERROR_MESSAGE);
                 } else if (serverResponse.equals("quantity error")) {
-                    JOptionPane.showMessageDialog(null, "The quantity must be a number greater than 0",
-                            "Quantity Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "The quantity must be a number " +
+                                    "greater than 0", "Quantity Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Product Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
                     //takes the product names separated by commas
-                    productList = serverResponse.split(",");
+                    if (serverResponse.equals("duplicate")) {
+                        JOptionPane.showMessageDialog(null, "Product already exists in store!",
+                                "Add Product", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Product Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        productList = serverResponse.split(",");
+                    }
                     productsDropdown.setVisible(true);
                     selectProductButton.setVisible(true);
                     productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
@@ -631,6 +656,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             //takes user back to seller homepage
             if (e.getSource() == backStore) {
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 stores.setVisible(false);
             }
@@ -747,10 +773,12 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == customerViewProdouctBack)
             {
                 customerViewProductFrame.setVisible(false);
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
             }
 
             if (e.getSource() == backButtonEdit) {
+                refreshStoresPage(writer, reader);
                 stores.setVisible(true);
                 products.setVisible(false);
             }
@@ -808,6 +836,7 @@ public class MainInterface extends JComponent implements Runnable {
                 products.setVisible(false);
             }
             if (e.getSource() == backCustomer) {
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
                 editCustomer.setVisible(false);
             }
@@ -843,9 +872,11 @@ public class MainInterface extends JComponent implements Runnable {
             }
             if (e.getSource() == backButtonCustomerDash) {
                 customer.setVisible(true);
+                refreshCustomerPage(writer, reader);
                 customerDashboardFrame.setVisible(false);
             }
             if (e.getSource() == backButtonSellerDash) {
+                refreshSellerPage(writer, reader);
                 seller.setVisible(true);
                 sellerDashboardFrame.setVisible(false);
             }
@@ -907,13 +938,15 @@ public class MainInterface extends JComponent implements Runnable {
 
                     if (serverResponse.equals("added to cart"))
                     {
-                        JOptionPane.showMessageDialog(null, "Product Added!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Product Added!", "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        refreshCustomerPage(writer, reader);
                         customer.setVisible(true);
                         customerViewProductFrame.setVisible(false);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Quantity Error. Decrease the quantity desired until it is " +
-                                        "less than the quantity available.", "Error",
-                                JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Quantity Error. Decrease the" +
+                                        " quantity desired until it is " + "less than the quantity available.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
@@ -961,6 +994,7 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == cartBackButton)
             {
                 viewCartFrame.setVisible(false);
+                refreshCustomerPage(writer, reader);
                 customer.setVisible(true);
             }
 
@@ -985,8 +1019,9 @@ public class MainInterface extends JComponent implements Runnable {
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     String[] failedProductNames = failedProducts.split(",");
-                    JOptionPane.showInputDialog(null, "These items could not be added to the cart because they were " +
-                                    "out of stock.", "Failed Purchases", JOptionPane.ERROR_MESSAGE,
+                    JOptionPane.showInputDialog(null, "These items could not be added to the " +
+                                    "cart because they were " + "out of stock.", "Failed Purchases",
+                            JOptionPane.ERROR_MESSAGE,
                             null, failedProductNames, null);
                 }
 
@@ -1004,7 +1039,8 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                JOptionPane.showMessageDialog(null, "Product Removed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Product Removed!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 resetViewCart(writer, reader);
             }
@@ -1015,7 +1051,8 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                JOptionPane.showMessageDialog(null, "Cart Cleared!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Cart Cleared!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 resetViewCart(writer, reader);
             }
@@ -1038,14 +1075,174 @@ public class MainInterface extends JComponent implements Runnable {
             {
                 customerViewProductFrame.setVisible(false);
                 viewCartFrame.setVisible(true);
+                resetViewCart(writer, reader);
             }
 
+            if (e.getSource() == historyBtn) { //27
+                writer.write("27");
+                writer.println();
+                writer.flush();
+                String h;
+                try {
+                    h = reader.readLine();
+                    if (!h.equals("none")) {
+                       String[] sp = h.split(",");
+                       String[] sp2 = new String[sp.length];
+                       String[] sp3;
+                       for (int i = 0; i < sp.length; i++) {
+                           sp3 = sp[i].split("-");
+                           sp2[i] = ("Store: " + sp3[0] + "     Product: " + sp3[1]);
+                       }
+                        history.setModel(new DefaultComboBoxModel<String>(sp2));
+                        customer.setVisible(false);
+                        viewPurchaseHistory.setVisible(true);
 
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "You have no purchase History to view!", "error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ez) {
+                    //ez.printStackTrace();
+                }
 
+            }
 
-//            if (e.getSource() == ) {
-//
-//            }
+            if (e.getSource() == historyBack) {
+                refreshCustomerPage(writer, reader);
+                customer.setVisible(true);
+                viewPurchaseHistory.setVisible(false);
+            }
+
+            // button 26, export customer purchase history
+            if (e.getSource() == exportPurchaseHistory) {
+                writer.write("26");
+                writer.println();
+                writer.flush();
+                try {
+                    String customerPurchaseHistory = reader.readLine();
+                    if (customerPurchaseHistory.equals("empty")) {
+                        JOptionPane.showMessageDialog(null,
+                                "You have no purchase history to export!", "Export Purchase History",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        String customerEmail = reader.readLine();
+                        PrintWriter pw = new PrintWriter(customerEmail + "PurchaseHistory.txt");
+                        String[] pHistoryData = customerPurchaseHistory.split("~");
+                        for (int i = 0; i < pHistoryData.length; i++) {
+                            pw.println(pHistoryData[i]);
+                            pw.flush();
+                        }
+                        pw.close();
+                        JOptionPane.showMessageDialog(null,
+                                "Purchase history exported successfully!", "Export Purchase History",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error exporting purchase history!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            if (e.getSource() == viewProductsInCarts) {//28
+                writer.write("28");
+                writer.println();
+                writer.flush();
+                try {
+                    String s = reader.readLine();
+                    if (!s.equals("none")) {
+                        items.setModel(new DefaultComboBoxModel<String>(s.split(",")));
+                        viewProductsInCartsFrame.setVisible(true);
+                        seller.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "No products in carts", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ez) {
+                    //ez.printStackTrace();
+                }
+
+            }
+            if (e.getSource() == inCartsBack) {
+                viewProductsInCartsFrame.setVisible(false);
+                refreshSellerPage(writer, reader);
+                seller.setVisible(true);
+            }
+
+            // button 29, import products to stores from a file
+            if (e.getSource() == importProducts) {
+                StringBuilder productImportFileData = new StringBuilder();
+                String fileName = JOptionPane.showInputDialog(null,
+                        "Enter the filename you wish to import from");
+                if (fileName.isEmpty()) {
+                    JOptionPane.showMessageDialog(null,
+                            "File name cannot be empty!", "Import Products", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    File f = new File(fileName);
+                    if (f.exists()) {
+                        ArrayList<String> productImportFileLines = Seller.readCSVProductFile(fileName);
+                        if (productImportFileLines.size() == 0) {
+                            JOptionPane.showMessageDialog(null,
+                                    "File is empty!", "Import Products", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            writer.write("29");
+                            writer.println();
+                            writer.flush();
+                            for (int i = 0; i < productImportFileLines.size(); i++) {
+                                if (i == productImportFileLines.size() - 1) {
+                                    productImportFileData.append(productImportFileLines.get(i));
+                                } else {
+                                    productImportFileData.append(productImportFileLines.get(i) + "~");
+                                }
+                            }
+                            writer.write(String.valueOf(productImportFileData));
+                            writer.println();
+                            writer.flush();
+                            JOptionPane.showMessageDialog(null,
+                                    "New products imported successfully!",
+                                    "Import Products", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "File does not exist!", "Import Products", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+
+            // button 30, export products from a store to a file
+            if (e.getSource() == exportProductsFromAStore) {
+                writer.write("30");
+                writer.println();
+                writer.flush();
+
+                String exportedStore = storesDropdown.getItemAt(storesDropdown.getSelectedIndex());
+                writer.write(exportedStore);
+                writer.println();
+                writer.flush();
+
+                try {
+                    String processedStoreData = reader.readLine();
+                    if (processedStoreData.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,
+                                "No products to export!", "Export Products", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        String[] splitStoreProducts = processedStoreData.split("~");
+                        PrintWriter pw =
+                                new PrintWriter(new FileWriter(exportedStore + "ExportedProducts.txt"));
+                        for (int i = 0; i < splitStoreProducts.length; i++) {
+                            pw.println(splitStoreProducts[i]);
+                        }
+                        pw.flush();
+                        pw.close();
+                        JOptionPane.showMessageDialog(null,
+                                "Export finished!", "Export Products", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null,
+                            "An error has occurred", "Export Products", JOptionPane.ERROR_MESSAGE);
+                }
+            }
 
 
         }
@@ -1094,6 +1291,94 @@ public class MainInterface extends JComponent implements Runnable {
             emptyCartLabel.setVisible(false);
         }
     }
+
+    public void refreshSellerPage(PrintWriter writer, BufferedReader reader) {
+        writer.write("32");
+        writer.println();
+        writer.flush();
+        String str = "";
+
+        try {
+            str = reader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        if (str.equals("")) {
+            storesDropdown.setVisible(false);
+            selectStoreButton.setVisible(false);
+
+            JOptionPane.showMessageDialog(null, "you have no stores", "error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            storeList = str.split(",");
+            selectStoreButton.setVisible(true);
+            storesDropdown.setModel(new DefaultComboBoxModel<>(storeList));
+        }
+    }
+    public void refreshStoresPage(PrintWriter writer, BufferedReader reader) {
+        writer.write("33");
+        writer.println();
+        writer.flush();
+
+        writer.write(storeList[storesDropdown.getSelectedIndex()]);
+        writer.println();
+        writer.flush();
+        String str = "";
+
+        try {
+            str = reader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        if (str.equals("")) {
+            productsDropdown.setVisible(false);
+            selectProductButton.setVisible(false);
+
+            JOptionPane.showMessageDialog(null, "you have no products in this store",
+                    "error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            productList = str.split(",");
+            selectProductButton.setVisible(true);
+            productsDropdown.setModel(new DefaultComboBoxModel<>(productList));
+        }
+    }
+
+
+    public void refreshCustomerPage(PrintWriter writer, BufferedReader reader) {
+        writer.write("31");
+        writer.println();
+        writer.flush();
+        String str = "";
+
+        try {
+            str = reader.readLine();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        if (str.equals("")) {
+            marketSelect.setVisible(false);
+            selectProductButton.setVisible(false);
+            searchBtn.setVisible(false);
+            searchBox.setVisible(false);
+            allProBtn.setVisible(false);
+            JOptionPane.showMessageDialog(null, "No Products in the marketplace", "error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            marketPlace = str.split(",");
+            marketSelect.setModel(new DefaultComboBoxModel<>(marketPlace));
+
+            marketSelect.setVisible(true);
+            selectProductButton.setVisible(true);
+            searchBtn.setVisible(true);
+            searchBox.setVisible(true);
+            allProBtn.setVisible(true);
+
+        }
+    }
+
 
     public void viewProductPage(PrintWriter writer, BufferedReader reader)
     {
@@ -1248,6 +1533,39 @@ public class MainInterface extends JComponent implements Runnable {
         viewCartFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         viewCartFrame.setVisible(false);
 
+        viewPurchaseHistory = new JFrame("Purchase History");
+        Container purchaseHistoryContent = viewPurchaseHistory.getContentPane();
+        purchaseHistoryContent.setLayout(new BorderLayout());
+        viewPurchaseHistory.setSize(1000, 600);
+        viewPurchaseHistory.setLocationRelativeTo(null);
+        viewPurchaseHistory.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        viewPurchaseHistory.setVisible(false);
+        history = new JComboBox<String>();
+        historyBack = new JButton("Back");
+        purchaseHistoryContent.setLayout(null);
+        historyBack.setBounds(50, 475, 350, 60);
+        historyBack.addActionListener(actionListener);
+        purchaseHistoryContent.add(historyBack);
+        history = new JComboBox<String>();
+        history.setBounds(viewPurchaseHistory.getWidth() / 2 - 350, 250, 700, 30);
+        purchaseHistoryContent.add(history);
+
+        viewProductsInCartsFrame = new JFrame("Products in Carts");
+        Container productsInCartsContent = viewProductsInCartsFrame.getContentPane();
+        productsInCartsContent.setLayout(new BorderLayout());
+        viewProductsInCartsFrame.setSize(1000, 600);
+        viewProductsInCartsFrame.setLocationRelativeTo(null);
+        viewProductsInCartsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        viewProductsInCartsFrame.setVisible(false);
+        items = new JComboBox<String>();
+        inCartsBack = new JButton("Back");
+        productsInCartsContent.setLayout(null);
+        inCartsBack.setBounds(50, 475, 350, 60);
+        inCartsBack.addActionListener(actionListener);
+        productsInCartsContent.add(inCartsBack);
+        items = new JComboBox<String>();
+        items.setBounds(viewProductsInCartsFrame.getWidth() / 2 - 450, 250, 900, 30);
+        productsInCartsContent.add(items);
 
         //Creating Panels and Buttons for Login
         JPanel buttonPanelLogin = new JPanel();
@@ -1338,6 +1656,11 @@ public class MainInterface extends JComponent implements Runnable {
         accountSeller.addActionListener(actionListener);
         buttonPanelSeller.add(accountSeller);
 
+        viewProductsInCarts = new JButton("View Products in Carts");
+        viewProductsInCarts.setBounds(300, 20, 250, 30);
+        viewProductsInCarts.addActionListener(actionListener);
+        buttonPanelSeller.add(viewProductsInCarts);
+
         logoutButtonSeller = new JButton("Logout");
         logoutButtonSeller.setBounds(50, 20, 150, 30);
         logoutButtonSeller.addActionListener(actionListener);
@@ -1388,6 +1711,12 @@ public class MainInterface extends JComponent implements Runnable {
         customerDashboard.setBounds(700, 20, 150, 30);
         customerDashboard.addActionListener(actionListener);
         buttonPanelCustomer.add(customerDashboard);
+
+        historyBtn = new JButton("View Purchase History");
+        historyBtn.setBounds(300, 20, 250, 30);
+        historyBtn.addActionListener(actionListener);
+        buttonPanelCustomer.add(historyBtn);
+        historyBtn.setVisible(true);
 
         logoutButtonCustomer = new JButton("Logout");
         logoutButtonCustomer.setBounds(50, 20, 150, 30);
@@ -1707,7 +2036,7 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelSellerDashboard.add(logoutButtonSellerDash);
 
         sellerDash = new JComboBox<>();
-        sellerDash.setBounds(400, 250, 200, 30);
+        sellerDash.setBounds(275, 250, 475, 30);
         buttonPanelSellerDashboard.add(sellerDash);
 
         sortByRevenue = new JButton("Sort By Revenue");
@@ -1736,7 +2065,7 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelCustomerDashboard.add(logoutButtonCustomerDash);
 
         customerDash = new JComboBox<>();
-        customerDash.setBounds(400, 250, 200, 30);
+        customerDash.setBounds(275, 250, 475, 30);
         buttonPanelCustomerDashboard.add(customerDash);
 
         sortByUserPop = new JButton("Sort By Your # of Purchases");
@@ -1749,6 +2078,20 @@ public class MainInterface extends JComponent implements Runnable {
         sortByGenPop.addActionListener(actionListener);
         buttonPanelCustomerDashboard.add(sortByGenPop);
 
+        exportPurchaseHistory = new JButton("Export Purchase History");
+        exportPurchaseHistory.setBounds(675, 60, 200, 30);
+        exportPurchaseHistory.addActionListener(actionListener);
+        buttonPanelCustomer.add(exportPurchaseHistory);
+
+        importProducts = new JButton("Import Products");
+        importProducts.setBounds(825, 70, 150, 30);
+        importProducts.addActionListener(actionListener);
+        buttonPanelSeller.add(importProducts);
+
+        exportProductsFromAStore = new JButton("Export Store's Products");
+        exportProductsFromAStore.setBounds(600, 400, 350, 60);
+        exportProductsFromAStore.addActionListener(actionListener);
+        buttonPanelStore.add(exportProductsFromAStore);
 
         productsContent.add(buttonPanelEditProduct);
         accountContentSeller.add(buttonPanelEditSeller);
