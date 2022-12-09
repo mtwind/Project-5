@@ -216,8 +216,9 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.flush();
 
                 String newCustomerInfo = "";
-                newCustomerInfo += createUsername.getText() + "," + createEmail.getText() + "," + createPassword.getText()
-                        + ",true" + ","  + createSecurityAnswer.getText() + ","  + chooseSecurityQ.getSelectedIndex();
+                newCustomerInfo += createUsername.getText() + "," + createEmail.getText() + "," +
+                        createPassword.getText() + ",true" + ","  + createSecurityAnswer.getText() + ","  +
+                        chooseSecurityQ.getSelectedIndex();
 
                 writer.write(newCustomerInfo);
                 writer.println();
@@ -302,7 +303,8 @@ public class MainInterface extends JComponent implements Runnable {
                                     storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
                                 } else {
                                     JOptionPane.showMessageDialog(null,
-                                            "There are no stores. add stores", "error", JOptionPane.ERROR_MESSAGE);
+                                            "There are no stores. add stores", "error",
+                                            JOptionPane.ERROR_MESSAGE);
                                 }
 
                             } catch (Exception p) {
@@ -315,7 +317,8 @@ public class MainInterface extends JComponent implements Runnable {
                         }
                     } else if (result.equals("customerLog")) {
                         JOptionPane.showMessageDialog(null,
-                                "this email is registered as a customer.", "error", JOptionPane.ERROR_MESSAGE);
+                                "this email is registered as a customer.", "error",
+                                JOptionPane.ERROR_MESSAGE);
                     } else if (result.equals("noLog")) {
                         JOptionPane.showMessageDialog(null,
                                 "this email is not registered! create a new account.", "error",
@@ -374,7 +377,8 @@ public class MainInterface extends JComponent implements Runnable {
                         }
                     } else if (result.equals("sellerLog")) {
                         JOptionPane.showMessageDialog(null,
-                                "this email is registered as a seller.", "error", JOptionPane.ERROR_MESSAGE);
+                                "this email is registered as a seller.", "error",
+                                JOptionPane.ERROR_MESSAGE);
                     } else if (result.equals("noLog")) {
                         JOptionPane.showMessageDialog(null,
                                 "this email is not registered! create a new account.", "error",
@@ -512,8 +516,8 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                String newStoreName = JOptionPane.showInputDialog(null, "Enter the Store Name: ", "Create Store",
-                        JOptionPane.QUESTION_MESSAGE);
+                String newStoreName = JOptionPane.showInputDialog(null, "Enter the Store Name: ",
+                        "Create Store", JOptionPane.QUESTION_MESSAGE);
                 writer.write(newStoreName);
                 writer.println();
                 writer.flush();
@@ -526,10 +530,11 @@ public class MainInterface extends JComponent implements Runnable {
                 }
                 if (serverAnswer.equals("already used"))
                 {
-                    JOptionPane.showMessageDialog(null, "A store under that name already exists.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,
+                            "A store under that name already exists.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Store Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Store Created!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
                     //takes the store names separated by commas
 
                     storeList = serverAnswer.split(",");
@@ -559,7 +564,8 @@ public class MainInterface extends JComponent implements Runnable {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                JOptionPane.showMessageDialog(null, "Store Removed.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Store Removed.", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 storeList = serverResponse.split(",");
                 ArrayList<String> storeArrayList = new ArrayList<>();
@@ -609,19 +615,22 @@ public class MainInterface extends JComponent implements Runnable {
                 }
 
                 if (serverResponse.equals("name error")) {
-                    JOptionPane.showMessageDialog(null, "The product name must not be empty or contain the characters"
-                            + " [\",\" \"~\" \"-\"]", "Name Error", JOptionPane.ERROR_MESSAGE);
-                } else if (serverResponse.equals("description error")) {
-                    JOptionPane.showMessageDialog(null, "The product name must not be empty or contain the characters "
-                            + "[\",\" \"~\"]", "Description Error", JOptionPane.ERROR_MESSAGE);
-                } else if (serverResponse.equals("price error")) {
-                    JOptionPane.showMessageDialog(null, "The price must be a number greater than 0.00", "Price Error",
+                    JOptionPane.showMessageDialog(null, "The product name must not be empty or " +
+                            "contain the characters" + " [\",\" \"~\" \"-\"]", "Name Error",
                             JOptionPane.ERROR_MESSAGE);
+                } else if (serverResponse.equals("description error")) {
+                    JOptionPane.showMessageDialog(null, "The product name must not be empty or " +
+                            "contain the characters " + "[\",\" \"~\"]", "Description Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else if (serverResponse.equals("price error")) {
+                    JOptionPane.showMessageDialog(null, "The price must be a number greater" +
+                                    " than 0.00", "Price Error", JOptionPane.ERROR_MESSAGE);
                 } else if (serverResponse.equals("quantity error")) {
-                    JOptionPane.showMessageDialog(null, "The quantity must be a number greater than 0",
-                            "Quantity Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "The quantity must be a number " +
+                                    "greater than 0", "Quantity Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Product Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Product Created!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
 
                     //takes the product names separated by commas
                     productList = serverResponse.split(",");
@@ -915,19 +924,18 @@ public class MainInterface extends JComponent implements Runnable {
 
                     if (serverResponse.equals("added to cart"))
                     {
-                        JOptionPane.showMessageDialog(null, "Product Added!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Product Added!", "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
                         customer.setVisible(true);
                         customerViewProductFrame.setVisible(false);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Quantity Error. Decrease the quantity desired until it is " +
-                                        "less than the quantity available.", "Error",
-                                JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Quantity Error. Decrease the" +
+                                        " quantity desired until it is " + "less than the quantity available.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-
-
             }
 
 
@@ -993,8 +1001,9 @@ public class MainInterface extends JComponent implements Runnable {
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     String[] failedProductNames = failedProducts.split(",");
-                    JOptionPane.showInputDialog(null, "These items could not be added to the cart because they were " +
-                                    "out of stock.", "Failed Purchases", JOptionPane.ERROR_MESSAGE,
+                    JOptionPane.showInputDialog(null, "These items could not be added to the " +
+                                    "cart because they were " + "out of stock.", "Failed Purchases",
+                            JOptionPane.ERROR_MESSAGE,
                             null, failedProductNames, null);
                 }
 
@@ -1012,7 +1021,8 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                JOptionPane.showMessageDialog(null, "Product Removed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Product Removed!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 resetViewCart(writer, reader);
             }
@@ -1217,12 +1227,6 @@ public class MainInterface extends JComponent implements Runnable {
         }
     };
 
-
-    public static void main(String[] args) {
-
-
-    }
-
     // method to reset a users cart after they choose the view cart button or buy/remove items from cart
     public void resetViewCart(PrintWriter writer, BufferedReader reader) {
         writer.write("22");
@@ -1286,8 +1290,6 @@ public class MainInterface extends JComponent implements Runnable {
     }
 
     public void run() {
-
-
         // creating socket
         try {
             socket = new Socket("localhost", 1);
@@ -1296,8 +1298,6 @@ public class MainInterface extends JComponent implements Runnable {
         } catch (IOException e) {
 //            throw new RuntimeException(e);
         }
-
-
         // set up JFrames for all different frames
         login = new JFrame("Login");
         Container loginContent = login.getContentPane();
@@ -1988,6 +1988,4 @@ public class MainInterface extends JComponent implements Runnable {
         customerViewProductContent.add(buttonPanelCustomerViewProduct);
         viewCartContent.add(buttonPanelViewCart);
     }
-
-
 }
