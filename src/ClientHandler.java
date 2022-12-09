@@ -969,6 +969,38 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         break;
+                    case 30: // export a store's products to a file
+                        user = Seller.parseSeller(user.getEmail());
+                        StringBuilder storeProductData = new StringBuilder("");
+                        ArrayList<Store> userStores = ((Seller) user).getStores();
+                        String storeToBeExportedName = reader.readLine();
+                        Store storeToBeExported = null;
+                        for (int i = 0; i < userStores.size(); i++) {
+                            if (userStores.get(i).getName().equals(storeToBeExportedName)) {
+                                storeToBeExported = userStores.get(i);
+                                break;
+                            }
+                        }
+                        ArrayList<Product> storeToBeExportedProducts = storeToBeExported.getProducts();
+                        for (int i = 0; i < storeToBeExportedProducts.size(); i++) {
+                            Product product = storeToBeExportedProducts.get(i);
+                            String priceFormatted = String.format("%.2f", product.getPrice());
+                            String productString;
+                            if (i == storeToBeExportedProducts.size() - 1) {
+                                productString = product.getName() + "," + product.getStore() + "," +
+                                        product.getProductDescription() + "," + product.getQuantity() + "," +
+                                        priceFormatted + "," + product.getAmountSold();
+                            } else {
+                                productString = product.getName() + "," + product.getStore() + "," +
+                                        product.getProductDescription() + "," + product.getQuantity() + "," +
+                                        priceFormatted + "," + product.getAmountSold() + "~";
+                            }
+                            storeProductData.append(productString);
+                        }
+                        writer.write(String.valueOf(storeProductData));
+                        writer.println();
+                        writer.flush();
+                        break;
                     default:
                         running = false;
                         writer.close();

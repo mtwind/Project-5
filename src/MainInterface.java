@@ -1169,13 +1169,47 @@ public class MainInterface extends JComponent implements Runnable {
                             writer.flush();
                             JOptionPane.showMessageDialog(null,
                                     "New products imported successfully!",
-                                    "Import Products", JOptionPane.ERROR_MESSAGE);
+                                    "Import Products", JOptionPane.INFORMATION_MESSAGE);
                         }
 
                     } else {
                         JOptionPane.showMessageDialog(null,
                                 "File does not exist!", "Import Products", JOptionPane.ERROR_MESSAGE);
                     }
+                }
+            }
+
+            // button 30, export products from a store to a file
+            if (e.getSource() == exportProductsFromAStore) {
+                writer.write("30");
+                writer.println();
+                writer.flush();
+
+                String exportedStore = storesDropdown.getItemAt(storesDropdown.getSelectedIndex());
+                writer.write(exportedStore);
+                writer.println();
+                writer.flush();
+
+                try {
+                    String processedStoreData = reader.readLine();
+                    if (processedStoreData.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,
+                                "No products to export!", "Export Products", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        String[] splitStoreProducts = processedStoreData.split("~");
+                        PrintWriter pw =
+                                new PrintWriter(new FileWriter(exportedStore + "ExportedProducts.txt"));
+                        for (int i = 0; i < splitStoreProducts.length; i++) {
+                            pw.println(splitStoreProducts[i]);
+                        }
+                        pw.flush();
+                        pw.close();
+                        JOptionPane.showMessageDialog(null,
+                                "Export finished!", "Export Products", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null,
+                            "An error has occurred", "Export Products", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
@@ -1934,6 +1968,11 @@ public class MainInterface extends JComponent implements Runnable {
         importProducts.setBounds(825, 70, 150, 30);
         importProducts.addActionListener(actionListener);
         buttonPanelSeller.add(importProducts);
+
+        exportProductsFromAStore = new JButton("Export Store's Products");
+        exportProductsFromAStore.setBounds(600, 400, 350, 60);
+        exportProductsFromAStore.addActionListener(actionListener);
+        buttonPanelStore.add(exportProductsFromAStore);
 
         productsContent.add(buttonPanelEditProduct);
         accountContentSeller.add(buttonPanelEditSeller);
