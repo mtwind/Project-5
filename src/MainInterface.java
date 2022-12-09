@@ -586,6 +586,7 @@ public class MainInterface extends JComponent implements Runnable {
             }
 
             if (e.getSource() == newProductBackButton) {
+                refreshStoresPage(writer, reader);
                 stores.setVisible(true);
                 makeProduct.setVisible(false);
             }
@@ -777,6 +778,7 @@ public class MainInterface extends JComponent implements Runnable {
             }
 
             if (e.getSource() == backButtonEdit) {
+                refreshStoresPage(writer, reader);
                 stores.setVisible(true);
                 products.setVisible(false);
             }
