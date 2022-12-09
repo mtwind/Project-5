@@ -925,6 +925,7 @@ public class ClientHandler implements Runnable {
                             StringBuilder s = new StringBuilder();
                             for (int i = 0; i < sending.size(); i++) {
                                 s.append(sending.get(i));
+                                System.out.println(sending.get(i));
                                 if (i != sending.size() -1) {
                                     s.append(",");
                                 }

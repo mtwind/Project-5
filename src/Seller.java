@@ -839,6 +839,7 @@ public class Seller extends User{
                         for (int i = 0; i < this.getStores().size(); i ++) {
                             for (int j = 0; j < carts.size(); j++) {
                                 if (carts.get(j).getStore().equals(this.getStores().get(i).getName())) {
+                                    str = new StringBuilder();
                                     totalInCarts++;
                                     str.append(String.format("Customer: %s   Store: %s   Product: %s  ", c.getEmail(),
                                             this.getStores().get(i).getName(), carts.get(j).getName()));
