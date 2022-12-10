@@ -301,6 +301,28 @@ public class Store {
         return stores;
     }
 
+    public static synchronized ArrayList<Store> getAllStores(String email) {
+        ArrayList<Store> stores = new ArrayList<Store>();
+
+        try {
+            FileReader fr = new FileReader("stores.txt");
+            BufferedReader bfr = new BufferedReader(fr);
+
+            String storeLine = bfr.readLine();
+
+            while (storeLine != null) {
+                if (storeLine.split(",")[1].equals(email))
+                    stores.add(makeStore(storeLine));
+                storeLine = bfr.readLine();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stores;
+    }
+
+
     public static Store makeStore(String storeLine) { //constructs a store based on a line from the store file
         String[] storeVariables = storeLine.split(",");
 
