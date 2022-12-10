@@ -534,6 +534,7 @@ public class ClientHandler implements Runnable {
                                 viewCustomerProduct.getStore() + "," + String.format("%.2f", viewCustomerProduct.getPrice())
                                 + "," + viewCustomerProduct.getQuantity();
 
+
                         writer.write(productDataViewCustomer);
                         writer.println();
                         writer.flush();
@@ -1131,6 +1132,9 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
+
+                    case 34:
+                        user.deleteAccount();
                     default:
                         running = false;
                         writer.close();

@@ -53,12 +53,14 @@ public class MainInterface extends JComponent implements Runnable {
     JTextField editUsernameSeller;
     JTextField editPasswordSeller;
     JTextField editEmailSeller;
+    JButton deleteAccountSeller;
     JButton confirmEditSeller;
     JButton backSeller;
     JButton backStore;
     JTextField editUsernameCustomer;
     JTextField editPasswordCustomer;
     JTextField editEmailCustomer;
+    JButton deleteAccountCustomer;
     JButton confirmEditCustomer;
     JButton logoutButtonStore;
     JButton addProduct;
@@ -621,18 +623,18 @@ public class MainInterface extends JComponent implements Runnable {
 
                 if (serverResponse.equals("name error")) {
                     JOptionPane.showMessageDialog(null, "The product name must not be empty or " +
-                            "contain the characters" + " [\",\" \"~\" \"-\"]", "Name Error",
+                                    "contain the characters" + " [\",\" \"~\" \"-\"]", "Name Error",
                             JOptionPane.ERROR_MESSAGE);
                 } else if (serverResponse.equals("description error")) {
                     JOptionPane.showMessageDialog(null, "The product name must not be empty or " +
-                            "contain the characters " + "[\",\" \"~\"]", "Description Error",
+                                    "contain the characters " + "[\",\" \"~\"]", "Description Error",
                             JOptionPane.ERROR_MESSAGE);
                 } else if (serverResponse.equals("price error")) {
                     JOptionPane.showMessageDialog(null, "The price must be a number greater" +
-                                    " than 0.00", "Price Error", JOptionPane.ERROR_MESSAGE);
+                            " than 0.00", "Price Error", JOptionPane.ERROR_MESSAGE);
                 } else if (serverResponse.equals("quantity error")) {
                     JOptionPane.showMessageDialog(null, "The quantity must be a number " +
-                                    "greater than 0", "Quantity Error", JOptionPane.ERROR_MESSAGE);
+                            "greater than 0", "Quantity Error", JOptionPane.ERROR_MESSAGE);
                 } else {
 
                     //takes the product names separated by commas
@@ -1087,13 +1089,13 @@ public class MainInterface extends JComponent implements Runnable {
                 try {
                     h = reader.readLine();
                     if (!h.equals("none")) {
-                       String[] sp = h.split(",");
-                       String[] sp2 = new String[sp.length];
-                       String[] sp3;
-                       for (int i = 0; i < sp.length; i++) {
-                           sp3 = sp[i].split("-");
-                           sp2[i] = ("Store: " + sp3[0] + "     Product: " + sp3[1]);
-                       }
+                        String[] sp = h.split(",");
+                        String[] sp2 = new String[sp.length];
+                        String[] sp3;
+                        for (int i = 0; i < sp.length; i++) {
+                            sp3 = sp[i].split("-");
+                            sp2[i] = ("Store: " + sp3[0] + "     Product: " + sp3[1]);
+                        }
                         history.setModel(new DefaultComboBoxModel<String>(sp2));
                         customer.setVisible(false);
                         viewPurchaseHistory.setVisible(true);
@@ -1246,6 +1248,33 @@ public class MainInterface extends JComponent implements Runnable {
                 }
             }
 
+            if (e.getSource() == deleteAccountSeller) {
+                writer.write("34");
+                writer.println();
+                writer.flush();
+
+                JOptionPane.showMessageDialog(null, "Account Deleted", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                login.setVisible(true);
+                editSeller.setVisible(false);
+
+                email.setText("Enter Email:");
+                password.setText("Enter Password:");
+            }
+
+            if (e.getSource() == deleteAccountCustomer) {
+                writer.write("34");
+                writer.println();
+                writer.flush();
+
+                JOptionPane.showMessageDialog(null, "Account Deleted", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                login.setVisible(true);
+                editCustomer.setVisible(false);
+
+                email.setText("Enter Email:");
+                password.setText("Enter Password:");
+            }
 
         }
     };
@@ -1779,6 +1808,11 @@ public class MainInterface extends JComponent implements Runnable {
         confirmEditSeller.addActionListener(actionListener);
         buttonPanelEditSeller.add(confirmEditSeller);
 
+        deleteAccountSeller = new JButton("Delete Account");
+        deleteAccountSeller.setBounds(600, 475, 350, 60);
+        deleteAccountSeller.addActionListener(actionListener);
+        buttonPanelEditSeller.add(deleteAccountSeller);
+
         backSeller = new JButton("Back");
         backSeller.setBounds(50, 475, 350, 60);
         backSeller.addActionListener(actionListener);
@@ -1807,6 +1841,11 @@ public class MainInterface extends JComponent implements Runnable {
         confirmEditCustomer.setBounds(400, 300, 200, 60);
         confirmEditCustomer.addActionListener(actionListener);
         buttonPanelEditCustomer.add(confirmEditCustomer);
+
+        deleteAccountCustomer = new JButton("Delete Account");
+        deleteAccountCustomer.setBounds(600, 475, 350, 60);
+        deleteAccountCustomer.addActionListener(actionListener);
+        buttonPanelEditCustomer.add(deleteAccountCustomer);
 
         backCustomer = new JButton("Back");
         backCustomer.setBounds(50, 475, 350, 60);
