@@ -1362,7 +1362,7 @@ public class MainInterface extends JComponent implements Runnable {
 
         if (str.equals("")) {
             marketSelect.setVisible(false);
-            selectProductButton.setVisible(false);
+            customerViewProPage.setVisible(false);
             searchBtn.setVisible(false);
             searchBox.setVisible(false);
             allProBtn.setVisible(false);
@@ -1373,7 +1373,7 @@ public class MainInterface extends JComponent implements Runnable {
             marketSelect.setModel(new DefaultComboBoxModel<>(marketPlace));
 
             marketSelect.setVisible(true);
-            selectProductButton.setVisible(true);
+            customerViewProPage.setVisible(true);
             searchBtn.setVisible(true);
             searchBox.setVisible(true);
             allProBtn.setVisible(true);
