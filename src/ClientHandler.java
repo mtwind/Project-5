@@ -250,7 +250,7 @@ public class ClientHandler implements Runnable {
 
                         // TODO: implement changes to the emails in the store's list of customers
                         break;
-                    case 7:
+                    case 7: // takes seller to the selected store screen, puts all the products in a dropdown
                         String selectedStore = reader.readLine();
                         ArrayList<Store> fileStores = Store.getAllStores();
                         Store selected = null;
@@ -280,7 +280,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 8:
+                    case 8: // create a store
                         String newStoreName = reader.readLine();
                         ArrayList<Store> allStores = Store.getAllStores();
                         boolean used = false;
@@ -315,7 +315,7 @@ public class ClientHandler implements Runnable {
 
                         }
                         break;
-                    case 9:
+                    case 9: // delete store
                         String storeName = reader.readLine();
 
                         ArrayList<Store> newStoreList = new ArrayList<Store>();
@@ -376,7 +376,7 @@ public class ClientHandler implements Runnable {
                         writer.flush();
                         break;
 
-                    case 10:
+                    case 10: // create new product
 
                         String[] newProductInfo = reader.readLine().split(",");
                         if (newProductInfo[0].contains(",") || newProductInfo[0].contains("~") || newProductInfo[0].contains("-") || newProductInfo[0].isEmpty()) {
@@ -464,7 +464,7 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         break;
-                    case 11:
+                    case 11: // select product for seller
                         String pName = reader.readLine();
                         String sName = reader.readLine();
                         Product p = Product.getProduct(pName, sName);
@@ -481,7 +481,7 @@ public class ClientHandler implements Runnable {
                         writer.flush();
 
                         break;
-                    case 12:
+                    case 12: // search for the customer
                         String wantToFind = reader.readLine();
                         ArrayList<Product> searchResult = Product.returnSearch(wantToFind);
                         StringBuilder results = new StringBuilder();
@@ -500,7 +500,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 13:
+                    case 13: // view all products
                         StringBuilder currentMarket = new StringBuilder();
                         ArrayList<Product> marPros = Product.getAllProducts();
                         String products;
@@ -536,7 +536,7 @@ public class ClientHandler implements Runnable {
                         writer.flush();
 
                         break;
-                    case 15:
+                    case 15: // edit a product
                         try {
                             String proNewName = reader.readLine(); // read new pass from client
                             String proNewDescription = reader.readLine();
@@ -645,6 +645,7 @@ public class ClientHandler implements Runnable {
                             }
 
 
+
                             PrintWriter pw2 = new PrintWriter(new FileOutputStream("stores.txt", false));
                             for (int j = 0; j < newTemp.size(); j++) {
                                 synchronized (obj) {
@@ -680,7 +681,7 @@ public class ClientHandler implements Runnable {
                             writer.flush();
                         }
                         break;
-                    case 16:
+                    case 16: // delete product
                         String productName = reader.readLine();
                         String stoName = reader.readLine();
                         ArrayList<Store> sto = Store.getAllStores();
@@ -766,7 +767,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 19:
+                    case 19: // add to cart
                         String[] currentProductData = reader.readLine().split(",");
                         String currentProductName = currentProductData[0];
                         String currentProductStore = currentProductData[1];
@@ -864,7 +865,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 22:
+                    case 22: // sends customer to their cart, is used in resetViewCart
                         ArrayList<Product> userCart = ((Customer) user).getShoppingCart();
                         StringBuilder itemsInCartInfo = new StringBuilder();
                         String singleProductInfo;
@@ -886,14 +887,14 @@ public class ClientHandler implements Runnable {
 
                         break;
 
-                    case 23:
+                    case 23: // buy cart
                         StringBuilder failedProducts = ((Customer) user).purchaseProductsInCartProject5();
                         writer.write(failedProducts.toString());
                         writer.println();
                         writer.flush();
 
                         break;
-                    case 24:
+                    case 24: // remove from cart
                         String line = reader.readLine();
 
                         String removableProductName = line.substring(9, line.indexOf("Store:") - 3);
@@ -929,7 +930,7 @@ public class ClientHandler implements Runnable {
                         ((Customer) user).editUserFile();
                         break;
 
-                    case 25:
+                    case 25: // remove all from cart
                         ((Customer) user).setShoppingCart(new ArrayList<Product>());
                         ((Customer) user).editUserFile();
                         break;
@@ -960,8 +961,8 @@ public class ClientHandler implements Runnable {
                             writer.flush();
                         }
                         break;
-                    case 27:
-                        ArrayList<String> history = ((Customer) user).getPurchaseHistory();
+                    case 27: // view purchase history
+                        ArrayList<String> history = ((Customer)user).getPurchaseHistory();
                         if (history.size() == 0) {
                             writer.write("none");
                         } else {
@@ -977,7 +978,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 28:
+                    case 28: // view products in carts for the seller
                         ArrayList<String> sending = ((Seller) user).viewCustomerCarts();
                         if (sending.size() > 0) {
                             StringBuilder s = new StringBuilder();
@@ -1061,7 +1062,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 31:
+                    case 31: // refresh customer page
                         ArrayList<Product> pro = Product.getAllProducts();
                         StringBuilder pro2 = new StringBuilder();
                         String singlePro;
@@ -1080,7 +1081,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 32:
+                    case 32: // refresh seller page
                         StringBuilder lines = new StringBuilder();
                         for (int i = 0; i < ((Seller) user).getStores().size(); i++) {
                             lines.append(((Seller) user).getStores().get(i).getName());
@@ -1092,7 +1093,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 33:
+                    case 33: // refresh stores page
                         String ss = reader.readLine();
                         ArrayList<Store> fileStore = Store.getAllStores();
                         Store select = null;
