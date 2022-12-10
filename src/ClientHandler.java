@@ -853,11 +853,16 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         StringBuilder storesSortedByRevenue = new StringBuilder();
-                        for (int i = 0; i < stores.size(); i++) {
-                            if (i == stores.size() - 1) {
-                                storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i));
+                        String oneStore;
+                        for(int i = 0; i < stores.size(); i++) {
+                            if(i == stores.size() - 1) {
+                                oneStore = String.format("Store: %s - Revenue: $%.2f", stores.get(i).getName(), storeRevenue.get(i));
+                                storesSortedByRevenue.append(oneStore);
+                                //storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i));
                             } else {
-                                storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i)).append(", ");
+                                oneStore = String.format("Store: %s - Revenue: $%.2f,", stores.get(i).getName(), storeRevenue.get(i));
+                                storesSortedByRevenue.append(oneStore);
+                                //storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i)).append(", ");
                             }
                         }
 
