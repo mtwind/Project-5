@@ -169,7 +169,14 @@ public class MainInterface extends JComponent implements Runnable {
             if (e.getSource() == createAccountButton) {
                 login.setVisible(false);
                 createAccount.setVisible(true);
+
+                createEmail.setText("Enter Email:");
+                createUsername.setText("Enter Username:");
+                createPassword.setText("Enter Password:");
+                createSecurityAnswer.setText("Enter Answer:");
+                chooseSecurityQ.setSelectedIndex(0);
             }
+
             //back button sends back to login screen
             if (e.getSource() == back) {
                 login.setVisible(true);
