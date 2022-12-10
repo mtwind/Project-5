@@ -530,9 +530,9 @@ public class ClientHandler implements Runnable {
                         Product viewCustomerProduct = null;
                         viewCustomerProduct = Product.getProduct(productNameViewCustomer, productStoreViewCustomer);
 
-                        productDataViewCustomer = String.format("%s,%s,%s,%$.2f,%d", viewCustomerProduct.getName(),
-                                viewCustomerProduct.getProductDescription(), viewCustomerProduct.getStore(),
-                                viewCustomerProduct.getPrice(), viewCustomerProduct.getQuantity());
+                        productDataViewCustomer = viewCustomerProduct.getName() + "," + viewCustomerProduct.getProductDescription() + "," +
+                                viewCustomerProduct.getStore() + "," + String.format("%.2f", viewCustomerProduct.getPrice())
+                                + "," + viewCustomerProduct.getQuantity();
 
                         writer.write(productDataViewCustomer);
                         writer.println();
