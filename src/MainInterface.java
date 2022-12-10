@@ -1182,6 +1182,7 @@ public class MainInterface extends JComponent implements Runnable {
                     File f = new File(fileName);
                     if (f.exists()) {
                         ArrayList<String> productImportFileLines = Seller.readCSVProductFile(fileName);
+                        assert productImportFileLines != null;
                         if (productImportFileLines.size() == 0) {
                             JOptionPane.showMessageDialog(null,
                                     "File is empty!", "Import Products", JOptionPane.ERROR_MESSAGE);
@@ -1193,7 +1194,7 @@ public class MainInterface extends JComponent implements Runnable {
                                 if (i == productImportFileLines.size() - 1) {
                                     productImportFileData.append(productImportFileLines.get(i));
                                 } else {
-                                    productImportFileData.append(productImportFileLines.get(i) + "~");
+                                    productImportFileData.append(productImportFileLines.get(i)).append("~");
                                 }
                             }
                             writer.write(String.valueOf(productImportFileData));

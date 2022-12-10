@@ -18,23 +18,19 @@ public class ClientHandler implements Runnable {
 
     public void run() {
         try {
-            //SwingUtilities.invokeLater(new MainInterface());
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             int buttonChoice = 0;
             boolean running = true;
             while (running) {
                 buttonChoice = Integer.parseInt(reader.readLine());
-                //System.out.println(buttonChoice);
-                //TODO: enter switch statement that takes input from client (based on button) and processes information
                 String email, type;
                 switch (buttonChoice) {
                     case 1: // create an account, used for both sellers and customers
                         String[] info = reader.readLine().split(",");
                         boolean alreadyUsed = User.checkNewUser(info[1]);
-                        //System.out.println(alreadyUsed);
 
-                        if (alreadyUsed == false) {
+                        if (!alreadyUsed) {
                             boolean isCustomer = Boolean.parseBoolean(info[3]);
                             writer.write("new");
                             writer.println();
@@ -91,13 +87,11 @@ public class ClientHandler implements Runnable {
 
                                 StringBuilder line = new StringBuilder();
                                 for (int i = 0; i < ((Seller)user).getStores().size(); i++) {
-                                    //System.out.println(((Seller)user).getStores().get(i));
                                     line.append(((Seller)user).getStores().get(i).getName());
                                     if (i != ((Seller)user).getStores().size() - 1) {
                                         line.append(",");
                                     }
                                 }
-                                //System.out.println(line.toString());
                                 writer.write(line.toString());
                                 writer.println();
                                 writer.flush();
@@ -118,7 +112,6 @@ public class ClientHandler implements Runnable {
                             writer.println();
                             writer.flush();
                         }
-                        //System.out.println("in seller log in");
                         break;
                     case 3: // customer log in
                         email = reader.readLine();
@@ -178,6 +171,7 @@ public class ClientHandler implements Runnable {
                         user = Seller.parseSeller(oldSellerEmail);
 
 
+                        assert user != null;
                         ArrayList<String> userLines = ((Seller)user).readUserFile();
                         for (int i = 0; i < userLines.size(); i++) {
                             String[] userData = userLines.get(i).split(",");
@@ -223,6 +217,7 @@ public class ClientHandler implements Runnable {
                         user = Customer.parseCustomer(oldCustomerEmail);
 
 
+                        assert user != null;
                         ArrayList<String> customerLines = ((Customer)user).readUserFile();
                         for (int i = 0; i < customerLines.size(); i++) {
                             String[] userData = customerLines.get(i).split(",");
@@ -355,6 +350,7 @@ public class ClientHandler implements Runnable {
                             tempArr = new ArrayList<Product>();
                             prods = customer.get(i).getShoppingCart();
                             for(int j = 0; j < prods.size(); j++) {
+                                assert selectStore != null;
                                 if(!(prods.get(j).getStore().equals(selectStore.getName()))) {
                                     tempArr.add(prods.get(j));
                                 }
@@ -441,7 +437,7 @@ public class ClientHandler implements Runnable {
                             {
                                 ArrayList<String> productFileLines = Seller.readProductFile();
                                 boolean duplicate = false;
-                                for (int i = 0; i < productFileLines.size(); i++) {
+                                for (int i = 0; i < Objects.requireNonNull(productFileLines).size(); i++) {
                                     String[] productSplit = productFileLines.get(i).split(",");
                                     int pQuantity = Integer.parseInt(productSplit[3]);
                                     double pPrice = Double.parseDouble(productSplit[4]);
@@ -621,6 +617,7 @@ public class ClientHandler implements Runnable {
                                     break;
                                 }
                             }
+                            assert p != null;
                             p.setPrice(d);
                             p.setName(proNewName);
                             p.setQuantity(t);
@@ -755,12 +752,9 @@ public class ClientHandler implements Runnable {
                         StringBuilder storesSortedByProductsSold = new StringBuilder("");
                         for (int i = 0; i < sortedByTotalProductsSold.size(); i++) {
                             if (i == sortedByTotalProductsSold.size() - 1) {
-                                storesSortedByProductsSold.append("Name: " + sortedByTotalProductsSold.get(i).getName()
-                                        + " Total Products Sold: " + sortedByTotalProductsSold.get(i).getTotalSales());
+                                storesSortedByProductsSold.append("Name: ").append(sortedByTotalProductsSold.get(i).getName()).append(" Total Products Sold: ").append(sortedByTotalProductsSold.get(i).getTotalSales());
                             } else {
-                                storesSortedByProductsSold.append("Name: " + sortedByTotalProductsSold.get(i).getName()
-                                        + " Total Products Sold: " + sortedByTotalProductsSold.get(i).getTotalSales()
-                                        + ",");
+                                storesSortedByProductsSold.append("Name: ").append(sortedByTotalProductsSold.get(i).getName()).append(" Total Products Sold: ").append(sortedByTotalProductsSold.get(i).getTotalSales()).append(",");
                             }
                         }
                         writer.write(String.valueOf(storesSortedByProductsSold));
@@ -774,17 +768,11 @@ public class ClientHandler implements Runnable {
                         StringBuilder storesSortedByCustomerFavorite = new StringBuilder("");
                         for (int i = 0; i < sortedByCustomerFavorite.size(); i++) {
                             if (i == sortedByCustomerFavorite.size() - 1) {
-                                storesSortedByCustomerFavorite.append("Name: " +
-                                        sortedByCustomerFavorite.get(i).getName() +
-                                        " Your purchases: " +
-                                        sortedByCustomerFavorite.get(i).getProductsBoughtByCurrentUser
-                                                (((Customer)user)));
+                                storesSortedByCustomerFavorite.append("Name: ").append(sortedByCustomerFavorite.get(i).getName()).append(" Your purchases: ").append(sortedByCustomerFavorite.get(i).getProductsBoughtByCurrentUser
+                                        (((Customer) user)));
                             } else {
-                                storesSortedByCustomerFavorite.append("Name: " +
-                                        sortedByCustomerFavorite.get(i).getName() +
-                                        " Your purchases: " +
-                                        sortedByCustomerFavorite.get(i).getProductsBoughtByCurrentUser
-                                                (((Customer)user)) + ",");
+                                storesSortedByCustomerFavorite.append("Name: ").append(sortedByCustomerFavorite.get(i).getName()).append(" Your purchases: ").append(sortedByCustomerFavorite.get(i).getProductsBoughtByCurrentUser
+                                        (((Customer) user))).append(",");
                             }
                         }
                         writer.write(String.valueOf(storesSortedByCustomerFavorite));
@@ -797,6 +785,7 @@ public class ClientHandler implements Runnable {
                         String currentProductStore = currentProductData[1];
                         int quantityDesired = Integer.parseInt(currentProductData[2]);
                         Product currentProduct = Product.getProduct(currentProductName, currentProductStore);
+                        assert currentProduct != null;
                         if (quantityDesired > currentProduct.getQuantity())
                         {
                             writer.write("quantity error");
@@ -825,17 +814,15 @@ public class ClientHandler implements Runnable {
                                 stores.set(max, swap);
                             }
                         }
-                        String sortedStores = "";
+                        StringBuilder sortedStores = new StringBuilder();
                         for(int k = 0; k < stores.size(); k++) {
                             if(k == stores.size() - 1) {
-                                sortedStores += "Name: " + stores.get(k).getName() + " Sales: " +
-                                        stores.get(k).getTotalSales();
+                                sortedStores.append("Name: ").append(stores.get(k).getName()).append(" Sales: ").append(stores.get(k).getTotalSales());
                             } else {
-                                sortedStores += "Name: " + stores.get(k).getName() + " Sales: " +
-                                        stores.get(k).getTotalSales() + ",";
+                                sortedStores.append("Name: ").append(stores.get(k).getName()).append(" Sales: ").append(stores.get(k).getTotalSales()).append(",");
                             }
                         }
-                        writer.write(sortedStores);
+                        writer.write(sortedStores.toString());
                         writer.println();
                         writer.flush();
                         break;
@@ -877,18 +864,16 @@ public class ClientHandler implements Runnable {
                                 stores.set(max, swap);
                             }
                         }
-                        String storesSortedByRevenue = "";
+                        StringBuilder storesSortedByRevenue = new StringBuilder();
                         for(int i = 0; i < stores.size(); i++) {
                             if(i == stores.size() - 1) {
-                                storesSortedByRevenue += "Store: " + stores.get(i).getName() + " - Revenue: $"
-                                        + storeRevenue.get(i);
+                                storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i));
                             } else {
-                                storesSortedByRevenue += "Store: " + stores.get(i).getName() + " - Revenue: $"
-                                        + storeRevenue.get(i) + ", ";
+                                storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i)).append(", ");
                             }
                         }
 
-                        writer.write(storesSortedByRevenue);
+                        writer.write(storesSortedByRevenue.toString());
                         writer.println();
                         writer.flush();
                         break;
@@ -947,6 +932,7 @@ public class ClientHandler implements Runnable {
 
 
                         for (int i = 0; i < cart.size(); i++) {
+                            assert remove != null;
                             if (!cart.get(i).getName().equals(remove.getName())) {
                                 newCart.add(cart.get(i));
                             } else if (cart.get(i).getName().equals(remove.getName()) && removed) {
@@ -1032,7 +1018,7 @@ public class ClientHandler implements Runnable {
                         for (int i = 0; i < importProductData.length; i++) {
                             boolean alreadyExists = false; // true if the product already exists in the user's store
                             String[] importLineData = importProductData[i].split(",");
-                            for (int j = 0; j < productFileLines.size(); j++) {
+                            for (int j = 0; j < Objects.requireNonNull(productFileLines).size(); j++) {
                                 String[] productLineData = productFileLines.get(j).split(",");
                                 if (importLineData[0].equals(productLineData[0]) &&
                                         importLineData[1].equals(productLineData[1])) {
@@ -1060,6 +1046,7 @@ public class ClientHandler implements Runnable {
                     case 30: // export a store's products to a file
                         user = Seller.parseSeller(user.getEmail());
                         StringBuilder storeProductData = new StringBuilder("");
+                        assert user != null;
                         ArrayList<Store> userStores = ((Seller) user).getStores();
                         String storeToBeExportedName = reader.readLine();
                         Store storeToBeExported = null;
@@ -1069,6 +1056,7 @@ public class ClientHandler implements Runnable {
                                 break;
                             }
                         }
+                        assert storeToBeExported != null;
                         ArrayList<Product> storeToBeExportedProducts = storeToBeExported.getProducts();
                         for (int i = 0; i < storeToBeExportedProducts.size(); i++) {
                             Product product = storeToBeExportedProducts.get(i);
@@ -1117,7 +1105,6 @@ public class ClientHandler implements Runnable {
                                 lines.append(",");
                             }
                         }
-                        //System.out.println(line.toString());
                         writer.write(lines.toString());
                         writer.println();
                         writer.flush();

@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -9,14 +10,21 @@ import java.util.Scanner;
 
 public class Server
 {
+    public static InetAddress ip;
+
     public static void main(String[] args)
     {
         ServerSocket server = null;
         try {
+
+            ip = InetAddress.getLocalHost();
+            System.out.println(ip);
+
             server = new ServerSocket(1);
             server.setReuseAddress(true);
             // the next lines start and accept a socket from the client and create objects to read and write to
             // the client
+
 
             while (true) {
                 Socket client = server.accept();
@@ -122,6 +130,7 @@ public class Server
         while (passwordLoop)
         {
             String password = reader.readLine();
+            assert user != null;
             if (password.equals(user.getPassword()))
             {
                 writer.write("true");
@@ -283,7 +292,7 @@ public class Server
 
 
             ArrayList<String> temp = new ArrayList<>();
-            int sortChoice = Integer.valueOf(reader.readLine());
+            int sortChoice = Integer.parseInt(reader.readLine());
 
             String[] doubleSplit;
 

@@ -87,7 +87,7 @@ public class Store {
         sales--;
         products.get(index).setQuantity(products.get(index).getQuantity() + 1);
     }
-    public void writeToFile() { // write new store to the file
+    public synchronized void writeToFile() { // write new store to the file
         File f = new File("stores.txt");
         try {
             FileOutputStream fos = new FileOutputStream(f,true);
@@ -280,7 +280,7 @@ public class Store {
     }
 
 
-    public static ArrayList<Store> getAllStores() { //returns an array of the lines in Stores.txt
+    public static synchronized ArrayList<Store> getAllStores() { //returns an array of the lines in Stores.txt
         ArrayList<Store> stores = new ArrayList<Store>();
 
         try {
@@ -365,7 +365,7 @@ public class Store {
         return repeat;
     }
 
-    public static ArrayList<String> getAllLines() {
+    public static synchronized ArrayList<String> getAllLines() {
         ArrayList<String> stores = new ArrayList<>();
 
         try {

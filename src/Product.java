@@ -36,7 +36,7 @@ public class Product {
         this.sold = amtSold;
     }
 
-    public void writeToFile() { // write new product to the file
+    public synchronized void writeToFile() { // write new product to the file
         File f = new File("products.txt");
         try {
             FileOutputStream fos = new FileOutputStream(f,true);
@@ -158,7 +158,7 @@ public class Product {
     }
 
     // use this to get a product's info when the store is already known
-    public static Product getProduct(String productName)
+    public static synchronized Product getProduct(String productName)
     {
         int nameLength = productName.length();
 
@@ -197,7 +197,7 @@ public class Product {
     }
 
     // use this for when you need to determine if the product is a part of a store
-    public static Product getProduct(String productName, String productStore)
+    public static synchronized Product getProduct(String productName, String productStore)
     {
         int nameLength = productName.length();
         int storeLength = productStore.length();
@@ -238,7 +238,7 @@ public class Product {
         }
     }
 
-    public static ArrayList<Product> getAllProducts() {
+    public static synchronized ArrayList<Product> getAllProducts() {
         ArrayList<Product> temp = new ArrayList<>();
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("products.txt"));
@@ -277,7 +277,7 @@ public class Product {
         return searchArray;
     }
 
-    public static ArrayList<String> getAllLines() {
+    public static synchronized ArrayList<String> getAllLines() {
         ArrayList<String> temp = new ArrayList<>();
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("products.txt"));
@@ -293,7 +293,7 @@ public class Product {
         return temp;
     }
 
-    public void deleteProduct() {
+    public synchronized void deleteProduct() {
         ArrayList<String> lines = getAllLines();
         ArrayList<String> newLines = new ArrayList<>();
         String[] splitted;

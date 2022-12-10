@@ -65,7 +65,7 @@ public class User {
         this.securityAnswer = securityAnswer;
     }
 
-    public static String userExists(String email) { //if the user exists, returns the type of user. if not, returns an
+    public static synchronized String userExists(String email) { //if the user exists, returns the type of user. if not, returns an
         //empty string
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
@@ -89,7 +89,7 @@ public class User {
     }
 
     // checks if the user is returning or not for create account button
-    public static boolean checkNewUser(String email) { //if the user exists, returns the type of user. if not, returns an
+    public static synchronized boolean checkNewUser(String email) { //if the user exists, returns the type of user. if not, returns an
         //empty string
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
@@ -238,7 +238,7 @@ public class User {
         this.securityAnswer = securityAnswer;
     }
 
-    public void removeStoreFromFile(String name) {
+    public synchronized void removeStoreFromFile(String name) {
         try {
             ArrayList<String> lines = new ArrayList<>();
             BufferedReader bfr = new BufferedReader(new FileReader("stores.txt"));
@@ -269,7 +269,7 @@ public class User {
         }
     }
 
-    public void deleteAccount() {
+    public synchronized void deleteAccount() {
         String em = this.getEmail();
         String[] storeNames = null;
         String[] split;

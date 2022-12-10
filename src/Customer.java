@@ -82,7 +82,7 @@ public class Customer extends User {
         this.writeToFile();
     }
 
-    public ArrayList<String> readUserFile() { // returns an arrayList of every line in the user's file
+    public synchronized ArrayList<String> readUserFile() { // returns an arrayList of every line in the user's file
         ArrayList<String> fileLines = null;
         try {
             fileLines = new ArrayList<>();
@@ -121,7 +121,7 @@ public class Customer extends User {
     }
 
     // user buys all the products in their cart
-    public void purchaseProductsInCart() {
+    public synchronized void purchaseProductsInCart() {
         for (int i = 0; i < shoppingCart.size(); i++) {
             if (shoppingCart.get(i).getQuantity() == 0) {
                 System.out.println("Product " + shoppingCart.get(i).getName() + " is out of stock!");
@@ -217,7 +217,7 @@ public class Customer extends User {
 
     }
 
-    public StringBuilder purchaseProductsInCartProject5() {
+    public synchronized StringBuilder purchaseProductsInCartProject5() {
 
         StringBuilder failedProducts = new StringBuilder("");
 
@@ -489,7 +489,7 @@ public class Customer extends User {
         this.purchaseHistory = purchaseHistory;
     }
 
-    public void writeToFile() {
+    public synchronized void writeToFile() {
         File f = new File("users.txt");
         try {
             FileOutputStream fos = new FileOutputStream(f,true);
@@ -510,7 +510,7 @@ public class Customer extends User {
      * @param em
      * @return Customer object
      */
-    public static Customer parseCustomer(String em) {
+    public static synchronized Customer parseCustomer(String em) {
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
 
@@ -536,7 +536,7 @@ public class Customer extends User {
         return null;
     }
 
-    public static ArrayList<Customer> getAllCustomers() {
+    public synchronized static ArrayList<Customer> getAllCustomers() {
         ArrayList<Customer> r = new ArrayList<>();
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));

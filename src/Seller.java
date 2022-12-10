@@ -103,7 +103,7 @@ public class Seller extends User{
         return stores;
     }
 
-    public ArrayList<String> readUserFile() { // returns an arrayList of every line in the user's file
+    public synchronized ArrayList<String> readUserFile() { // returns an arrayList of every line in the user's file
         ArrayList<String> fileLines = null;
         try {
             fileLines = new ArrayList<>();
@@ -684,7 +684,7 @@ public class Seller extends User{
 
     }
 
-    public static ArrayList<String> readCSVProductFile(String filename) {
+    public static synchronized ArrayList<String> readCSVProductFile(String filename) {
         try {
             ArrayList<String> csvProductFileImportLines = new ArrayList<>();
             BufferedReader bfr = new BufferedReader(new FileReader(filename));
@@ -707,7 +707,7 @@ public class Seller extends User{
     }
 
 
-    public static ArrayList<String> readProductFile() {
+    public static synchronized ArrayList<String> readProductFile() {
         try {
             ArrayList<String> productFileLines = new ArrayList<>();
             BufferedReader bfrProduct = new BufferedReader(new FileReader("products.txt"));
@@ -726,7 +726,7 @@ public class Seller extends User{
         }
     }
 
-    public static Seller parseSeller(String em) {
+    public static synchronized Seller parseSeller(String em) {
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
 
@@ -797,7 +797,7 @@ public class Seller extends User{
         }
     }
 
-    public void writeToFile() {
+    public synchronized void writeToFile() {
         File f = new File("users.txt");
         try {
             FileOutputStream fos = new FileOutputStream(f,true);
