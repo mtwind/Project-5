@@ -1135,6 +1135,7 @@ public class ClientHandler implements Runnable {
 
                     case 34:
                         user.deleteAccount();
+                        break;
                     default:
                         running = false;
                         writer.close();
