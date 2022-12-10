@@ -844,9 +844,8 @@ public class Seller extends User{
                                     str.append(String.format("Customer: %s   Store: %s   Product: %s  ", c.getEmail(),
                                             this.getStores().get(i).getName(), carts.get(j).getName()));
                                     str.append(String.format("Product Quantity: %d   Product Price: $%.2f   " +
-                                                    "Product Description: %s   Amount Sold: %d", carts.get(j).getQuantity(),
-                                            carts.get(j).getPrice(), carts.get(j).getProductDescription(),
-                                            carts.get(j).getAmountSold()));
+                                                    "Amount Sold: %d", carts.get(j).getQuantity(),
+                                            carts.get(j).getPrice(), carts.get(j).getAmountSold()));
                                     built.add(str.toString());
                                 }
                             }
