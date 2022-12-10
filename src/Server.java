@@ -10,16 +10,11 @@ import java.util.Scanner;
 
 public class Server
 {
-    public static InetAddress ip;
 
     public static void main(String[] args)
     {
         ServerSocket server = null;
         try {
-
-            ip = InetAddress.getLocalHost();
-            System.out.println(ip);
-
             server = new ServerSocket(1);
             server.setReuseAddress(true);
             // the next lines start and accept a socket from the client and create objects to read and write to
