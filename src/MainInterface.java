@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * A marketplace that allows for multiple users to connect, uses GUI, and is fully run on servers and sockets
  *
- * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parekh, Matthew Wind
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
  * @version November 15, 2022
  */
 public class MainInterface extends JComponent implements Runnable {
@@ -48,8 +48,8 @@ public class MainInterface extends JComponent implements Runnable {
     JButton sellerDashboard;
     JButton addStore;
     JButton selectStoreButton;
-    JButton exitButtonSeller;
-    JButton exitButtonCustomer;
+    //JButton exitButtonSeller;
+    //JButton exitButtonCustomer;
     JTextField editUsernameSeller;
     JTextField editPasswordSeller;
     JTextField editEmailSeller;
@@ -390,7 +390,8 @@ public class MainInterface extends JComponent implements Runnable {
             }
 
             // resets account creation text fields after an account is created
-            if (e.getSource() == logoutButtonCustomer || e.getSource() == logoutButtonSeller) {
+            if (e.getSource() == logoutButtonCustomer || e.getSource() == logoutButtonSeller ||
+                    e.getSource() == logoutButtonStore || e.getSource() == logoutButtonEdit) {
                 createEmail.setText("Enter Email");
                 createUsername.setText("Enter Username");
                 createPassword.setText("Enter Password");
@@ -1582,14 +1583,14 @@ public class MainInterface extends JComponent implements Runnable {
         buttonPanelLogin.add(loginSellerButton);
 
         createAccountButton = new JButton("Create New Account");
-        createAccountButton.setBounds(600, 475, 350, 60);
+        createAccountButton.setBounds(325, 475, 350, 60);
         createAccountButton.addActionListener(actionListener);
         buttonPanelLogin.add(createAccountButton);
 
-        exitButton = new JButton("Exit");
+        /*exitButton = new JButton("Exit");
         exitButton.setBounds(50, 475, 350, 60);
         exitButton.addActionListener(actionListener);
-        buttonPanelLogin.add(exitButton);
+        buttonPanelLogin.add(exitButton);*/
 
         email = new JTextField("Enter Email");
         email.setBounds(400, 200, 200, 30);
@@ -1685,10 +1686,10 @@ public class MainInterface extends JComponent implements Runnable {
         selectStoreButton.addActionListener(actionListener);
         buttonPanelSeller.add(selectStoreButton);
 
-        exitButtonSeller = new JButton("Exit");
+        /*exitButtonSeller = new JButton("Exit");
         exitButtonSeller.setBounds(50, 475, 350, 60);
         exitButtonSeller.addActionListener(actionListener);
-        buttonPanelSeller.add(exitButtonSeller);
+        buttonPanelSeller.add(exitButtonSeller);*/
 
 
 
@@ -1748,10 +1749,10 @@ public class MainInterface extends JComponent implements Runnable {
         marketSelect.setBounds(temp - 350, 250, 700, 30);
         buttonPanelCustomer.add(marketSelect);
 
-        exitButtonCustomer = new JButton("Exit");
+        /*exitButtonCustomer = new JButton("Exit");
         exitButtonCustomer.setBounds(50, 475, 350, 60);
         exitButtonCustomer.addActionListener(actionListener);
-        buttonPanelCustomer.add(exitButtonCustomer);
+        buttonPanelCustomer.add(exitButtonCustomer);*/
 
         //Creating buttons and panels for edit Seller page
         JPanel buttonPanelEditSeller = new JPanel();
