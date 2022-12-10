@@ -2110,5 +2110,4 @@ public class MainInterface extends JComponent implements Runnable {
         viewCartContent.add(buttonPanelViewCart);
     }
 
-
 }
