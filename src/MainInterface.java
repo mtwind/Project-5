@@ -1335,7 +1335,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             if (e.getSource() == backViewCustomersandProducts) {
                 sellerDashboardFrame.setVisible(true);
-                viewProductsInCartsFrame.setVisible(false);
+                viewCustomersandProducts.setVisible(false);
             }
 
             if (e.getSource() == moreInfo) {
