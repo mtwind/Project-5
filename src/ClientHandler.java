@@ -564,7 +564,7 @@ public class ClientHandler implements Runnable {
                                 boolean j = false;
                                 preSplit = preSplit[2].split("~");
                                 for (int i = 0; i < preSplit.length; i++) {
-                                    if (preSplit[i].equals(proNewName)) {
+                                    if (preSplit[i].equals(proNewName) && !proNewName.equals(oldProductName)) {
                                         writer.write("repeat");
                                         writer.println();
                                         writer.flush();
