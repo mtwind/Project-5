@@ -166,6 +166,8 @@ public class MainInterface extends JComponent implements Runnable {
 
     JLabel proLabel;
     JLabel cusLabel;
+    JButton sortProductsByPrice;
+    JButton sortProductsByQuantity;
 
 
 
@@ -264,10 +266,12 @@ public class MainInterface extends JComponent implements Runnable {
                             marketSelect.setVisible(true);
                             searchBox.setVisible(true);
                             searchBtn.setVisible(true);
+                            sortProductsByPrice.setVisible(true);
                             customerViewProPage.setVisible(true);
                             allProBtn.setVisible(true);
                         } else {
                             searchBtn.setVisible(false);
+                            sortProductsByPrice.setVisible(false);
                             marketSelect.setVisible(false);
                             searchBox.setVisible(false);
                             customerViewProPage.setVisible(false);
@@ -1360,6 +1364,30 @@ public class MainInterface extends JComponent implements Runnable {
                 }
             }
 
+            // button 36, sort by price customer marketplace
+            if (e.getSource() == sortProductsByPrice ) {
+                writer.write("36");
+                writer.println();
+                writer.flush();
+                try {
+                    String priceSortedProducts = reader.readLine();
+                    if (!priceSortedProducts.equals("")) {
+                        if (priceSortedProducts.contains(","))
+                            marketPlace = priceSortedProducts.split(",");
+                        else
+                            marketPlace =  new String[]{priceSortedProducts};
+                        marketSelect.setModel(new DefaultComboBoxModel<String>(marketPlace));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No Results", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Failed to sort",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+
         }
     };
 
@@ -2255,6 +2283,13 @@ public class MainInterface extends JComponent implements Runnable {
         exportProductsFromAStore.setBounds(600, 400, 350, 60);
         exportProductsFromAStore.addActionListener(actionListener);
         buttonPanelStore.add(exportProductsFromAStore);
+
+        sortProductsByPrice = new JButton("Sort By Price");
+        sortProductsByPrice.setBounds(300, 400, 200, 30);
+        sortProductsByPrice.addActionListener(actionListener);
+        buttonPanelCustomer.add(sortProductsByPrice);
+
+        sortProductsByQuantity = new JButton();
 
         productsContent.add(buttonPanelEditProduct);
         accountContentSeller.add(buttonPanelEditSeller);

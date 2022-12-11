@@ -1181,6 +1181,22 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
+                    case 36:
+                        ArrayList<Product> allProductsByPrice = Driver.sortByPrice(Product.getAllProducts());
+                        StringBuilder sortedByPriceProductInfo = new StringBuilder();
+                        for (int i = 0; i < allProductsByPrice.size(); i++) {
+                            productInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                    allProductsByPrice.get(i).getName(), allProductsByPrice.get(i).getStore(),
+                                    allProductsByPrice.get(i).getPrice());
+                            sortedByPriceProductInfo.append(productInfo);
+                            if (i != allProductsByPrice.size() - 1) {
+                                sortedByPriceProductInfo.append(",");
+                            }
+                        }
+                        writer.write(String.valueOf(sortedByPriceProductInfo));
+                        writer.println();
+                        writer.flush();
+                        break;
                     default:
                         running = false;
                         writer.close();
