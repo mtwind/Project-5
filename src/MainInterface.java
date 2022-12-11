@@ -134,6 +134,7 @@ public class MainInterface extends JComponent implements Runnable {
     JComboBox<String> itemsInCartDropdown;
     JLabel emptyCartLabel;
     String[] cartList = new String[0];
+    JLabel directionLabel;
 
     // Buttons for export and imports csv files
     JButton exportPurchaseHistory;
@@ -892,7 +893,9 @@ public class MainInterface extends JComponent implements Runnable {
                 products.setVisible(false);
             }
             if (e.getSource() == sellerDashboard) {
+                directionLabel.setVisible(true);
                 sellerDashboardFrame.setVisible(true);
+                sellerDash.setModel(new DefaultComboBoxModel<String>());
                 seller.setVisible(false);
             }
             if (e.getSource() == customerDashboard) {
@@ -986,6 +989,7 @@ public class MainInterface extends JComponent implements Runnable {
 
 
             if (e.getSource() == sortBySales) {
+                directionLabel.setVisible(false);
                 writer.write("20");
                 writer.println();
                 writer.flush();
@@ -994,6 +998,10 @@ public class MainInterface extends JComponent implements Runnable {
                     sortedStores = reader.readLine();
                     String[] stores = sortedStores.split(",");
                     sellerDash.setModel(new DefaultComboBoxModel<String>(stores));
+                    if (stores[0].equals("")) {
+                        JOptionPane.showMessageDialog(null, "you have no stores.", "error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     //System.out.println("Error sorting by sales");
@@ -1001,6 +1009,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             }
             if (e.getSource() == sortByRevenue) {
+                directionLabel.setVisible(false);
                 writer.write("21");
                 writer.println();
                 writer.flush();
@@ -1009,6 +1018,10 @@ public class MainInterface extends JComponent implements Runnable {
                     String sortedStores = reader.readLine();
                     String[] stores = sortedStores.split(",");
                     sellerDash.setModel(new DefaultComboBoxModel<String>(stores));
+                    if (stores[0].equals("")) {
+                        JOptionPane.showMessageDialog(null, "you have no stores.", "error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch(IOException ioException) {
                     ioException.printStackTrace();
                     //System.out.println("Error sorting by revenue");
@@ -2170,6 +2183,10 @@ public class MainInterface extends JComponent implements Runnable {
         //sortbyrevenue, sortbysales,
         JPanel buttonPanelSellerDashboard = new JPanel();
         buttonPanelSellerDashboard.setLayout(null);
+
+        directionLabel = new JLabel("select a sort option to see your stores.");
+        directionLabel.setBounds(375, 210, 300, 30);
+        buttonPanelSellerDashboard.add(directionLabel);
 
         backButtonSellerDash = new JButton("Back");
         backButtonSellerDash.setBounds(50, 475, 350, 60);
