@@ -1135,7 +1135,8 @@ public class MainInterface extends JComponent implements Runnable {
                 resetViewCart(writer, reader);
             }
 
-            if (e.getSource() == historyBtn) { //27
+            if (e.getSource() == historyBtn) {//27
+                refreshCustomerPage(writer, reader);
                 writer.write("27");
                 writer.println();
                 writer.flush();
