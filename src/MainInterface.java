@@ -671,11 +671,12 @@ public class MainInterface extends JComponent implements Runnable {
                     } else {
                         JOptionPane.showMessageDialog(null, "Product Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         productList = serverResponse.split(",");
-                    }
-                    productsDropdown.setVisible(true);
-                    selectProductButton.setVisible(true);
-                    productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
 
+                        productsDropdown.setVisible(true);
+                        selectProductButton.setVisible(true);
+                        productsDropdown.setModel(new DefaultComboBoxModel<String>(productList));
+
+                    }
                     productName.setText("Enter Product Name:");
                     productDescription.setText("Enter Product Description:");
                     productPrice.setText("Enter Product Price:");

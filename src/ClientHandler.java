@@ -714,9 +714,6 @@ public class ClientHandler implements Runnable {
 
                         store1.setProducts(ll);
                         store1.editStoreFile();
-                        assert p != null;
-                        p.deleteProduct();
-
                         StringBuilder stri = new StringBuilder();
                         for (int i = 0; i < ll.size(); i++) {
                             stri.append(ll.get(i).getName());
@@ -738,6 +735,10 @@ public class ClientHandler implements Runnable {
                             c.get(i).setShoppingCart(temp2);
                             c.get(i).editUserFile();
                         }
+
+                        assert p != null;
+                        p.deleteProduct();
+
 
                         writer.write(stri.toString());
                         writer.println();
