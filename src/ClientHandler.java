@@ -524,25 +524,31 @@ public class ClientHandler implements Runnable {
                         break;
                     case 14: // sends the data of a selected product back to client
                         // this allows client to list the data in the products' page
-                        String productDataViewCustomer = reader.readLine();
-                        String productNameViewCustomer = productDataViewCustomer.substring(9,
-                                productDataViewCustomer.indexOf("Store:") - 3);
+                        try {
+                            String productDataViewCustomer = reader.readLine();
+                            String productNameViewCustomer = productDataViewCustomer.substring(9,
+                                    productDataViewCustomer.indexOf("Store:") - 3);
 
-                        String productStoreViewCustomer = productDataViewCustomer.substring(
-                                productDataViewCustomer.indexOf("Store:") + 7,
-                                productDataViewCustomer.indexOf("Price:") - 3);
+                            String productStoreViewCustomer = productDataViewCustomer.substring(
+                                    productDataViewCustomer.indexOf("Store:") + 7,
+                                    productDataViewCustomer.indexOf("Price:") - 3);
 
-                        Product viewCustomerProduct = null;
-                        viewCustomerProduct = Product.getProduct(productNameViewCustomer, productStoreViewCustomer);
+                            Product viewCustomerProduct = null;
+                            viewCustomerProduct = Product.getProduct(productNameViewCustomer, productStoreViewCustomer);
 
-                        productDataViewCustomer = viewCustomerProduct.getName() + "," + viewCustomerProduct.getProductDescription() + "," +
-                                viewCustomerProduct.getStore() + "," + String.format("%.2f", viewCustomerProduct.getPrice())
-                                + "," + viewCustomerProduct.getQuantity();
+                            productDataViewCustomer = viewCustomerProduct.getName() + "," + viewCustomerProduct.getProductDescription() + "," +
+                                    viewCustomerProduct.getStore() + "," + String.format("%.2f", viewCustomerProduct.getPrice())
+                                    + "," + viewCustomerProduct.getQuantity();
 
 
-                        writer.write(productDataViewCustomer);
-                        writer.println();
-                        writer.flush();
+                            writer.write(productDataViewCustomer);
+                            writer.println();
+                            writer.flush();
+                        } catch (Exception ex) {
+                            writer.write("error");
+                            writer.println();
+                            writer.flush();
+                        }
 
                         break;
                     case 15: // edit a product

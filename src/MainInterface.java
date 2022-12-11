@@ -799,15 +799,17 @@ public class MainInterface extends JComponent implements Runnable {
 
             if (e.getSource() == customerViewProPage) { // sends customer to product page
                 // view viewProductPage method for details
-                viewProductPage(writer, reader);
+                boolean successful = viewProductPage(writer, reader);
 
-                customerViewProdouctBackForCart.setVisible(false);
-                customerViewProdouctBack.setVisible(true);
-                customerViewProductHowMany.setVisible(true);
-                customerViewProductHowManyLabel.setVisible(true);
-                addToCart.setVisible(true);
-                customerViewProductFrame.setVisible(true);
-                customer.setVisible(false);
+                if (successful) {
+                    customerViewProdouctBackForCart.setVisible(false);
+                    customerViewProdouctBack.setVisible(true);
+                    customerViewProductHowMany.setVisible(true);
+                    customerViewProductHowManyLabel.setVisible(true);
+                    addToCart.setVisible(true);
+                    customerViewProductFrame.setVisible(true);
+                    customer.setVisible(false);
+                }
 
             }
 
@@ -1553,7 +1555,7 @@ public class MainInterface extends JComponent implements Runnable {
     }
 
 
-    public void viewProductPage(PrintWriter writer, BufferedReader reader)
+    public boolean viewProductPage(PrintWriter writer, BufferedReader reader)
     {
         writer.write("14");
         writer.println();
@@ -1564,17 +1566,27 @@ public class MainInterface extends JComponent implements Runnable {
         writer.flush();
 
         String[] productDataViewCustomer;
+        String p;
         try {
-            productDataViewCustomer = reader.readLine().split(",");
+            p = reader.readLine();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+        if (!p.equals("error")) {
+            productDataViewCustomer = p.split(",");
+            customerViewProductName.setText("Product: " + productDataViewCustomer[0]);
+            customerViewProductDescription.setText("Description: " + productDataViewCustomer[1]);
+            customerViewProductStore.setText("Store: " + productDataViewCustomer[2]);
+            customerViewProductPrice.setText("Price: " + productDataViewCustomer[3]);
+            customerViewProductStock.setText("Quantity Available: " + productDataViewCustomer[4]);
+        } else {
+            JOptionPane.showMessageDialog(null, "this object has been updated or deleted. " +
+                    "refreshing now.", "error", JOptionPane.ERROR_MESSAGE);
+            refreshCustomerPage(writer, reader);
+            return false;
+        }
 
-        customerViewProductName.setText("Product: " + productDataViewCustomer[0]);
-        customerViewProductDescription.setText("Description: " + productDataViewCustomer[1]);
-        customerViewProductStore.setText("Store: " + productDataViewCustomer[2]);
-        customerViewProductPrice.setText("Price: " + productDataViewCustomer[3]);
-        customerViewProductStock.setText("Quantity Available: " + productDataViewCustomer[4]);
+        return true;
     }
 
     public void run() {
