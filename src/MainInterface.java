@@ -1539,6 +1539,8 @@ public class MainInterface extends JComponent implements Runnable {
         if (str.equals("")) {
             marketSelect.setVisible(false);
             customerViewProPage.setVisible(false);
+            sortProductsByPrice.setVisible(false);
+            sortProductsByQuantity.setVisible(false);
             searchBtn.setVisible(false);
             searchBox.setVisible(false);
             allProBtn.setVisible(false);
@@ -1551,6 +1553,8 @@ public class MainInterface extends JComponent implements Runnable {
             marketSelect.setVisible(true);
             customerViewProPage.setVisible(true);
             searchBtn.setVisible(true);
+            sortProductsByPrice.setVisible(true);
+            sortProductsByQuantity.setVisible(true);
             searchBox.setVisible(true);
             allProBtn.setVisible(true);
 
