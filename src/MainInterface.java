@@ -267,11 +267,13 @@ public class MainInterface extends JComponent implements Runnable {
                             searchBox.setVisible(true);
                             searchBtn.setVisible(true);
                             sortProductsByPrice.setVisible(true);
+                            sortProductsByQuantity.setVisible(true);
                             customerViewProPage.setVisible(true);
                             allProBtn.setVisible(true);
                         } else {
                             searchBtn.setVisible(false);
                             sortProductsByPrice.setVisible(false);
+                            sortProductsByQuantity.setVisible(false);
                             marketSelect.setVisible(false);
                             searchBox.setVisible(false);
                             customerViewProPage.setVisible(false);
@@ -384,10 +386,14 @@ public class MainInterface extends JComponent implements Runnable {
                                 marketSelect.setVisible(true);
                                 searchBox.setVisible(true);
                                 searchBtn.setVisible(true);
+                                sortProductsByPrice.setVisible(true);
+                                sortProductsByQuantity.setVisible(true);
                                 customerViewProPage.setVisible(true);
                                 allProBtn.setVisible(true);
                             } else {
                                 searchBtn.setVisible(false);
+                                sortProductsByPrice.setVisible(false);
+                                sortProductsByQuantity.setVisible(false);
                                 marketSelect.setVisible(false);
                                 searchBox.setVisible(false);
                                 customerViewProPage.setVisible(false);
@@ -1389,6 +1395,29 @@ public class MainInterface extends JComponent implements Runnable {
 
             }
 
+            // button 37, sort by quantity customer marketplace
+            if (e.getSource() == sortProductsByQuantity) {
+                writer.write("37");
+                writer.println();
+                writer.flush();
+                try {
+                    String quantitySortedProducts = reader.readLine();
+                    if (!quantitySortedProducts.equals("")) {
+                        if (quantitySortedProducts.contains(","))
+                            marketPlace = quantitySortedProducts.split(",");
+                        else
+                            marketPlace =  new String[]{quantitySortedProducts};
+                        marketSelect.setModel(new DefaultComboBoxModel<String>(marketPlace));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No Results", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Failed to sort",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
         }
     };
 
@@ -2290,7 +2319,10 @@ public class MainInterface extends JComponent implements Runnable {
         sortProductsByPrice.addActionListener(actionListener);
         buttonPanelCustomer.add(sortProductsByPrice);
 
-        sortProductsByQuantity = new JButton();
+        sortProductsByQuantity = new JButton("Sort by Quantity");
+        sortProductsByQuantity.setBounds(500, 400, 200, 30);
+        sortProductsByQuantity.addActionListener(actionListener);
+        buttonPanelCustomer.add(sortProductsByQuantity);
 
         productsContent.add(buttonPanelEditProduct);
         accountContentSeller.add(buttonPanelEditSeller);

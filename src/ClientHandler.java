@@ -1182,7 +1182,7 @@ public class ClientHandler implements Runnable {
                         writer.println();
                         writer.flush();
                         break;
-                    case 36:
+                    case 36: // sort products by price for customer to view
                         ArrayList<Product> allProductsByPrice = Driver.sortByPrice(Product.getAllProducts());
                         StringBuilder sortedByPriceProductInfo = new StringBuilder();
                         for (int i = 0; i < allProductsByPrice.size(); i++) {
@@ -1195,6 +1195,22 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         writer.write(String.valueOf(sortedByPriceProductInfo));
+                        writer.println();
+                        writer.flush();
+                        break;
+                    case 37: // sort products by quantity for customer to view
+                        ArrayList<Product> allProductsByQuantity = Driver.sortByQuantity(Product.getAllProducts());
+                        StringBuilder sortedByQuantityProductInfo = new StringBuilder();
+                        for (int i = 0; i < allProductsByQuantity.size(); i++) {
+                            productInfo = String.format("Product: %s   Store: %s   Price: $%.2f",
+                                    allProductsByQuantity.get(i).getName(), allProductsByQuantity.get(i).getStore(),
+                                    allProductsByQuantity.get(i).getPrice());
+                            sortedByQuantityProductInfo.append(productInfo);
+                            if (i != allProductsByQuantity.size() - 1) {
+                                sortedByQuantityProductInfo.append(",");
+                            }
+                        }
+                        writer.write(String.valueOf(sortedByQuantityProductInfo));
                         writer.println();
                         writer.flush();
                         break;
