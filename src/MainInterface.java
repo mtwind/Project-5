@@ -1174,6 +1174,7 @@ public class MainInterface extends JComponent implements Runnable {
 
             // button 26, export customer purchase history
             if (e.getSource() == exportPurchaseHistory) {
+                refreshCustomerPage(writer, reader);
                 writer.write("26");
                 writer.println();
                 writer.flush();
