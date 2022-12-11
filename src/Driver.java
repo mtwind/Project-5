@@ -3,11 +3,10 @@ import java.util.*;
 /**
  * DRIVER CLASS
  *
- * Contains the main method for the project
- * Allows users to log in and navigate the customer and seller menus
+ * Contains sort methods we use in other part of the project
  *
  * @author L12 group 2
- * @version 13 NOV 2022
+ * @version 11 December 2022
  */
 public class Driver {
 
