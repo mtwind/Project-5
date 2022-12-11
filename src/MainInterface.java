@@ -531,31 +531,39 @@ public class MainInterface extends JComponent implements Runnable {
 
                 String newStoreName = JOptionPane.showInputDialog(null, "Enter the Store Name: ",
                         "Create Store", JOptionPane.QUESTION_MESSAGE);
-                writer.write(newStoreName);
-                writer.println();
-                writer.flush();
-
-                String serverAnswer = null;
-                try {
-                    serverAnswer = reader.readLine();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                if (serverAnswer.equals("already used"))
+                if (newStoreName == null)
                 {
-                    JOptionPane.showMessageDialog(null,
-                            "A store under that name already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+                    writer.write("x button");
+                    writer.println();
+                    writer.flush();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Store Created!", "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    //takes the store names separated by commas
+                    writer.write(newStoreName);
+                    writer.println();
+                    writer.flush();
 
-                    storeList = serverAnswer.split(",");
-                    storesDropdown.setVisible(true);
-                    selectStoreButton.setVisible(true);
-                    storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
+                    String serverAnswer = null;
+                    try {
+                        serverAnswer = reader.readLine();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    if (serverAnswer.equals("already used"))
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "A store under that name already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Store Created!", "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        //takes the store names separated by commas
 
+                        storeList = serverAnswer.split(",");
+                        storesDropdown.setVisible(true);
+                        selectStoreButton.setVisible(true);
+                        storesDropdown.setModel(new DefaultComboBoxModel<String>(storeList));
+
+                    }
                 }
+
             }
 
             //deletes the store that's currently selected and takes back to seller homepage
