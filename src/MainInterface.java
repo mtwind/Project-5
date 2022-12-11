@@ -1259,6 +1259,7 @@ public class MainInterface extends JComponent implements Runnable {
                             JOptionPane.showMessageDialog(null,
                                     "New products imported successfully!",
                                     "Import Products", JOptionPane.INFORMATION_MESSAGE);
+                            selectProductButton.setVisible(true);
                         }
 
                     } else {
