@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A marketplace that allows for multiple users to connect, uses GUI, and is fully run on servers and sockets
@@ -155,6 +156,16 @@ public class MainInterface extends JComponent implements Runnable {
     JButton historyBtn;
 
     JButton deleteProduct;
+
+    JFrame viewCustomersandProducts;
+    JComboBox<String> viewCustomers;
+    JComboBox<String> viewProducts;
+    JButton backViewCustomersandProducts;
+    JButton moreInfo;
+
+    JLabel proLabel;
+    JLabel cusLabel;
+
 
 
     /* action listener for buttons */
@@ -1293,6 +1304,49 @@ public class MainInterface extends JComponent implements Runnable {
                 password.setText("Enter Password:");
             }
 
+            if (e.getSource() == backViewCustomersandProducts) {
+                sellerDashboardFrame.setVisible(true);
+                viewProductsInCartsFrame.setVisible(false);
+            }
+
+            if (e.getSource() == moreInfo) {
+                if (sellerDash.getSelectedItem() != null && !sellerDash.getSelectedItem().toString().equals("")) {
+                    writer.write("35");
+                    writer.println();
+                    writer.flush();
+
+                    writer.write(Objects.requireNonNull(sellerDash.getSelectedItem()).toString());
+                    writer.println();
+                    writer.flush();
+
+                    try {
+                        String customerList = reader.readLine();
+                        String proList = reader.readLine();
+                        viewCustomers.setModel(new DefaultComboBoxModel<String>(customerList.split(",")));
+                        viewProducts.setModel(new DefaultComboBoxModel<String>(proList.split(",")));
+
+                        if (customerList.split(",")[0].equals("")) {
+                            cusLabel.setText("Customers: no customers");
+                        } else {
+                            cusLabel.setText("Customers: ");
+                        }
+                        if (proList.split(",")[0].equals("")) {
+                            proLabel.setText("Products: no customers");
+                        } else {
+                            proLabel.setText("Products: ");
+                        }
+
+
+                        viewCustomersandProducts.setVisible(true);
+                        sellerDashboardFrame.setVisible(false);
+                    } catch (Exception ez) {
+                        ez.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "No Store to view", "error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
         }
     };
 
@@ -1468,6 +1522,9 @@ public class MainInterface extends JComponent implements Runnable {
         // set up JFrames for all different frames
         login = new JFrame("Login");
         Container loginContent = login.getContentPane();
+        viewCustomersandProducts = new JFrame("More store Info");
+        Container extraView = viewCustomersandProducts.getContentPane();
+        extraView.setLayout(new BorderLayout());
         createAccount = new JFrame("Create Account");
         Container createAccountContent = createAccount.getContentPane();
         createAccountContent.setLayout(new BorderLayout());
@@ -1598,6 +1655,36 @@ public class MainInterface extends JComponent implements Runnable {
         history.setBounds(viewPurchaseHistory.getWidth() / 2 - 350, 250, 700, 30);
         purchaseHistoryContent.add(history);
 
+        viewCustomersandProducts.setSize(1000,600);
+        viewCustomersandProducts.setLocationRelativeTo(null);
+        viewCustomersandProducts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        viewCustomersandProducts.setVisible(false);
+
+        viewCustomers = new JComboBox<String>();
+        viewProducts = new JComboBox<String>();
+        extraView.setLayout(null);
+        backViewCustomersandProducts = new JButton("Back");
+        backViewCustomersandProducts.setBounds(50, 475, 350, 60);
+        backViewCustomersandProducts.addActionListener(actionListener);
+        extraView.add(backViewCustomersandProducts);
+        viewCustomers.setBounds(50,250,375, 30);
+        viewProducts.setBounds(575, 250, 375, 30);
+        extraView.add(viewCustomers);
+        extraView.add(viewProducts);
+        viewCustomers.setVisible(true);
+        viewProducts.setVisible(true);
+        moreInfo = new JButton("View more about this store");
+        moreInfo.setBounds(250, 350, 500, 30);
+        moreInfo.addActionListener(actionListener);
+        proLabel = new JLabel("Products: ");
+        proLabel.setBounds(713, 200, 250, 30);
+        extraView.add(proLabel);
+        cusLabel = new JLabel("Customers: ");
+        cusLabel.setBounds(120, 200, 250, 30);
+        extraView.add(cusLabel);
+        sellerDashboardContent.add(moreInfo);
+
+
         viewProductsInCartsFrame = new JFrame("Products in Carts");
         Container productsInCartsContent = viewProductsInCartsFrame.getContentPane();
         productsInCartsContent.setLayout(new BorderLayout());
@@ -1605,6 +1692,7 @@ public class MainInterface extends JComponent implements Runnable {
         viewProductsInCartsFrame.setLocationRelativeTo(null);
         viewProductsInCartsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         viewProductsInCartsFrame.setVisible(false);
+
         items = new JComboBox<String>();
         inCartsBack = new JButton("Back");
         productsInCartsContent.setLayout(null);

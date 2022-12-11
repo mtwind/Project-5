@@ -813,9 +813,9 @@ public class ClientHandler implements Runnable {
                         StringBuilder sortedStores = new StringBuilder();
                         for (int k = 0; k < stores.size(); k++) {
                             if (k == stores.size() - 1) {
-                                sortedStores.append("Name: ").append(stores.get(k).getName()).append(" Sales: ").append(stores.get(k).getTotalSales());
+                                sortedStores.append(" Sales: ").append(stores.get(k).getTotalSales()).append(" - Store: ").append(stores.get(k).getName());
                             } else {
-                                sortedStores.append("Name: ").append(stores.get(k).getName()).append(" Sales: ").append(stores.get(k).getTotalSales()).append(",");
+                                sortedStores.append(" Sales: ").append(stores.get(k).getTotalSales()).append(" - Store: ").append(stores.get(k).getName()).append(",");
                             }
                         }
                         writer.write(sortedStores.toString());
@@ -865,11 +865,11 @@ public class ClientHandler implements Runnable {
                         String oneStore;
                         for(int i = 0; i < stores.size(); i++) {
                             if(i == stores.size() - 1) {
-                                oneStore = String.format("Store: %s - Revenue: $%.2f", stores.get(i).getName(), storeRevenue.get(i));
+                                oneStore = String.format("Revenue: $%.2f - Store: %s", storeRevenue.get(i), stores.get(i).getName());
                                 storesSortedByRevenue.append(oneStore);
                                 //storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i));
                             } else {
-                                oneStore = String.format("Store: %s - Revenue: $%.2f,", stores.get(i).getName(), storeRevenue.get(i));
+                                oneStore = String.format("Revenue: $%.2f - Store: %s,", storeRevenue.get(i), stores.get(i).getName());
                                 storesSortedByRevenue.append(oneStore);
                                 //storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i)).append(", ");
                             }
@@ -1140,6 +1140,45 @@ public class ClientHandler implements Runnable {
 
                     case 34:
                         user.deleteAccount();
+                        break;
+                    case 35:
+                        stoName = reader.readLine();
+                        int get = stoName.indexOf("Store: ");
+                        stoName = stoName.substring(get + 7);
+                        ArrayList<Store> lots = Store.getAllStores(user.getEmail());
+                        Store focus = null;
+                        for (int i = 0; i < lots.size(); i++) {
+                            if (lots.get(i).getName().equals(stoName)) {
+                                focus = lots.get(i);
+                                break;
+                            }
+                        }
+
+                        assert focus != null;
+                        ArrayList<Customer> see = focus.getCustomers();
+                        ArrayList<Integer> seeNums = focus.getCustomerSales();
+                        str = new StringBuilder();
+                        for (int i = 0; i < see.size(); i++) {
+                            str.append("Customer: ").append(see.get(i).getEmail()).append(" - Sales: ").append(seeNums.get(i));
+                            if (i != see.size() - 1) {
+                                str.append(",");
+                            }
+                        }
+                        writer.write(str.toString());
+                        writer.println();
+                        writer.flush();
+
+                        str = new StringBuilder();
+                        ArrayList<Product> seePro = focus.getProducts();
+                        for (int i = 0; i < seePro.size(); i++) {
+                            str.append("Product: ").append(seePro.get(i).getName());
+                            if (i != seePro.size() - 1) {
+                                str.append(",");
+                            }
+                        }
+                        writer.write(str.toString());
+                        writer.println();
+                        writer.flush();
                         break;
                     default:
                         running = false;
