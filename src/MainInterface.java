@@ -976,7 +976,8 @@ public class MainInterface extends JComponent implements Runnable {
                     String[] stores = sortedStores.split(",");
                     sellerDash.setModel(new DefaultComboBoxModel<String>(stores));
                 } catch (IOException ex) {
-                    System.out.println("Error sorting by sales");
+                    ex.printStackTrace();
+                    //System.out.println("Error sorting by sales");
                 }
 
             }
@@ -990,7 +991,8 @@ public class MainInterface extends JComponent implements Runnable {
                     String[] stores = sortedStores.split(",");
                     sellerDash.setModel(new DefaultComboBoxModel<String>(stores));
                 } catch(IOException ioException) {
-                    System.out.println("Error sorting by revenue");
+                    ioException.printStackTrace();
+                    //System.out.println("Error sorting by revenue");
                 }
 
             }

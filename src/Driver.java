@@ -285,16 +285,16 @@ public class Driver {
                     }
                     break;
                 case 3:
-                    user.editStore(s);
+                    //user.editStore(s);
                     break;
                 case 4:
                     //viewSellerDash(s, stores);
                     break;
                 case 5:
-                    user.exportStoreProducts(s);
+                    //user.exportStoreProducts(s);
                     break;
                 case 6:
-                    user.importStoreProducts(s);
+                    //user.importStoreProducts(s);
                     break;
                 case 7:
                     //user.viewCustomerCarts(s);

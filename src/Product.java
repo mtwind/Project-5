@@ -48,7 +48,8 @@ public class Product {
             pw.close();
 
         } catch (IOException e) {
-            System.out.println("Error writing to file.");
+            e.printStackTrace();
+            //System.out.println("Error writing to file.");
         }
     }
 
@@ -66,7 +67,8 @@ public class Product {
                     productFileLines.add(line);
                 }
             } catch (IOException e) {
-                System.out.println("File not found!");
+                e.printStackTrace();
+                //System.out.println("File not found!");
             }
 
             for (int i = 0; i < productFileLines.size(); i++) {
@@ -190,7 +192,7 @@ public class Product {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Exception at Product line 176");
+            //System.out.println("Exception at Product line 176");
 
             return null;
         }
@@ -232,7 +234,7 @@ public class Product {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Exception at Product line 218");
+            //System.out.println("Exception at Product line 218");
 
             return null;
         }

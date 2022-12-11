@@ -308,7 +308,7 @@ public class Customer extends User {
                         line = bfr.readLine(); //moves onto the next line in Stores
                     }
                 } catch (Exception e) {
-                    System.out.println("Error reading file. ");
+                    //System.out.println("Error reading file. ");
                     e.printStackTrace();
                 }
 
@@ -401,7 +401,8 @@ public class Customer extends User {
             pw.close();
 
         } catch (Exception e) {
-            System.out.println("error");
+            //System.out.println("error");
+            e.printStackTrace();
         }
     }
 

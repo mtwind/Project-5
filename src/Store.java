@@ -69,7 +69,7 @@ public class Store {
             }
         }
         if (index == -1) {
-            System.out.print("Sorry, that product doesn't exist at this store.");
+            //System.out.print("Sorry, that product doesn't exist at this store.");
         }
         sales++;
         products.get(index).setQuantity(products.get(index).getQuantity() - 1);
@@ -82,7 +82,7 @@ public class Store {
             }
         }
         if (index == -1) {
-            System.out.print("Sorry, that product doesn't exist at this store.");
+            //System.out.print("Sorry, that product doesn't exist at this store.");
         }
         sales--;
         products.get(index).setQuantity(products.get(index).getQuantity() + 1);
@@ -100,7 +100,8 @@ public class Store {
             pw.close();
 
         } catch (IOException e) {
-            System.out.println("Error writing to file.");
+            //System.out.println("Error writing to file.");
+            e.printStackTrace();
         }
     }
 
@@ -121,7 +122,8 @@ public class Store {
                     storeFileLines.add(line);
                 } // adds all the lines from the store file to an arrayList
             } catch (IOException e) {
-                System.out.println("File not found!");
+                e.printStackTrace();
+                //System.out.println("File not found!");
             }
 
             //splits based on our file formatting system
@@ -180,7 +182,8 @@ public class Store {
             pw.close();
 
         } catch (IOException e) {
-            System.out.println("Error: Store file could not be properly edited!");
+            e.printStackTrace();
+            //System.out.println("Error: Store file could not be properly edited!");
         }
     }
 
@@ -216,7 +219,8 @@ public class Store {
 
 
         } catch(IOException io) {
-            System.out.println("Error: file products.txt was not properly updated.");
+            io.printStackTrace();
+            //System.out.println("Error: file products.txt was not properly updated.");
         }
 
     }
@@ -295,7 +299,7 @@ public class Store {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in getAllStores, Store line 268");
+            //System.out.println("Error in getAllStores, Store line 268");
             e.printStackTrace();
         }
         return stores;

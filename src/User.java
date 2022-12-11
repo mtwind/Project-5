@@ -40,7 +40,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.isCustomer = isCustomer;
-        this.securityAnswer = securityQuestions(s);
+       // this.securityAnswer = securityQuestions(s);
     }
 
     // user for project 5 without a scanner
@@ -83,7 +83,8 @@ public class User {
                 }
             }
         } catch (IOException e) {
-            System.out.println("That file does not exist.");
+            e.printStackTrace();
+            //System.out.println("That file does not exist.");
         }
         return "";
     }
@@ -107,7 +108,8 @@ public class User {
                 }
             }
         } catch (IOException e) {
-            System.out.println("That file does not exist.");
+            e.printStackTrace();
+            //System.out.println("That file does not exist.");
         }
         return false;
     }
@@ -151,33 +153,7 @@ public class User {
     }
 
     //asks for security questions when creating an account
-    public String securityQuestions(Scanner s) {
-        System.out.println("Choose a security questions below:");
-        for (int i = 0; i < questionList.length; i++) {
-            System.out.println(questionList[i]);
-        }
 
-        do {
-            try {
-                this.securityQuestionNumber = Integer.parseInt(s.nextLine());
-                int num = this.securityQuestionNumber;
-
-                if (num != 1 && num != 2 && num != 3 && num != 4 && num != 5 && num != 6) {
-                    System.out.println("Invalid Input!");
-                    System.out.println("Choose a security questions number:");
-                    continue;
-                }
-                break;
-            } catch (Exception e) {
-                System.out.println("please enter a number.");
-            }
-        } while (true);
-
-        System.out.println(questionList[this.securityQuestionNumber - 1]);
-        String answer = s.nextLine();
-
-        return answer;
-    }
 
     public String getName() {
         return name;
@@ -265,7 +241,8 @@ public class User {
             pw.close();
 
         } catch (Exception e) {
-            System.out.println("Error reading file");
+            e.printStackTrace();
+            //System.out.println("Error reading file");
         }
     }
 
@@ -380,7 +357,8 @@ public class User {
             }
 
         } catch (Exception e) {
-            System.out.println("Error reading file");
+            //System.out.println("Error reading file");
+            e.printStackTrace();
         }
     }
 
