@@ -20,7 +20,7 @@ This class contains the GUI for our project that the user interacts with. Client
 ### Client.java
 This class must be run for each user while Server.java is running in order for the users to interact with the GUI. This class creates new instances of MainInterface.java for every user and connects sockets to the server socket.
 ### ClientHandler.java
-This class implements the functionality that was created by the other classes. This class also contains a variety of methods that allow Customers to view the marketplace of products and sort it by prices or quantity. It contains methods for Sellers to see their store statistics and the ability for them to sort their stores by revenue, number of products, or no sort at all.
+This class implements the functionality that was created by other server-side classes. This class also contains a variety of methods that allow Customers to view the marketplace of products and sort it by prices or quantity. It contains methods for Sellers to see their store statistics and the ability for them to sort their stores by revenue, number of products, or no sort at all.
 ### Server.java
 This class runs until manually stopped and must be running in order for users to connect. This class creates a server socket with port number 1 for the client to connect to. This class creates new instances of ClientHandler for data processing and starts new threads for each individual user.
 ### Driver.java ???
