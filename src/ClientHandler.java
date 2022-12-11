@@ -880,6 +880,7 @@ public class ClientHandler implements Runnable {
                         writer.flush();
                         break;
                     case 22: // sends customer to their cart, is used in resetViewCart
+                        user = Customer.parseCustomer(user.getEmail());
                         ArrayList<Product> userCart = ((Customer) user).getShoppingCart();
                         StringBuilder itemsInCartInfo = new StringBuilder();
                         String singleProductInfo;
