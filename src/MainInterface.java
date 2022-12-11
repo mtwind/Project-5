@@ -10,7 +10,7 @@ import java.util.Objects;
  * A marketplace that allows for multiple users to connect, uses GUI, and is fully run on servers and sockets
  *
  * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
- * @version November 15, 2022
+ * @version December 11, 2022
  */
 public class MainInterface extends JComponent implements Runnable {
     JFrame login;

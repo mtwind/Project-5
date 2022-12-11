@@ -1,12 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
+
 /**
  * PRODUCT CLASS
  *
  * Creates product objects that can be bought by customers and sold by sellers
  *
- * @author L12 group 2
- * @version 13 NOV 2022
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
+ * @version December 11, 2022
  */
 public class Product {
     private String name;

@@ -2,13 +2,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+
 /**
  * CUSTOMER CLASS
  *
  * Creates customer objects that can buy products from stores
  *
- * @author L12 group 2
- * @version 2 DEC 2022
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
+ * @version December 11, 2022
  */
 
 public class Customer extends User {

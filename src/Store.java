@@ -1,12 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
+
 /**
  * STORE CLASS
  *
  * Stores contain a list of products and customers and can be edited by the seller that owns it
  *
- * @author L12 group 2
- * @version 13 NOV 2022
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
+ * @version December 11, 2022
  */
 public class Store {
     private String owner;

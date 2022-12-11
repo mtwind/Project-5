@@ -5,7 +5,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
+/**
+ * ClientHandler
+ *
+ * Holds the serversocket for users to connect to
+ * Contains all of our processing for different buttons in a switch statement within the run() method
+ *
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
+ * @version December 11, 2022
+ */
 public class ClientHandler implements Runnable {
     Socket socket;
     User user;

@@ -1,11 +1,12 @@
 import java.io.*;
 import java.util.*;
+
 /**
  * DRIVER CLASS
  *
  * Contains sort methods we use in other part of the project
  *
- * @author L12 group 2
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
  * @version 11 December 2022
  */
 public class Driver {
