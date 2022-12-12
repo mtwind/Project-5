@@ -12,7 +12,7 @@
 - Line format for a store in "stores.txt": storeName,sellerEmail,product names strings,sales,customer email strings,sales per customer ints
 - The program should compile and run correctly if these three text files exist and are empty the very first time running the program.
 ### Who submitted which parts of the assignment to Brightspace?
-- Dalton Babbs - Submitted Report on Brightspace
+- Paige Lorenz - Submitted Report on Brightspace
 - Paige Lorenz - Submitted Project on Vocareum Workspace
 ## Descriptions of Classes
 ### MainInterface.java
