@@ -14,6 +14,7 @@
 ### Who submitted which parts of the assignment to Brightspace?
 - Paige Lorenz - Submitted Report on Brightspace
 - Paige Lorenz - Submitted Project on Vocareum Workspace
+- Paige Lorenz - Submitted Presentation on Brightspace
 ## Descriptions of Classes
 ### MainInterface.java
 This class contains the GUI for our project that the user interacts with. Client.java creates new instances of this class for every user running the program. Users are first prompted to log in with an email and password or create a new seller or customer type account. After logging in, the user is directed to either the seller or customer menu depending on their account type. This class contains many action listeners for various buttons in the GUI. When a button is pressed, it has a corresponding string that is then written to the ClientHandler/Server. This string matches a corresponding case in a switch statement in ClientHandler.java that determines the kind of processing that is necessary for the button.
