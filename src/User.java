@@ -252,6 +252,27 @@ public class User {
         String[] split;
         ArrayList<String> fileLines = new ArrayList<>();
         try {
+
+            if (this instanceof Customer) {
+                ArrayList<Store> storeList = Store.getAllStores();
+                ArrayList<Customer> yeet;
+                ArrayList<Integer> yeet2;
+                ArrayList<Customer> yeetNew = new ArrayList<>();
+                ArrayList<Integer> yeet2New = new ArrayList<>();
+                for (int i = 0; i < storeList.size(); i++) {
+                    yeet = storeList.get(i).getCustomers();
+                    yeet2 = storeList.get(i).getCustomerSales();
+                    for (int j = 0; j < yeet.size(); j++) {
+                        if (!yeet.get(j).getEmail().equals(this.getEmail())) {
+                            yeetNew.add(yeet.get(j));
+                            yeet2New.add(yeet2.get(j));
+                        }
+                    }
+                    storeList.get(i).setCustomers(yeetNew);
+                    storeList.get(i).setCustomerSales(yeet2New);
+                    storeList.get(i).editStoreFile();
+                }
+            }
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
             String line = bfr.readLine();
 
