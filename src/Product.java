@@ -224,7 +224,6 @@ public class Product {
 
             }
 
-
             String productDescription = productInfo[2];
             int productQuantity = Integer.parseInt(productInfo[3]);
             double productCost = Double.parseDouble(productInfo[4]);
@@ -250,7 +249,7 @@ public class Product {
 
             while (line != null) {
                 productInfo = line.split(",");
-                temp.add(getProduct(productInfo[0]));
+                temp.add(getProduct(productInfo[0], productInfo[1]));
                 line = bfr.readLine();
             }
             bfr.close();
@@ -323,7 +322,10 @@ public class Product {
     }
 
 
+    }
 
 
 
-}
+
+
+

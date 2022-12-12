@@ -814,23 +814,40 @@ public class ClientHandler implements Runnable {
                     case 20:// sort stores by greatest sales for seller dash
                         ArrayList<Store> stores = Store.getAllStores(user.getEmail());
                         ((Seller) user).setStores(stores);
+                        ArrayList<Product> products1;
+                        ArrayList<Integer> productsSoldPer = new ArrayList<Integer>();
+                        int count = 0;
+                        for (int i = 0; i < stores.size(); i++) {
+                            count = 0;
+                            products1 = stores.get(i).getAllProducts();
+                            for (int j = 0; j < products1.size(); j++) {
+                                count += products1.get(j).getAmountSold();
+                                //System.out.println(products1.get(j).getAmountSold());
+                            }
+                            productsSoldPer.add(count);
+
+                        }
                         for (int i = 0; i < stores.size(); i++) {
                             int max = i;
                             for (int j = i; j < stores.size(); j++) {
-                                if (stores.get(j).getTotalSales() > stores.get(max).getTotalSales()) {
+                                if (productsSoldPer.get(j) > productsSoldPer.get(max)) {
                                     max = j;
                                 }
                                 Store swap = stores.get(i);
                                 stores.set(i, stores.get(max));
                                 stores.set(max, swap);
+
+                                Integer swap2 = productsSoldPer.get(i);
+                                productsSoldPer.set(i, productsSoldPer.get(max));
+                                productsSoldPer.set(max, swap2);
                             }
                         }
                         StringBuilder sortedStores = new StringBuilder();
                         for (int k = 0; k < stores.size(); k++) {
                             if (k == stores.size() - 1) {
-                                sortedStores.append(" Sales: ").append(stores.get(k).getTotalSales()).append(" - Store: ").append(stores.get(k).getName());
+                                sortedStores.append(" Sales: ").append(productsSoldPer.get(k)).append(" - Store: ").append(stores.get(k).getName());
                             } else {
-                                sortedStores.append(" Sales: ").append(stores.get(k).getTotalSales()).append(" - Store: ").append(stores.get(k).getName()).append(",");
+                                sortedStores.append(" Sales: ").append(productsSoldPer.get(k)).append(" - Store: ").append(stores.get(k).getName()).append(",");
                             }
                         }
                         writer.write(sortedStores.toString());
@@ -848,29 +865,14 @@ public class ClientHandler implements Runnable {
 
                         stores = Store.getAllStores(user.getEmail());
                         ((Seller) user).setStores(stores);
-                        ArrayList<Product> prod;
-                        ArrayList<Double> storeRevenue = new ArrayList<Double>();
-                        double rev;
-                        for (int i = 0; i < stores.size(); i++) {
-                            prod = new ArrayList<Product>();
-                            rev = 0;
-                            prod = stores.get(i).getProducts();
-                            for (Product product : prod) {
-                                rev += product.getPrice() * product.getAmountSold();
-                            }
-                            storeRevenue.add(rev);
-                        }
+
 
                         for (int j = 0; j < stores.size(); j++) {
                             int max = j;
                             for (int k = j; k < stores.size(); k++) {
-                                if (storeRevenue.get(k) > storeRevenue.get(j)) {
+                                if (stores.get(k).getSales() > stores.get(j).getSales()) {
                                     max = k;
                                 }
-                                double revSwap = storeRevenue.get(j);
-                                storeRevenue.set(j, storeRevenue.get(max));
-                                storeRevenue.set(max, revSwap);
-
                                 Store swap = stores.get(j);
                                 stores.set(j, stores.get(max));
                                 stores.set(max, swap);
@@ -880,11 +882,11 @@ public class ClientHandler implements Runnable {
                         String oneStore;
                         for(int i = 0; i < stores.size(); i++) {
                             if(i == stores.size() - 1) {
-                                oneStore = String.format("Revenue: $%.2f - Store: %s", storeRevenue.get(i), stores.get(i).getName());
+                                oneStore = String.format("Revenue: $%.2f - Store: %s", stores.get(i).getSales(), stores.get(i).getName());
                                 storesSortedByRevenue.append(oneStore);
                                 //storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i));
                             } else {
-                                oneStore = String.format("Revenue: $%.2f - Store: %s,", storeRevenue.get(i), stores.get(i).getName());
+                                oneStore = String.format("Revenue: $%.2f - Store: %s,", stores.get(i).getSales(), stores.get(i).getName());
                                 storesSortedByRevenue.append(oneStore);
                                 //storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i)).append(", ");
                             }

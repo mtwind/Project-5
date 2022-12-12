@@ -412,4 +412,15 @@ public class Store {
         return stores;
     }
 
+    public synchronized ArrayList<Product> getAllProducts() {
+        ArrayList<Product> temp = new ArrayList<>();
+        ArrayList<Product> current = this.getProducts();
+
+        for (int i = 0; i < current.size(); i++) {
+            temp.add(Product.getProduct(current.get(i).getName(), this.getName()));
+        }
+
+        return temp;
+    }
+
 }
