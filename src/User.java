@@ -1,13 +1,13 @@
 import java.util.*;
 import java.io.*;
+
 /**
  * USER CLASS
  *
  * this class contains the basic variables that customers and sellers share
- * It also implements methods to change a password through security questions
  *
- * @author L12 group 2
- * @version 13 NOV 2022
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
+ * @version December 11, 2022
  */
 public class User {
 

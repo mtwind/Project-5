@@ -6,6 +6,16 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+/**
+ * Server
+ *
+ * Creates serversocket with port number 1
+ * Starts new threads using ClientHandler for each client as necessary
+ *
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
+ * @version December 11, 2022
+ */
 public class Server {
 
     public static void main(String[] args) {

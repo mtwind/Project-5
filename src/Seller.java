@@ -1,13 +1,14 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 /**
  * SELLER CLASS
  *
  * Seller objects can make stores and products
  *
- * @author L12 group 2
- * @version 13 NOV 2022
+ * @author Aaryamik Gupta, Paige Lorenz, Dalton Babbs, Mahika Parakh, Matthew Wind
+ * @version December 11, 2022
  */
 public class Seller extends User{
 
