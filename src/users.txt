@@ -1,2 +1,1 @@
-seller,email1,name,password,0,Enter Answer,store1~store2
-seller,email2,name,password,0,Enter Answer,store
+
