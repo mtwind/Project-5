@@ -76,7 +76,8 @@ public class Customer extends User {
     }
 
     // project 5 customer without a scanner
-    public Customer(String name, String email, String password, boolean isCustomer, String securityAnswer, int securityQuestionNum) {
+    public Customer(String name, String email, String password, boolean isCustomer, String securityAnswer,
+                    int securityQuestionNum) {
         super(name, email, password, isCustomer, securityAnswer, securityQuestionNum);
         purchaseHistory = new ArrayList<String>();
         shoppingCart = new ArrayList<Product>();

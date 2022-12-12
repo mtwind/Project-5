@@ -572,7 +572,8 @@ public class MainInterface extends JComponent implements Runnable {
                     if (serverAnswer.equals("already used"))
                     {
                         JOptionPane.showMessageDialog(null,
-                                "A store under that name already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+                                "A store under that name already exists.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null, "Store Created!", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -679,7 +680,8 @@ public class MainInterface extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Product already exists in store!",
                                 "Add Product", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Product Created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Product Created!", "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
                         productList = serverResponse.split(",");
 
                         productsDropdown.setVisible(true);
@@ -1310,7 +1312,8 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                JOptionPane.showMessageDialog(null, "Account Deleted", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Account Deleted", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 login.setVisible(true);
                 editSeller.setVisible(false);
@@ -1324,7 +1327,8 @@ public class MainInterface extends JComponent implements Runnable {
                 writer.println();
                 writer.flush();
 
-                JOptionPane.showMessageDialog(null, "Account Deleted", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Account Deleted", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
                 login.setVisible(true);
                 editCustomer.setVisible(false);
@@ -1372,7 +1376,8 @@ public class MainInterface extends JComponent implements Runnable {
                         ez.printStackTrace();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "No Store to view", "error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "No Store to view", "error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
 
@@ -1847,7 +1852,7 @@ public class MainInterface extends JComponent implements Runnable {
         createEmail.addActionListener(actionListener);
         buttonPanelCreate.add(createEmail);
 
-        chooseSecurityQ = new JComboBox(User.questionList);
+        chooseSecurityQ = new JComboBox<String>(User.questionList);
         chooseSecurityQ.setBounds(360, 200, 275, 30);
         chooseSecurityQ.addActionListener(actionListener);
         buttonPanelCreate.add(chooseSecurityQ);

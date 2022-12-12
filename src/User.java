@@ -44,7 +44,8 @@ public class User {
     }
 
     // user for project 5 without a scanner
-    public User(String name, String email, String password, boolean isCustomer, String securityAnswer, int securityQuestionNumber) {
+    public User(String name, String email, String password, boolean isCustomer, String securityAnswer,
+                int securityQuestionNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -65,7 +66,8 @@ public class User {
         this.securityAnswer = securityAnswer;
     }
 
-    public static synchronized String userExists(String email) { //if the user exists, returns the type of user. if not, returns an
+    public static synchronized String userExists(String email) { //if the user exists, returns the
+        // type of user. if not, returns an
         //empty string
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));
@@ -90,7 +92,8 @@ public class User {
     }
 
     // checks if the user is returning or not for create account button
-    public static synchronized boolean checkNewUser(String email) { //if the user exists, returns the type of user. if not, returns an
+    public static synchronized boolean checkNewUser(String email) { //if the user exists, returns
+        // the type of user. if not, returns an
         //empty string
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("users.txt"));

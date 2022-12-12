@@ -21,7 +21,8 @@ public class Seller extends User{
     }
 
     // project 5 seller constructor, no scanner
-    public Seller(String name, String username, String password, Boolean isCustomer, String securityAnswer, int securityQuestionNum) {
+    public Seller(String name, String username, String password, Boolean isCustomer, String securityAnswer,
+                  int securityQuestionNum) {
         super(name, username, password, isCustomer, securityAnswer, securityQuestionNum);
         stores = new ArrayList<Store>();
         this.writeToFile();

@@ -191,7 +191,7 @@ public class Store {
     public static synchronized void updateProducts(String storeName) throws FileNotFoundException {
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("products.txt"));
-            ArrayList<String> lines = new ArrayList();
+            ArrayList<String> lines = new ArrayList<>();
             ArrayList<String> newProducts = new ArrayList<>();
 
             while(true) {

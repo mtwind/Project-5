@@ -392,11 +392,13 @@ public class ClientHandler implements Runnable {
                     case 10: // create new product
 
                         String[] newProductInfo = reader.readLine().split(",");
-                        if (newProductInfo[0].contains(",") || newProductInfo[0].contains("~") || newProductInfo[0].contains("-") || newProductInfo[0].isEmpty()) {
+                        if (newProductInfo[0].contains(",") || newProductInfo[0].contains("~") ||
+                                newProductInfo[0].contains("-") || newProductInfo[0].isEmpty()) {
                             writer.write("name error");
                             writer.println();
                             writer.flush();
-                        } else if (newProductInfo[1].contains(",") || newProductInfo[1].contains("~") || newProductInfo[1].isEmpty()) {
+                        } else if (newProductInfo[1].contains(",") || newProductInfo[1].contains("~") ||
+                                newProductInfo[1].isEmpty()) {
                             writer.write("description error");
                             writer.println();
                             writer.flush();
@@ -544,9 +546,10 @@ public class ClientHandler implements Runnable {
                             Product viewCustomerProduct = null;
                             viewCustomerProduct = Product.getProduct(productNameViewCustomer, productStoreViewCustomer);
 
-                            productDataViewCustomer = viewCustomerProduct.getName() + "," + viewCustomerProduct.getProductDescription() + "," +
-                                    viewCustomerProduct.getStore() + "," + String.format("%.2f", viewCustomerProduct.getPrice())
-                                    + "," + viewCustomerProduct.getQuantity();
+                            productDataViewCustomer = viewCustomerProduct.getName() + "," +
+                                    viewCustomerProduct.getProductDescription() + "," + viewCustomerProduct.getStore()
+                                    + "," + String.format("%.2f", viewCustomerProduct.getPrice()) + "," +
+                                    viewCustomerProduct.getQuantity();
 
 
                             writer.write(productDataViewCustomer);
@@ -742,7 +745,8 @@ public class ClientHandler implements Runnable {
                             temp2 = new ArrayList<Product>();
                             temp = c.get(i).getShoppingCart();
                             for (int j = 0; j < temp.size(); j++) {
-                                if (!temp.get(j).getName().equals(productName) && !temp.get(j).getStore().equals(stoName)) {
+                                if (!temp.get(j).getName().equals(productName) &&
+                                        !temp.get(j).getStore().equals(stoName)) {
                                     temp2.add(temp.get(j));
                                 }
                             }
@@ -764,9 +768,13 @@ public class ClientHandler implements Runnable {
                         StringBuilder storesSortedByProductsSold = new StringBuilder("");
                         for (int i = 0; i < sortedByTotalProductsSold.size(); i++) {
                             if (i == sortedByTotalProductsSold.size() - 1) {
-                                storesSortedByProductsSold.append("Name: ").append(sortedByTotalProductsSold.get(i).getName()).append(" Total Products Sold: ").append(sortedByTotalProductsSold.get(i).getTotalSales());
+                                storesSortedByProductsSold.append("Name: ").append(sortedByTotalProductsSold.get(i)
+                                        .getName()).append(" Total Products Sold: ").append(sortedByTotalProductsSold
+                                        .get(i).getTotalSales());
                             } else {
-                                storesSortedByProductsSold.append("Name: ").append(sortedByTotalProductsSold.get(i).getName()).append(" Total Products Sold: ").append(sortedByTotalProductsSold.get(i).getTotalSales()).append(",");
+                                storesSortedByProductsSold.append("Name: ").append(sortedByTotalProductsSold.get(i)
+                                        .getName()).append(" Total Products Sold: ").append(sortedByTotalProductsSold
+                                        .get(i).getTotalSales()).append(",");
                             }
                         }
                         writer.write(String.valueOf(storesSortedByProductsSold));
@@ -780,10 +788,14 @@ public class ClientHandler implements Runnable {
                         StringBuilder storesSortedByCustomerFavorite = new StringBuilder("");
                         for (int i = 0; i < sortedByCustomerFavorite.size(); i++) {
                             if (i == sortedByCustomerFavorite.size() - 1) {
-                                storesSortedByCustomerFavorite.append("Name: ").append(sortedByCustomerFavorite.get(i).getName()).append(" Your purchases: ").append(sortedByCustomerFavorite.get(i).getProductsBoughtByCurrentUser
+                                storesSortedByCustomerFavorite.append("Name: ").append(sortedByCustomerFavorite.get(i)
+                                        .getName()).append(" Your purchases: ").append(sortedByCustomerFavorite.get(i)
+                                        .getProductsBoughtByCurrentUser
                                         (((Customer) user)));
                             } else {
-                                storesSortedByCustomerFavorite.append("Name: ").append(sortedByCustomerFavorite.get(i).getName()).append(" Your purchases: ").append(sortedByCustomerFavorite.get(i).getProductsBoughtByCurrentUser
+                                storesSortedByCustomerFavorite.append("Name: ").append(sortedByCustomerFavorite.get(i)
+                                        .getName()).append(" Your purchases: ").append(sortedByCustomerFavorite.get(i)
+                                        .getProductsBoughtByCurrentUser
                                         (((Customer) user))).append(",");
                             }
                         }
@@ -845,9 +857,11 @@ public class ClientHandler implements Runnable {
                         StringBuilder sortedStores = new StringBuilder();
                         for (int k = 0; k < stores.size(); k++) {
                             if (k == stores.size() - 1) {
-                                sortedStores.append(" Sales: ").append(productsSoldPer.get(k)).append(" - Store: ").append(stores.get(k).getName());
+                                sortedStores.append(" Sales: ").append(productsSoldPer.get(k)).append(" - Store: ")
+                                        .append(stores.get(k).getName());
                             } else {
-                                sortedStores.append(" Sales: ").append(productsSoldPer.get(k)).append(" - Store: ").append(stores.get(k).getName()).append(",");
+                                sortedStores.append(" Sales: ").append(productsSoldPer.get(k)).append(" - Store: ")
+                                        .append(stores.get(k).getName()).append(",");
                             }
                         }
                         writer.write(sortedStores.toString());
@@ -882,13 +896,13 @@ public class ClientHandler implements Runnable {
                         String oneStore;
                         for(int i = 0; i < stores.size(); i++) {
                             if(i == stores.size() - 1) {
-                                oneStore = String.format("Revenue: $%.2f - Store: %s", stores.get(i).getSales(), stores.get(i).getName());
+                                oneStore = String.format("Revenue: $%.2f - Store: %s", stores.get(i).getSales(),
+                                        stores.get(i).getName());
                                 storesSortedByRevenue.append(oneStore);
-                                //storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i));
                             } else {
-                                oneStore = String.format("Revenue: $%.2f - Store: %s,", stores.get(i).getSales(), stores.get(i).getName());
+                                oneStore = String.format("Revenue: $%.2f - Store: %s,", stores.get(i).getSales(),
+                                        stores.get(i).getName());
                                 storesSortedByRevenue.append(oneStore);
-                                //storesSortedByRevenue.append("Store: ").append(stores.get(i).getName()).append(" - Revenue: $").append(storeRevenue.get(i)).append(", ");
                             }
                         }
 
@@ -1177,7 +1191,8 @@ public class ClientHandler implements Runnable {
                         ArrayList<Integer> seeNums = focus.getCustomerSales();
                         str = new StringBuilder();
                         for (int i = 0; i < see.size(); i++) {
-                            str.append("Customer: ").append(see.get(i).getEmail()).append(" - Sales: ").append(seeNums.get(i));
+                            str.append("Customer: ").append(see.get(i).getEmail()).append(" - Sales: ")
+                                    .append(seeNums.get(i));
                             if (i != see.size() - 1) {
                                 str.append(",");
                             }
